@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* TipTap editor styles */
+.tiptap-editor .ProseMirror {
+  min-height: 200px;
+  outline: none;
+  padding: 1rem;
 }
+
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #94a3b8;
+  pointer-events: none;
+  height: 0;
+}
+
+.tiptap-editor .ProseMirror h1 { font-size: 1.875rem; font-weight: 700; margin: 1rem 0 0.5rem; }
+.tiptap-editor .ProseMirror h2 { font-size: 1.5rem; font-weight: 600; margin: 0.875rem 0 0.5rem; }
+.tiptap-editor .ProseMirror h3 { font-size: 1.25rem; font-weight: 600; margin: 0.75rem 0 0.5rem; }
+.tiptap-editor .ProseMirror ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+.tiptap-editor .ProseMirror ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+.tiptap-editor .ProseMirror li { margin: 0.25rem 0; }
+.tiptap-editor .ProseMirror strong { font-weight: 700; }
+.tiptap-editor .ProseMirror em { font-style: italic; }
+.tiptap-editor .ProseMirror img { max-width: 100%; border-radius: 0.5rem; margin: 0.5rem 0; }
+.tiptap-editor .ProseMirror hr { border-color: #e2e8f0; margin: 1rem 0; }
+.tiptap-editor .ProseMirror a { color: #4f46e5; text-decoration: underline; }
+.tiptap-editor .ProseMirror blockquote {
+  border-left: 3px solid #a5b4fc;
+  padding-left: 1rem;
+  color: #475569;
+  margin: 0.5rem 0;
+}
+
+/* Prose styles for lesson content display */
+.prose h1 { font-size: 1.875rem; font-weight: 700; margin: 1rem 0 0.5rem; }
+.prose h2 { font-size: 1.5rem; font-weight: 600; margin: 0.875rem 0 0.5rem; }
+.prose h3 { font-size: 1.25rem; font-weight: 600; margin: 0.75rem 0 0.5rem; }
+.prose ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+.prose ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+.prose li { margin: 0.25rem 0; }
+.prose strong { font-weight: 700; }
+.prose em { font-style: italic; }
+.prose img { max-width: 100%; border-radius: 0.5rem; margin: 0.5rem 0; }
+.prose hr { border-color: #e2e8f0; margin: 1rem 0; }
+.prose a { color: #4f46e5; text-decoration: underline; }
+.prose p { margin: 0.5rem 0; line-height: 1.7; }
+.prose blockquote {
+  border-left: 3px solid #a5b4fc;
+  padding-left: 1rem;
+  color: #475569;
+  margin: 0.5rem 0;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin { animation: spin 1s linear infinite; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.data-\[state\=open\]\:animate-in[data-state="open"] { animation: fadeIn 0.15s ease-out; }
+.data-\[state\=open\]\:fade-in-0[data-state="open"] { opacity: 1; }
+.data-\[state\=open\]\:zoom-in-95[data-state="open"] { transform: scale(1); }
+.animate-in.slide-in-from-right-full { animation: slideInRight 0.2s ease-out; }
