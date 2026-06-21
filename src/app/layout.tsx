@@ -6,8 +6,9 @@ import { ToastProvider } from "@/components/ui/toast";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "DNA Worldwide LMS",
+  title: "DNA Worldwide",
   description: "A modern learning management system for instructors and students",
+  icons: { icon: "/logo.png", shortcut: "/logo.png", apple: "/logo.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

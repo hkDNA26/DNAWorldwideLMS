@@ -89,7 +89,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
       title={title}
       className={cn(
         "p-1.5 rounded transition-colors",
-        active ? "bg-indigo-100 text-indigo-700" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+        active ? "bg-indigo-100 text-[#1a3d8f]" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
       )}
     >
       {children}
@@ -97,7 +97,7 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
   );
 
   return (
-    <div className="tiptap-editor border border-slate-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent">
+    <div className="tiptap-editor border border-slate-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-[#1a3d8f] focus-within:border-transparent">
       <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
         <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Bold">
           <Bold className="h-4 w-4" />

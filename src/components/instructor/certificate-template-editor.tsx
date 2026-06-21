@@ -136,7 +136,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
           <label
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
-            className="flex flex-col items-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/30 transition-colors"
+            className="flex flex-col items-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-[#1a3d8f] hover:bg-indigo-50/30 transition-colors"
           >
             <Upload className="h-6 w-6 text-slate-400" />
             <span className="text-xs text-slate-500 text-center">
@@ -170,7 +170,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                 onClick={() => setSelectedKey(f.key)}
                 className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors text-left ${
                   selectedKey === f.key
-                    ? "bg-indigo-50 border border-indigo-200"
+                    ? "bg-indigo-50 border border-[#c2cef5]"
                     : "hover:bg-slate-50 border border-transparent"
                 }`}
               >
@@ -186,7 +186,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
 
         {/* Selected field properties */}
         {selectedField && (
-          <div className="bg-white rounded-xl border border-indigo-200 p-4">
+          <div className="bg-white rounded-xl border border-[#c2cef5] p-4">
             <p className="text-xs font-semibold text-slate-600 mb-3 uppercase tracking-wide">
               {selectedField.label}
             </p>
@@ -197,7 +197,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                   type="range" min={8} max={72}
                   value={selectedField.fontSize}
                   onChange={(e) => updateField(selectedField.key, { fontSize: Number(e.target.value) })}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[#1a3d8f]"
                 />
                 <span className="text-xs text-slate-500">{selectedField.fontSize}px</span>
               </div>
@@ -219,7 +219,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                   type="checkbox"
                   checked={selectedField.bold}
                   onChange={(e) => updateField(selectedField.key, { bold: e.target.checked })}
-                  className="rounded accent-indigo-600"
+                  className="rounded accent-[#1a3d8f]"
                 />
                 <label htmlFor="bold-toggle" className="text-xs text-slate-600">Bold</label>
               </div>
@@ -232,8 +232,8 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                       onClick={() => updateField(selectedField.key, { align: a })}
                       className={`flex-1 py-1 text-xs rounded border transition-colors ${
                         selectedField.align === a
-                          ? "bg-indigo-600 text-white border-indigo-600"
-                          : "text-slate-500 border-slate-200 hover:border-indigo-400"
+                          ? "bg-[#1a3d8f] text-white border-[#1a3d8f]"
+                          : "text-slate-500 border-slate-200 hover:border-[#1a3d8f]"
                       }`}
                     >
                       {a[0].toUpperCase() + a.slice(1)}

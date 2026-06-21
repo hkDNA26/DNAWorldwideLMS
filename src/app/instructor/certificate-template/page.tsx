@@ -15,7 +15,7 @@ export default async function CertificateTemplatePage() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Certificate Template</h1>
+        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Certificate Template</h1>
         <p className="text-slate-500 mt-1">
           Upload an A4 landscape background image and drag the field labels to position them on your certificate.
         </p>

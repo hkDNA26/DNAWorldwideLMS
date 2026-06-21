@@ -42,6 +42,17 @@ model User {
   quizAttempts        QuizAttempt[]
   certificates        Certificate[]
   certificateTemplate CertificateTemplate?
+  inviteTokens        InviteToken[]
+}
+
+model InviteToken {
+  id        String    @id @default(cuid())
+  token     String    @unique @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
 }
 
 model CertificateTemplate {
@@ -89,8 +100,9 @@ model Lesson {
   orderIndex  Int
   contentType ContentType
   content     String?
-  videoUrl    String?
-  createdAt   DateTime    @default(now())
+  videoUrl        String?
+  videoThumbnail  String?
+  createdAt       DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   quiz        Quiz?

@@ -44,6 +44,7 @@ export interface Lesson {
   contentType: ContentType;
   content: string | null;
   videoUrl: string | null;
+  videoThumbnail?: string | null;
   quiz?: Quiz | null;
 }
 
@@ -52,7 +53,7 @@ export interface Quiz {
   lessonId: string;
   title: string;
   passingScore: number;
-  questions?: Question[];
+  questions: Question[];
 }
 
 export interface Question {

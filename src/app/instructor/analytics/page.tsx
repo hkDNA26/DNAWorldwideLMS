@@ -85,7 +85,7 @@ export default async function AnalyticsPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
+        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Analytics</h1>
         <p className="text-slate-500 mt-1">Course progression and certificate data across all students.</p>
       </div>
       <AnalyticsPanel summary={summary} courses={data} />

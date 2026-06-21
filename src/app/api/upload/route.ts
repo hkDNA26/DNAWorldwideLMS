@@ -14,6 +14,7 @@ export async function POST(request: Request) {
       video: { mimes: ["video/mp4", "video/webm", "video/ogg", "video/quicktime"], folder: "videos" },
       image: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "images" },
       template: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "certificate-templates" },
+      thumbnail: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "thumbnails" },
     };
 
     const config = allowedTypes[type];

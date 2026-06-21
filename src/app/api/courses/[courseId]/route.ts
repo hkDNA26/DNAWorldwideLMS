@@ -87,7 +87,18 @@ export async function DELETE(_req: Request, { params }: { params: Promise<Params
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    await db.course.delete({ where: { id: courseId } });
+    // Delete children that lack onDelete: Cascade before removing the course
+    await db.$transaction(async (tx) => {
+      // AttemptAnswers cascade from QuizAttempt — delete attempts first
+      await tx.quizAttempt.deleteMany({
+        where: { quiz: { lesson: { module: { courseId } } } },
+      });
+      // LessonProgress cascades from Enrollment — delete enrollments next
+      await tx.certificate.deleteMany({ where: { courseId } });
+      await tx.enrollment.deleteMany({ where: { courseId } });
+      // Now the course cascade handles Modules → Lessons → Quizzes → Questions → AnswerOptions
+      await tx.course.delete({ where: { id: courseId } });
+    });
 
     return NextResponse.json({ data: { success: true } });
   } catch (err) {

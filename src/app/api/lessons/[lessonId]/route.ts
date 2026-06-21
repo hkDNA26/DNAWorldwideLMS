@@ -56,8 +56,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<Para
         ...(body.title !== undefined && { title: body.title }),
         ...(body.content !== undefined && { content: body.content }),
         ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl }),
+        ...(body.videoThumbnail !== undefined && { videoThumbnail: body.videoThumbnail }),
       },
-      include: { quiz: true },
+      include: { quiz: { include: { questions: { include: { answerOptions: true }, orderBy: { orderIndex: "asc" } } } } },
     });
 
     return NextResponse.json({ data: updated });

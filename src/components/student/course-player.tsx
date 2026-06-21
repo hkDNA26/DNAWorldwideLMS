@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle, Circle, ChevronDown, ChevronRight, FileText, Video, HelpCircle, Award, ArrowLeft, Eye } from "lucide-react";
+import { CheckCircle, Circle, ChevronDown, ChevronRight, FileText, Video, HelpCircle, Award, ArrowLeft, Eye, RotateCcw, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { QuizPlayer } from "./quiz-player";
+import { VideoPlayer } from "./video-player";
 import { useToast } from "@/components/ui/toast";
 import type { Certificate } from "@/types";
 
@@ -37,6 +38,7 @@ interface LessonData {
   contentType: string;
   content: string | null;
   videoUrl: string | null;
+  videoThumbnail?: string | null;
   quiz: {
     id: string;
     title: string;
@@ -88,7 +90,14 @@ export function CoursePlayer({
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set(initialCompleted));
   const [enrollmentCompleted, setEnrollmentCompleted] = useState(initialCompleted2);
   const [certificate, setCertificate] = useState(initialCert);
-  const [markingComplete, setMarkingComplete] = useState(false);
+
+  // Video: track when completed this session + remount key for "Watch Again"
+  const [videoCompleted, setVideoCompleted] = useState(false);
+  const [watchAgainKey, setWatchAgainKey] = useState(0);
+
+  // Text: track when "Continue" has been clicked (marks complete)
+  const [textProceedLoading, setTextProceedLoading] = useState(false);
+
   const [expandedModules, setExpandedModules] = useState<Set<string>>(
     new Set(course.modules.map((m) => m.id))
   );
@@ -115,61 +124,89 @@ export function CoursePlayer({
     });
   };
 
-  const markComplete = async () => {
+  // Core: mark a lesson complete via API and update state. Returns the new completed set.
+  const markLessonComplete = useCallback(async (lessonId: string): Promise<Set<string>> => {
+    if (isPreview) return completedIds;
+    if (completedIds.has(lessonId)) return completedIds;
+
+    const res = await fetch("/api/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lessonId }),
+    });
+
+    if (!res.ok) return completedIds;
+
+    const newIds = new Set(completedIds);
+    newIds.add(lessonId);
+    setCompletedIds(newIds);
+    return newIds;
+  }, [isPreview, completedIds]);
+
+  // Navigate to next lesson or course completion
+  const proceedNext = useCallback((newIds: Set<string>) => {
+    if (newIds.size === totalLessons && !enrollmentCompleted) {
+      router.push(`/student/learn/${course.id}/complete`);
+    } else if (nextLesson) {
+      router.push(lessonUrl(nextLesson.id));
+    }
+  }, [totalLessons, enrollmentCompleted, nextLesson, course.id, router, lessonUrl]);
+
+  // VIDEO: auto-called when video plays to end
+  const onVideoComplete = useCallback(async () => {
     if (isPreview) {
       addToast("Preview mode — progress is not tracked", "info");
+      setVideoCompleted(true);
       return;
     }
-    if (completedIds.has(currentLesson.id)) return;
-    setMarkingComplete(true);
+    await markLessonComplete(currentLesson.id);
+    setVideoCompleted(true);
+  }, [isPreview, markLessonComplete, currentLesson.id, addToast]);
+
+  // VIDEO: "Watch Again" resets the player
+  const onWatchAgain = useCallback(() => {
+    setVideoCompleted(false);
+    setWatchAgainKey((k) => k + 1);
+  }, []);
+
+  // VIDEO: "Next Lesson" after completion
+  const onVideoContinue = useCallback(async () => {
+    const newIds = completedIds.has(currentLesson.id)
+      ? completedIds
+      : await markLessonComplete(currentLesson.id);
+    proceedNext(newIds);
+  }, [completedIds, currentLesson.id, markLessonComplete, proceedNext]);
+
+  // TEXT: "Continue" marks complete and navigates
+  const onTextContinue = useCallback(async () => {
+    setTextProceedLoading(true);
     try {
-      const res = await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId: currentLesson.id }),
-      });
-      if (res.ok) {
-        const newIds = new Set(completedIds);
-        newIds.add(currentLesson.id);
-        setCompletedIds(newIds);
-
-        if (newIds.size === totalLessons && !enrollmentCompleted) {
-          setEnrollmentCompleted(true);
-          const certRes = await fetch(`/api/certificates/course/${course.id}`).catch(() => null);
-          if (certRes?.ok) {
-            const certData = await certRes.json();
-            if (certData.data) setCertificate(certData.data);
-          }
-          addToast("Congratulations! Course completed!", "success");
-        } else {
-          addToast("Lesson marked complete!", "success");
-          if (nextLesson) {
-            router.push(lessonUrl(nextLesson.id));
-          }
-        }
-      }
+      const newIds = await markLessonComplete(currentLesson.id);
+      proceedNext(newIds);
     } finally {
-      setMarkingComplete(false);
+      setTextProceedLoading(false);
     }
-  };
+  }, [markLessonComplete, currentLesson.id, proceedNext]);
 
-  const onQuizPassed = async () => {
+  // TEXT: "Read Again" scrolls to top of content
+  const onReadAgain = useCallback(() => {
+    document.getElementById("lesson-content-top")?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  // QUIZ: called by QuizPlayer when quiz passes (marks complete, updates state)
+  const onQuizPassed = useCallback(async () => {
     if (isPreview) return;
     const newIds = new Set(completedIds);
     newIds.add(currentLesson.id);
     setCompletedIds(newIds);
+  }, [isPreview, completedIds, currentLesson.id]);
 
-    if (newIds.size === totalLessons && !enrollmentCompleted) {
-      setEnrollmentCompleted(true);
-      addToast("Congratulations! Course completed!", "success");
-      router.refresh();
-    } else {
-      addToast("Quiz passed! Moving to next lesson...", "success");
-      if (nextLesson) {
-        setTimeout(() => router.push(lessonUrl(nextLesson.id)), 1500);
-      }
-    }
-  };
+  // QUIZ: called by QuizPlayer when student clicks "Continue"
+  const onQuizContinue = useCallback(async () => {
+    const newIds = new Set(completedIds);
+    newIds.add(currentLesson.id);
+    proceedNext(newIds);
+  }, [completedIds, currentLesson.id, proceedNext]);
 
   const isCompleted = completedIds.has(currentLesson.id);
 
@@ -236,14 +273,14 @@ export function CoursePlayer({
                           href={lessonUrl(lesson.id)}
                           className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors ${
                             isActive
-                              ? "bg-indigo-50 text-indigo-700"
+                              ? "bg-indigo-50 text-[#1a3d8f]"
                               : "text-slate-600 hover:bg-slate-100"
                           }`}
                         >
                           {isDone ? (
                             <CheckCircle className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
                           ) : (
-                            <span className={`flex-shrink-0 ${isActive ? "text-indigo-400" : "text-slate-300"}`}>
+                            <span className={`flex-shrink-0 ${isActive ? "text-[#1a3d8f]" : "text-slate-300"}`}>
                               {CONTENT_ICONS[lesson.contentType] || <Circle className="h-3.5 w-3.5" />}
                             </span>
                           )}
@@ -257,14 +294,14 @@ export function CoursePlayer({
             ))}
           </div>
 
-          {enrollmentCompleted && certificate && !isPreview && (
+          {enrollmentCompleted && !isPreview && (
             <div className="p-4 border-t border-slate-200 bg-amber-50">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="h-4 w-4 text-amber-600" />
                 <span className="text-xs font-semibold text-amber-800">Course Complete!</span>
               </div>
               <Button size="sm" variant="outline" asChild className="w-full text-amber-700 border-amber-300 hover:bg-amber-100">
-                <Link href={`/certificates/${certificate.verificationCode}`} target="_blank">
+                <Link href={`/student/learn/${course.id}/complete`}>
                   View Certificate
                 </Link>
               </Button>
@@ -274,88 +311,137 @@ export function CoursePlayer({
 
         {/* Main content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto p-8">
-            <div className="mb-6">
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
-                {currentLesson.contentType === "TEXT" ? "Text Lesson" : currentLesson.contentType === "VIDEO" ? "Video Lesson" : "Quiz"}
-              </span>
-              <h1 className="text-2xl font-bold text-slate-900 mt-1">{currentLesson.title}</h1>
-            </div>
+          {currentLesson.contentType === "VIDEO" ? (
+            <div className="flex flex-col h-full">
+              {/* Full-width video */}
+              <div className="p-3 flex-shrink-0" style={{ backgroundColor: "#1a3d8f" }}>
+                <div className="rounded-xl overflow-hidden w-full" style={{ aspectRatio: "16/9" }}>
+                  {currentLesson.videoUrl ? (
+                    <VideoPlayer
+                      key={watchAgainKey}
+                      url={currentLesson.videoUrl}
+                      thumbnail={currentLesson.videoThumbnail}
+                      onComplete={onVideoComplete}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-[#0d2060]">
+                      <Video className="h-20 w-20 text-white/20" />
+                    </div>
+                  )}
+                </div>
+              </div>
 
-            {currentLesson.contentType === "TEXT" && (
-              <div
-                className="prose text-slate-800 max-w-none"
-                dangerouslySetInnerHTML={{ __html: currentLesson.content || "<p>No content yet.</p>" }}
-              />
-            )}
+              {/* Title + actions below video */}
+              <div className="max-w-4xl mx-auto w-full px-8 py-6">
+                <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Video Lesson</span>
+                <h1 className="text-2xl font-bold text-slate-900 mt-1 mb-6">{currentLesson.title}</h1>
 
-            {currentLesson.contentType === "VIDEO" && (
-              <div>
-                {currentLesson.videoUrl ? (
-                  <div className="rounded-xl overflow-hidden bg-black aspect-video mb-6">
-                    {currentLesson.videoUrl.includes("youtube.com") || currentLesson.videoUrl.includes("vimeo.com") ? (
-                      <iframe
-                        src={currentLesson.videoUrl}
-                        className="w-full h-full"
-                        allowFullScreen
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      />
-                    ) : (
-                      <video src={currentLesson.videoUrl} controls className="w-full h-full" />
-                    )}
+                {/* Completion actions — only visible after video ends */}
+                {videoCompleted && (
+                  <div className="mb-6 p-5 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <div className="flex items-center gap-2 mb-4">
+                      <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
+                      <p className="font-semibold text-emerald-800">Lesson complete!</p>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={onWatchAgain}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition-colors"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Watch Again
+                      </button>
+                      {(nextLesson || (!enrollmentCompleted && isCompleted)) && (
+                        <button
+                          onClick={onVideoContinue}
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a3d8f] text-white text-sm font-medium hover:bg-[#15336e] transition-colors"
+                        >
+                          {nextLesson ? "Next Lesson" : "Complete Course"}
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  <div className="rounded-xl bg-slate-100 aspect-video flex items-center justify-center mb-6">
-                    <Video className="h-16 w-16 text-slate-300" />
+                )}
+
+                {/* Prev navigation */}
+                {prevLesson && (
+                  <div className="pt-6 border-t border-slate-200">
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href={lessonUrl(prevLesson.id)}>← Previous</Link>
+                    </Button>
                   </div>
                 )}
               </div>
-            )}
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto p-8">
+              <div id="lesson-content-top" className="mb-6">
+                <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+                  {currentLesson.contentType === "TEXT" ? "Text Lesson" : "Quiz"}
+                </span>
+                <h1 className="text-2xl font-bold text-slate-900 mt-1">{currentLesson.title}</h1>
+              </div>
 
-            {currentLesson.contentType === "QUIZ" && currentLesson.quiz && (
-              <QuizPlayer
-                quiz={currentLesson.quiz}
-                latestAttempt={latestAttempt}
-                courseId={course.id}
-                onPassed={onQuizPassed}
-                isPreview={isPreview}
-              />
-            )}
+              {currentLesson.contentType === "TEXT" && (
+                <>
+                  <div
+                    className="prose text-slate-800 max-w-none"
+                    dangerouslySetInnerHTML={{ __html: currentLesson.content || "<p>No content yet.</p>" }}
+                  />
 
-            {/* Navigation */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-200">
-              <div>
-                {prevLesson && (
+                  {/* End-of-text actions */}
+                  <div className="mt-10 pt-6 border-t border-slate-200">
+                    <p className="text-sm text-slate-500 mb-4">Finished reading?</p>
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={onReadAgain}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition-colors"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Read Again
+                      </button>
+                      <button
+                        onClick={onTextContinue}
+                        disabled={textProceedLoading}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a3d8f] text-white text-sm font-medium hover:bg-[#15336e] disabled:opacity-60 transition-colors"
+                      >
+                        {nextLesson ? "Next Lesson" : "Complete Course"}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {currentLesson.contentType === "QUIZ" && currentLesson.quiz && (
+                <QuizPlayer
+                  quiz={currentLesson.quiz}
+                  latestAttempt={latestAttempt}
+                  courseId={course.id}
+                  onPassed={onQuizPassed}
+                  onContinue={onQuizContinue}
+                  isPreview={isPreview}
+                />
+              )}
+
+              {/* Previous lesson link */}
+              {prevLesson && currentLesson.contentType !== "QUIZ" && (
+                <div className="mt-8 pt-6 border-t border-slate-200">
                   <Button variant="outline" size="sm" asChild>
                     <Link href={lessonUrl(prevLesson.id)}>← Previous</Link>
                   </Button>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                {currentLesson.contentType !== "QUIZ" && (
-                  <Button
-                    onClick={markComplete}
-                    loading={markingComplete}
-                    variant={isCompleted ? "outline" : "default"}
-                    size="sm"
-                    disabled={isPreview}
-                    title={isPreview ? "Progress not tracked in preview mode" : undefined}
-                  >
-                    {isCompleted ? (
-                      <><CheckCircle className="h-4 w-4 mr-1.5 text-emerald-500" />Completed</>
-                    ) : (
-                      "Mark Complete"
-                    )}
+                </div>
+              )}
+              {prevLesson && currentLesson.contentType === "QUIZ" && (
+                <div className="mt-6">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={lessonUrl(prevLesson.id)}>← Previous</Link>
                   </Button>
-                )}
-                {nextLesson && (
-                  <Button size="sm" asChild>
-                    <Link href={lessonUrl(nextLesson.id)}>Next →</Link>
-                  </Button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </main>
       </div>
     </div>

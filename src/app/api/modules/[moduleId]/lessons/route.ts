@@ -46,7 +46,7 @@ export async function POST(request: Request, { params }: { params: Promise<Param
 
     const full = await db.lesson.findUnique({
       where: { id: lesson.id },
-      include: { quiz: true },
+      include: { quiz: { include: { questions: { include: { answerOptions: true }, orderBy: { orderIndex: "asc" } } } } },
     });
 
     return NextResponse.json({ data: full }, { status: 201 });

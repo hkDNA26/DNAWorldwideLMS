@@ -38,7 +38,7 @@ export default async function CatalogPage({ searchParams }: PageProps) {
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Browse Courses</h1>
+        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Browse Courses</h1>
         <p className="text-slate-500 mt-1">Discover courses and start learning</p>
       </div>
 
@@ -50,7 +50,7 @@ export default async function CatalogPage({ searchParams }: PageProps) {
             type="search"
             defaultValue={q}
             placeholder="Search courses..."
-            className="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3d8f] focus:border-transparent"
           />
         </div>
       </form>

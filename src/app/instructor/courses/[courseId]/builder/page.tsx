@@ -58,7 +58,7 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-sm font-semibold text-slate-900 leading-tight">{course.title}</h1>
+            <h1 className="text-sm font-semibold leading-tight" style={{color:"#1a3d8f"}}>{course.title}</h1>
             <p className="text-xs text-slate-400">Course Builder</p>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
             <Link
               href={`/instructor/courses/${courseId}/preview/${firstLesson.id}`}
               target="_blank"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1a3d8f] hover:text-[#152f6d] hover:bg-indigo-50 rounded-lg transition-colors"
             >
               <Eye className="h-4 w-4" />
               Preview

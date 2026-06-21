@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { recordCourseCompletion } from "@/lib/sheets";
 
 type Params = { quizId: string };
 
@@ -131,6 +132,17 @@ async function checkCourseCompletion(enrollmentId: string, courseId: string, stu
     });
     if (!existing) {
       await db.certificate.create({ data: { studentId, courseId } });
+
+      // Record completion in Google Sheet
+      const [student, course] = await Promise.all([
+        db.user.findUnique({ where: { id: studentId }, select: { name: true } }),
+        db.course.findUnique({ where: { id: courseId }, select: { title: true } }),
+      ]);
+      if (student && course) {
+        recordCourseCompletion(student.name, course.title).catch((err) =>
+          console.error("Google Sheets update failed:", err)
+        );
+      }
     }
   }
 }

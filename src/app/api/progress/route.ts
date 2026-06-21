@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { recordCourseCompletion } from "@/lib/sheets";
 
 export async function POST(request: Request) {
   try {
@@ -60,6 +61,17 @@ export async function POST(request: Request) {
         await db.certificate.create({
           data: { studentId: session.userId, courseId: lesson.module.courseId },
         });
+
+        // Record completion in Google Sheet
+        const [student, course] = await Promise.all([
+          db.user.findUnique({ where: { id: session.userId }, select: { name: true } }),
+          db.course.findUnique({ where: { id: lesson.module.courseId }, select: { title: true } }),
+        ]);
+        if (student && course) {
+          recordCourseCompletion(student.name, course.title).catch((err) =>
+            console.error("Google Sheets update failed:", err)
+          );
+        }
       }
     }
 

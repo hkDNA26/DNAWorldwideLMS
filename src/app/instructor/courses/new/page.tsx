@@ -60,7 +60,7 @@ export default function NewCoursePage() {
       </Link>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Create a new course</h1>
+        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Create a new course</h1>
         <p className="text-slate-500 mt-1">You can add modules and lessons after creating the course.</p>
       </div>
 

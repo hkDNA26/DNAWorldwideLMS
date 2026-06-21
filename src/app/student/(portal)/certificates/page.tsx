@@ -21,7 +21,7 @@ export default async function CertificatesPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">My Certificates</h1>
+        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>My Certificates</h1>
         <p className="text-slate-500 mt-1">Certificates you&apos;ve earned by completing courses</p>
       </div>
 
@@ -48,7 +48,7 @@ export default async function CertificatesPage() {
               <Link
                 href={`/certificates/${cert.verificationCode}`}
                 target="_blank"
-                className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 mt-auto"
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#1a3d8f] hover:text-[#152f6d] mt-auto"
               >
                 View Certificate
                 <ExternalLink className="h-3.5 w-3.5" />

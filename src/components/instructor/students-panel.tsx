@@ -83,7 +83,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
       {/* Enroll form */}
       <div className="bg-white rounded-xl border border-slate-200 p-5">
         <h2 className="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
-          <UserPlus className="h-4 w-4 text-indigo-500" />
+          <UserPlus className="h-4 w-4 text-[#1a3d8f]" />
           Enroll a Student
         </h2>
         <form onSubmit={handleEnroll} className="flex gap-3">
@@ -128,7 +128,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
             {enrollments.map((enrollment) => (
               <li key={enrollment.id} className="flex items-center gap-4 px-5 py-4">
                 <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-semibold text-indigo-600">
+                  <span className="text-sm font-semibold text-[#1a3d8f]">
                     {enrollment.student.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -151,7 +151,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
                     <div className="mt-1.5 flex items-center gap-2">
                       <div className="flex-1 bg-slate-100 rounded-full h-1.5 max-w-[120px]">
                         <div
-                          className="bg-indigo-500 h-1.5 rounded-full transition-all"
+                          className="bg-[#1a3d8f] h-1.5 rounded-full transition-all"
                           style={{ width: `${enrollment.progress}%` }}
                         />
                       </div>

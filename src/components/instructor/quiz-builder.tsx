@@ -106,7 +106,7 @@ export function QuizBuilder({ quiz: initialQuiz, onUpdate }: QuizBuilderProps) {
               max={100}
               value={quiz.passingScore}
               onChange={(e) => updateQuizMeta({ passingScore: parseInt(e.target.value) || 0 })}
-              className="flex h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="flex h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3d8f] focus:border-transparent"
             />
           </div>
         </div>
@@ -127,21 +127,21 @@ export function QuizBuilder({ quiz: initialQuiz, onUpdate }: QuizBuilderProps) {
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => addQuestion("MULTIPLE_CHOICE")}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-[#1a3d8f] hover:text-[#1a3d8f] transition-colors"
         >
           <Plus className="h-4 w-4" />
           Multiple choice
         </button>
         <button
           onClick={() => addQuestion("TRUE_FALSE")}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-[#1a3d8f] hover:text-[#1a3d8f] transition-colors"
         >
           <Plus className="h-4 w-4" />
           True / False
         </button>
         <button
           onClick={() => addQuestion("SHORT_ANSWER")}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-[#1a3d8f] hover:text-[#1a3d8f] transition-colors"
         >
           <Plus className="h-4 w-4" />
           Short answer
@@ -211,7 +211,7 @@ function QuestionEditor({
     <div className="bg-white rounded-xl border border-slate-200 p-5">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <span className="text-xs font-medium text-indigo-600">Q{index} · {typeLabel}</span>
+          <span className="text-xs font-medium text-[#1a3d8f]">Q{index} · {typeLabel}</span>
         </div>
         <button onClick={onDelete} className="text-slate-300 hover:text-red-500 transition-colors">
           <Trash2 className="h-4 w-4" />
@@ -219,7 +219,7 @@ function QuestionEditor({
       </div>
 
       <textarea
-        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-4"
+        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#1a3d8f] focus:border-transparent mb-4"
         rows={2}
         placeholder="Question text..."
         value={question.questionText}
@@ -242,7 +242,7 @@ function QuestionEditor({
                 onCheckedChange={() => setCorrect(option.id)}
               />
               <input
-                className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent"
+                className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1a3d8f] focus:border-transparent"
                 value={option.text}
                 onChange={(e) => updateOptionText(option.id, e.target.value)}
                 disabled={question.type === "TRUE_FALSE"}
@@ -261,7 +261,7 @@ function QuestionEditor({
           {question.type === "MULTIPLE_CHOICE" && (
             <button
               onClick={addOption}
-              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700 mt-1"
+              className="flex items-center gap-1 text-xs text-[#1a3d8f] hover:text-[#152f6d] mt-1"
             >
               <Plus className="h-3 w-3" />
               Add option
