@@ -3,14 +3,16 @@ import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { sendStudentInviteEmail } from "@/lib/email";
+import { RESOURCES } from "@/lib/resources";
+import type { ResourceKey } from "@/generated/prisma/enums";
 import crypto from "crypto";
 
 export async function GET() {
   try {
-    await requireAuth("INSTRUCTOR");
+    await requireAuth("ADMIN");
 
     const students = await db.user.findMany({
-      where: { role: "STUDENT" },
+      where: { role: "STAFF" },
       select: {
         id: true,
         name: true,
@@ -32,7 +34,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const body = await request.json();
     const {
       name,
@@ -40,6 +42,7 @@ export async function POST(request: Request) {
       password,
       sendInvite = false,
       courseIds = [] as string[],
+      resourceKeys = [] as ResourceKey[],
     } = body;
 
     if (!name?.trim() || !email?.trim()) {
@@ -70,6 +73,10 @@ export async function POST(request: Request) {
       validCourseIds = ownedCourses.map((c) => c.id);
     }
 
+    const validResourceKeys: ResourceKey[] = resourceKeys.filter((k: ResourceKey) =>
+      RESOURCES.some((r) => r.key === k)
+    );
+
     const passwordHash = await bcrypt.hash(
       sendInvite ? crypto.randomBytes(16).toString("hex") : password,
       12
@@ -81,10 +88,15 @@ export async function POST(request: Request) {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         passwordHash,
-        role: "STUDENT",
+        role: "STAFF",
         ...(validCourseIds.length > 0 && {
           enrollments: {
             create: validCourseIds.map((courseId) => ({ courseId })),
+          },
+        }),
+        ...(validResourceKeys.length > 0 && {
+          resourceAccess: {
+            create: validResourceKeys.map((resource) => ({ resource })),
           },
         }),
         ...(sendInvite && {
@@ -120,15 +132,17 @@ export async function POST(request: Request) {
             ).map((c) => c.title)
           : [];
 
+      const resourceNames = validResourceKeys.map((k) => RESOURCES.find((r) => r.key === k)!.label);
+
       try {
-        await sendStudentInviteEmail(student.email, student.name, setupUrl, courseNames);
+        await sendStudentInviteEmail(student.email, student.name, setupUrl, courseNames, resourceNames);
       } catch (emailErr) {
         console.error("Failed to send invite email:", emailErr);
         const { inviteTokens: _tokens, ...studentData } = student as typeof student & { inviteTokens: unknown };
         return NextResponse.json(
           {
             data: studentData,
-            warning: "Student created but invite email could not be sent. Check your SMTP settings.",
+            warning: "Staff account created but invite email could not be sent. Check your SMTP settings.",
           },
           { status: 201 }
         );

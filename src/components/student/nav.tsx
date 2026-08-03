@@ -29,7 +29,7 @@ export function StudentNav({ userName }: NavProps) {
       <div className="px-4 py-5 border-b border-slate-200">
         <Link href="/student/dashboard" className="flex items-center gap-2">
           <img src="/logo.png" alt="DNA Worldwide" className="h-9 w-auto" />
-          <span className="font-bold" style={{ color: "#1a3d8f" }}>DNA Worldwide</span>
+          <span className="font-bold" style={{ color: "var(--color-brand)" }}>DNA Worldwide</span>
         </Link>
       </div>
 
@@ -44,7 +44,7 @@ export function StudentNav({ userName }: NavProps) {
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                 active
-                  ? "bg-indigo-50 text-[#1a3d8f]"
+                  ? "bg-indigo-50 text-brand"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               )}
             >
@@ -57,7 +57,7 @@ export function StudentNav({ userName }: NavProps) {
 
       <div className="px-3 py-4 border-t border-slate-200">
         <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-semibold text-[#1a3d8f]">
+          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-semibold text-brand">
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">

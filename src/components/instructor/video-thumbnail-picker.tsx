@@ -133,7 +133,7 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
           )}
           <button
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:border-[#1a3d8f] hover:text-[#1a3d8f] transition-colors bg-white"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:border-brand hover:text-brand transition-colors bg-white"
           >
             <Camera className="h-3.5 w-3.5" />
             {isEmbed ? (currentThumbnail ? "Change Thumbnail" : "Set Thumbnail URL") : (currentThumbnail ? "Change Frame" : "Pick Frame")}
@@ -161,7 +161,7 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
                 type="text"
                 placeholder="https://example.com/thumbnail.jpg"
                 defaultValue={currentThumbnail ?? ""}
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1a3d8f]/30 focus:border-[#1a3d8f]"
+                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const val = (e.target as HTMLInputElement).value.trim();
@@ -222,7 +222,7 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
                       value={currentTime}
                       onChange={handleSeek}
                       disabled={!videoReady}
-                      className="w-full accent-[#1a3d8f] disabled:opacity-40"
+                      className="w-full accent-brand disabled:opacity-40"
                     />
                     {!videoReady && (
                       <p className="text-xs text-slate-400 flex items-center gap-1.5">
@@ -235,7 +235,7 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
                     <button
                       onClick={captureFrame}
                       disabled={!videoReady}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[#1a3d8f] text-white hover:bg-[#15336e] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-brand text-white hover:bg-brand-dark disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     >
                       <Camera className="h-3.5 w-3.5" />
                       Capture This Frame
@@ -252,7 +252,7 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
                   {capturedDataUrl && (
                     <div className="space-y-2">
                       <p className="text-xs font-medium text-slate-600">Captured frame preview:</p>
-                      <div className="relative w-full max-w-xs aspect-video rounded-lg overflow-hidden border-2 border-[#1a3d8f]/30">
+                      <div className="relative w-full max-w-xs aspect-video rounded-lg overflow-hidden border-2 border-brand/30">
                         <img src={capturedDataUrl} alt="Captured frame" className="w-full h-full object-cover" />
                       </div>
                       <div className="flex gap-2">
@@ -289,14 +289,14 @@ export function VideoThumbnailPicker({ videoUrl, currentThumbnail, onSelect }: P
                       id="thumb-url-fallback"
                       type="text"
                       placeholder="https://…"
-                      className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1a3d8f]/30 focus:border-[#1a3d8f]"
+                      className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
                     />
                     <button
                       onClick={() => {
                         const val = (document.getElementById("thumb-url-fallback") as HTMLInputElement)?.value.trim();
                         if (val) { onSelect(val); setOpen(false); }
                       }}
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg bg-[#1a3d8f] text-white hover:bg-[#15336e] transition-colors"
+                      className="px-3 py-1.5 text-sm font-medium rounded-lg bg-brand text-white hover:bg-brand-dark transition-colors"
                     >
                       Save
                     </button>

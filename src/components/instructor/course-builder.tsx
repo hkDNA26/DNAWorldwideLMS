@@ -273,18 +273,18 @@ export function CourseBuilder({ course: initialCourse }: CourseBuilderProps) {
           {editingCourse ? (
             <div className="space-y-2">
               <input
-                className="w-full text-sm font-semibold text-slate-900 border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#1a3d8f]"
+                className="w-full text-sm font-semibold text-slate-900 border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-brand"
                 value={courseForm.title}
                 onChange={(e) => setCourseForm((p) => ({ ...p, title: e.target.value }))}
               />
               <textarea
-                className="w-full text-xs text-slate-500 border border-slate-300 rounded px-2 py-1 resize-none focus:outline-none focus:ring-1 focus:ring-[#1a3d8f]"
+                className="w-full text-xs text-slate-500 border border-slate-300 rounded px-2 py-1 resize-none focus:outline-none focus:ring-1 focus:ring-brand"
                 rows={2}
                 value={courseForm.description}
                 onChange={(e) => setCourseForm((p) => ({ ...p, description: e.target.value }))}
               />
               <div className="flex gap-2">
-                <button onClick={saveCourseInfo} className="text-xs text-[#1a3d8f] hover:underline">Save</button>
+                <button onClick={saveCourseInfo} className="text-xs text-brand hover:underline">Save</button>
                 <button onClick={() => setEditingCourse(false)} className="text-xs text-slate-500 hover:underline">Cancel</button>
               </div>
             </div>
@@ -458,7 +458,7 @@ function SortableModule({
           <div className="relative">
             <button
               onClick={() => setShowAddMenu((p) => !p)}
-              className="flex items-center gap-1.5 px-2 py-1 text-xs text-slate-400 hover:text-[#1a3d8f] transition-colors"
+              className="flex items-center gap-1.5 px-2 py-1 text-xs text-slate-400 hover:text-brand transition-colors"
             >
               <Plus className="h-3 w-3" />
               Add lesson
@@ -505,12 +505,12 @@ function SortableLesson({
       <button {...attributes} {...listeners} className="text-slate-200 hover:text-slate-400 cursor-grab">
         <GripVertical className="h-3.5 w-3.5" />
       </button>
-      <span className={`flex-shrink-0 ${isActive ? "text-[#1a3d8f]" : "text-slate-400"}`}>
+      <span className={`flex-shrink-0 ${isActive ? "text-brand" : "text-slate-400"}`}>
         {CONTENT_TYPE_ICONS[lesson.contentType]}
       </span>
       <span
         onClick={onSelect}
-        className={`flex-1 text-xs truncate ${isActive ? "text-[#1a3d8f] font-medium" : "text-slate-600"}`}
+        className={`flex-1 text-xs truncate ${isActive ? "text-brand font-medium" : "text-slate-600"}`}
       >
         {lesson.title}
       </span>
@@ -599,7 +599,7 @@ function LessonEditor({
             <span className="text-xs text-slate-400">or upload a file</span>
             <div className="h-px flex-1 bg-slate-200" />
           </div>
-          <label className={`flex items-center justify-center gap-2 h-24 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-[#1a3d8f] hover:bg-indigo-50 transition-colors ${uploadingVideo ? "opacity-50 pointer-events-none" : ""}`}>
+          <label className={`flex items-center justify-center gap-2 h-24 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-brand hover:bg-indigo-50 transition-colors ${uploadingVideo ? "opacity-50 pointer-events-none" : ""}`}>
             <Upload className="h-5 w-5 text-slate-400" />
             <span className="text-sm text-slate-500">{uploadingVideo ? "Uploading..." : "Upload video file"}</span>
             <input type="file" accept="video/*" className="hidden" onChange={uploadVideo} disabled={uploadingVideo} />

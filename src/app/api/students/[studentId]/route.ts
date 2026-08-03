@@ -6,11 +6,11 @@ type Params = { studentId: string };
 
 export async function DELETE(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    await requireAuth("INSTRUCTOR");
+    await requireAuth("ADMIN");
     const { studentId } = await params;
 
     const student = await db.user.findUnique({ where: { id: studentId } });
-    if (!student || student.role !== "STUDENT") {
+    if (!student || student.role !== "STAFF") {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 

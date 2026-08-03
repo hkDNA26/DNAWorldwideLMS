@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function InstructorDashboard() {
   const session = await getSession();
-  if (!session || session.role !== "INSTRUCTOR") redirect("/login");
+  if (!session || session.role !== "ADMIN") redirect("/login");
 
   const courses = await db.course.findMany({
     where: { instructorId: session.userId },
@@ -49,6 +49,7 @@ export default async function InstructorDashboard() {
       id: c.id,
       title: c.title,
       status: c.status as string,
+      type: c.type as string,
       coverImage: c.coverImage,
       enrollments: c._count.enrollments,
       modules: c._count.modules,

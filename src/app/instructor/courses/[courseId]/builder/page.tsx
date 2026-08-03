@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CourseBuilder } from "@/components/instructor/course-builder";
+import { ScormBuilder } from "@/components/instructor/scorm-builder";
 import { ArrowLeft, Users, Eye } from "lucide-react";
 
 type Params = { courseId: string };
@@ -22,6 +23,7 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
   const course = await db.course.findUnique({
     where: { id: courseId },
     include: {
+      scormPackage: true,
       modules: {
         orderBy: { orderIndex: "asc" },
         include: {
@@ -58,7 +60,7 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-sm font-semibold leading-tight" style={{color:"#1a3d8f"}}>{course.title}</h1>
+            <h1 className="text-sm font-semibold leading-tight" style={{color:"var(--color-brand)"}}>{course.title}</h1>
             <p className="text-xs text-slate-400">Course Builder</p>
           </div>
         </div>
@@ -68,13 +70,13 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
             className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
           >
             <Users className="h-4 w-4" />
-            Students
+            Staff
           </Link>
           {firstLesson && (
             <Link
               href={`/instructor/courses/${courseId}/preview/${firstLesson.id}`}
               target="_blank"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1a3d8f] hover:text-[#152f6d] hover:bg-indigo-50 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-brand hover:text-brand-dark hover:bg-indigo-50 rounded-lg transition-colors"
             >
               <Eye className="h-4 w-4" />
               Preview
@@ -82,8 +84,15 @@ export default async function CourseBuilderPage({ params }: { params: Promise<Pa
           )}
         </div>
       </div>
-      <div className="flex-1 overflow-hidden">
-        <CourseBuilder course={course as Parameters<typeof CourseBuilder>[0]["course"]} />
+      <div className="flex-1 overflow-hidden overflow-y-auto">
+        {course.type === "SCORM" ? (
+          <ScormBuilder
+            course={course as Parameters<typeof ScormBuilder>[0]["course"]}
+            scormPackage={course.scormPackage}
+          />
+        ) : (
+          <CourseBuilder course={course as Parameters<typeof CourseBuilder>[0]["course"]} />
+        )}
       </div>
     </div>
   );

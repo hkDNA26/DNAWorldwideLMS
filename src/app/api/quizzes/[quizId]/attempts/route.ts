@@ -7,7 +7,7 @@ type Params = { quizId: string };
 
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("STUDENT");
+    const session = await requireAuth("STAFF");
     const { quizId } = await params;
     const body = await request.json();
     // body.answers: [{ questionId, answerOptionId?, textAnswer? }]

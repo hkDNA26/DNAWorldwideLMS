@@ -9,7 +9,7 @@ export default async function StudentsPage() {
 
   const [students, courses] = await Promise.all([
     db.user.findMany({
-      where: { role: "STUDENT" },
+      where: { role: "STAFF" },
       select: {
         id: true,
         name: true,
@@ -33,9 +33,9 @@ export default async function StudentsPage() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold" style={{ color: "#1a3d8f" }}>Students</h1>
-        <p className="text-slate-500 mt-1">Create and manage student accounts on DNA Worldwide.</p>
+      <div className="mb-8 animate-brand-fade-up">
+        <h1 className="text-2xl font-bold text-brand">Staff</h1>
+        <p className="text-ink-soft mt-1">Create and manage staff accounts on DNA Worldwide.</p>
       </div>
       <StudentsManager initialStudents={initialStudents} courses={courses} />
     </div>

@@ -7,11 +7,11 @@ type Params = { studentId: string };
 
 export async function POST(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    await requireAuth("INSTRUCTOR");
+    await requireAuth("ADMIN");
     const { studentId } = await params;
 
     const student = await db.user.findUnique({
-      where: { id: studentId, role: "STUDENT" },
+      where: { id: studentId, role: "STAFF" },
       select: { id: true, name: true, email: true },
     });
     if (!student) return NextResponse.json({ error: "Student not found" }, { status: 404 });

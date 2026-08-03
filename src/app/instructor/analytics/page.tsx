@@ -5,7 +5,7 @@ import { AnalyticsPanel } from "@/components/instructor/analytics-panel";
 
 export default async function AnalyticsPage() {
   const session = await getSession();
-  if (!session || session.role !== "INSTRUCTOR") redirect("/login");
+  if (!session || session.role !== "ADMIN") redirect("/login");
 
   const courses = await db.course.findMany({
     where: { instructorId: session.userId },
@@ -13,6 +13,7 @@ export default async function AnalyticsPage() {
       id: true,
       title: true,
       status: true,
+      type: true,
       createdAt: true,
       modules: {
         select: { lessons: { select: { id: true } } },
@@ -40,7 +41,14 @@ export default async function AnalyticsPage() {
 
     const enrollments = course.enrollments.map((enr) => {
       const completedLessons = enr.lessonProgress.length;
-      const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+      const progress =
+        course.type === "SCORM"
+          ? enr.completedAt
+            ? 100
+            : 0
+          : totalLessons > 0
+            ? Math.round((completedLessons / totalLessons) * 100)
+            : 0;
       const cert = certMap.get(enr.student.id);
       return {
         id: enr.id,
@@ -66,6 +74,7 @@ export default async function AnalyticsPage() {
       id: course.id,
       title: course.title,
       status: course.status as string,
+      type: course.type as string,
       totalLessons,
       enrollmentCount: enrollments.length,
       completionCount,
@@ -85,7 +94,7 @@ export default async function AnalyticsPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Analytics</h1>
+        <h1 className="text-2xl font-bold" style={{color:"var(--color-brand)"}}>Analytics</h1>
         <p className="text-slate-500 mt-1">Course progression and certificate data across all students.</p>
       </div>
       <AnalyticsPanel summary={summary} courses={data} />

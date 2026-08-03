@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status");
     const search = searchParams.get("search");
 
-    if (session.role === "INSTRUCTOR") {
+    if (session.role === "ADMIN") {
       const courses = await db.course.findMany({
         where: {
           instructorId: session.userId,
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const body = await request.json();
     const { title, description } = body;
 

@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("JWT_SECRET environment variable must be set in production");
+}
+
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "fallback-secret-do-not-use-in-production"
 );
@@ -33,21 +37,19 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/login") || pathname.startsWith("/signup");
 
   if (isAuthRoute && session) {
-    const redirectPath =
-      session.role === "INSTRUCTOR" ? "/instructor/dashboard" : "/student/dashboard";
-    return NextResponse.redirect(new URL(redirectPath, request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if ((isInstructorRoute || isStudentRoute) && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isInstructorRoute && session?.role !== "INSTRUCTOR") {
-    return NextResponse.redirect(new URL("/student/dashboard", request.url));
+  if (isInstructorRoute && session?.role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (isStudentRoute && session?.role === "INSTRUCTOR") {
-    return NextResponse.redirect(new URL("/instructor/dashboard", request.url));
+  if (isStudentRoute && session?.role === "ADMIN") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

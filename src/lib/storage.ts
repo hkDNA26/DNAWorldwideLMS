@@ -44,6 +44,100 @@ class LocalStorageProvider implements StorageProvider {
 
 export const storage: StorageProvider = new LocalStorageProvider();
 
+const EXT_BY_MIME: Record<string, string> = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+  "video/mp4": ".mp4",
+  "video/webm": ".webm",
+  "video/quicktime": ".mov",
+};
+
+const MIME_BY_EXT: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".mov": "video/quicktime",
+};
+
+// Some hosts (Dropbox share links in particular) report a generic binary
+// content-type for perfectly valid files instead of the real mime type.
+const GENERIC_CONTENT_TYPES = new Set(["application/octet-stream", "application/binary", ""]);
+
+/** Rewrites a Dropbox share link so it serves the raw file instead of the HTML preview page. */
+function normalizeRemoteUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.endsWith("dropbox.com")) {
+      parsed.searchParams.set("dl", "1");
+      return parsed.toString();
+    }
+  } catch {
+    // Not a valid URL — let fetch() below produce a clear error.
+  }
+  return url;
+}
+
+/** Downloads a remote file (e.g. a Dropbox share link) and stores it via the configured StorageProvider. */
+export async function downloadRemoteFile(
+  url: string,
+  folder: string,
+  allowedMimes: string[]
+): Promise<{ url: string; error?: never } | { url?: never; error: string }> {
+  let response: Response;
+  try {
+    response = await fetch(normalizeRemoteUrl(url));
+  } catch (err) {
+    console.error(`Failed to fetch ${url}:`, err);
+    return { error: `Could not reach ${url}` };
+  }
+
+  if (!response.ok) {
+    return { error: `${url} returned HTTP ${response.status}` };
+  }
+
+  const contentType = response.headers.get("content-type")?.split(";")[0].trim() || "";
+  let resolvedMime = contentType;
+  let urlExt = "";
+  try {
+    urlExt = path.extname(new URL(url).pathname).toLowerCase();
+  } catch {
+    // ignore — url was already validated by the fetch() above
+  }
+
+  if (!allowedMimes.includes(resolvedMime) && GENERIC_CONTENT_TYPES.has(contentType)) {
+    const inferredMime = MIME_BY_EXT[urlExt];
+    if (inferredMime && allowedMimes.includes(inferredMime)) {
+      resolvedMime = inferredMime;
+    }
+  }
+
+  if (!allowedMimes.includes(resolvedMime)) {
+    return { error: `${url} is not an allowed file type (got ${contentType || "unknown"})` };
+  }
+
+  const maxSize = 100 * 1024 * 1024; // 100MB
+  const contentLength = Number(response.headers.get("content-length") || 0);
+  if (contentLength > maxSize) {
+    return { error: `${url} is too large (max 100MB)` };
+  }
+
+  const buffer = Buffer.from(await response.arrayBuffer());
+  if (buffer.byteLength > maxSize) {
+    return { error: `${url} is too large (max 100MB)` };
+  }
+
+  const ext = urlExt || EXT_BY_MIME[resolvedMime] || "";
+  const savedUrl = await storage.save(buffer, `download${ext}`, folder);
+
+  return { url: savedUrl };
+}
+
 export async function parseFileUpload(
   request: Request,
   field: string,

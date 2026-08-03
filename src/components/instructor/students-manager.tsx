@@ -7,6 +7,8 @@ import { useToast } from "@/components/ui/toast";
 import Link from "next/link";
 import { UserPlus, Trash2, Users, BookOpen, X, Mail, Lock, ChevronDown, ChevronRight } from "lucide-react";
 import { formatDateShort } from "@/lib/utils";
+import { RESOURCES } from "@/lib/resources";
+import type { ResourceKey } from "@/generated/prisma/enums";
 
 interface Student {
   id: string;
@@ -39,6 +41,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
   const [sendInvite, setSendInvite] = useState(true);
   const [selectedCourseIds, setSelectedCourseIds] = useState<string[]>([]);
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
+  const [selectedResourceKeys, setSelectedResourceKeys] = useState<ResourceKey[]>([]);
   const { addToast } = useToast();
 
   const validate = () => {
@@ -60,6 +63,12 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
     );
   };
 
+  const toggleResource = (key: ResourceKey) => {
+    setSelectedResourceKeys((prev) =>
+      prev.includes(key) ? prev.filter((r) => r !== key) : [...prev, key]
+    );
+  };
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
@@ -74,18 +83,20 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
           password: sendInvite ? undefined : form.password,
           sendInvite,
           courseIds: selectedCourseIds,
+          resourceKeys: selectedResourceKeys,
         }),
       });
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 409) setErrors({ email: data.error });
-        else addToast(data.error || "Failed to create student", "error");
+        else addToast(data.error || "Failed to create staff account", "error");
         return;
       }
       setStudents((prev) => [data.data, ...prev]);
       setForm(emptyForm);
       setErrors({});
       setSelectedCourseIds([]);
+      setSelectedResourceKeys([]);
       setShowForm(false);
       if (data.warning) {
         addToast(data.warning, "error");
@@ -106,7 +117,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
     setDeletingId(id);
     try {
       const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
-      if (!res.ok) { addToast("Failed to delete student", "error"); return; }
+      if (!res.ok) { addToast("Failed to delete staff account", "error"); return; }
       setStudents((prev) => prev.filter((s) => s.id !== id));
       addToast(`${name} deleted`, "success");
     } finally {
@@ -119,6 +130,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
     setForm(emptyForm);
     setErrors({});
     setSelectedCourseIds([]);
+    setSelectedResourceKeys([]);
     setSendInvite(true);
     setCourseDropdownOpen(false);
   };
@@ -132,18 +144,18 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
       {/* Header */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500">
-          {students.length} {students.length === 1 ? "student" : "students"} registered
+          {students.length} {students.length === 1 ? "staff member" : "staff members"} registered
         </p>
         <Button onClick={() => { setShowForm((v) => !v); if (showForm) resetForm(); }}>
           {showForm ? <X className="h-4 w-4 mr-2" /> : <UserPlus className="h-4 w-4 mr-2" />}
-          {showForm ? "Cancel" : "Add Student"}
+          {showForm ? "Cancel" : "Add Staff"}
         </Button>
       </div>
 
       {/* Create form */}
       {showForm && (
         <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-slate-700">New Student Account</h2>
+          <h2 className="text-sm font-semibold text-slate-700">New Staff Account</h2>
 
           <form onSubmit={handleCreate} className="space-y-4">
             {/* Name + Email */}
@@ -173,7 +185,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                 aria-checked={sendInvite}
                 onClick={() => { setSendInvite((v) => !v); setErrors((p) => ({ ...p, password: undefined })); }}
                 className={`relative inline-flex h-5 w-9 flex-shrink-0 mt-0.5 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${
-                  sendInvite ? "bg-[#1a3d8f]" : "bg-slate-300"
+                  sendInvite ? "bg-brand" : "bg-slate-300"
                 }`}
               >
                 <span
@@ -184,13 +196,13 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
               </button>
               <div>
                 <label className="text-sm font-medium text-slate-700 flex items-center gap-1.5 cursor-pointer" onClick={() => setSendInvite((v) => !v)}>
-                  <Mail className="h-3.5 w-3.5 text-[#1a3d8f]" />
+                  <Mail className="h-3.5 w-3.5 text-brand" />
                   Send invitation email
                 </label>
                 <p className="text-xs text-slate-500 mt-0.5">
                   {sendInvite
-                    ? "Student will receive an email with a link to set their own password (expires in 72 hours)."
-                    : "Set the password manually — the student can change it after logging in."}
+                    ? "They will receive an email with a link to set their own password (expires in 72 hours)."
+                    : "Set the password manually — they can change it after logging in."}
                 </p>
               </div>
             </div>
@@ -222,7 +234,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                   <button
                     type="button"
                     onClick={() => setCourseDropdownOpen((v) => !v)}
-                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-left hover:border-[#1a3d8f] transition-colors"
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-left hover:border-brand transition-colors"
                   >
                     <span className={selectedCourseIds.length === 0 ? "text-slate-400" : "text-slate-900"}>
                       {selectedCourseIds.length === 0
@@ -243,7 +255,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                             type="checkbox"
                             checked={selectedCourseIds.includes(course.id)}
                             onChange={() => toggleCourse(course.id)}
-                            className="rounded accent-[#1a3d8f] h-4 w-4 flex-shrink-0"
+                            className="rounded accent-brand h-4 w-4 flex-shrink-0"
                           />
                           <span className="text-sm text-slate-700 flex-1 truncate">{course.title}</span>
                           {course.status === "DRAFT" && (
@@ -258,7 +270,7 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                 {selectedCourseNames.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {selectedCourseNames.map((name) => (
-                      <span key={name} className="inline-flex items-center gap-1 text-xs bg-[#1a3d8f]/10 text-[#1a3d8f] rounded-full px-2.5 py-0.5">
+                      <span key={name} className="inline-flex items-center gap-1 text-xs bg-brand/10 text-brand rounded-full px-2.5 py-0.5">
                         {name}
                         <button
                           type="button"
@@ -276,6 +288,29 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                 )}
               </div>
             )}
+
+            {/* Resource access */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Grant resource access <span className="font-normal text-slate-400">(optional)</span>
+              </label>
+              <div className="space-y-1.5">
+                {RESOURCES.map((resource) => (
+                  <label
+                    key={resource.key}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer select-none"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedResourceKeys.includes(resource.key)}
+                      onChange={() => toggleResource(resource.key)}
+                      className="rounded accent-brand h-4 w-4 flex-shrink-0"
+                    />
+                    <span className="text-sm text-slate-700 flex-1 truncate">{resource.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
             <div className="flex gap-3 pt-1">
               <Button type="submit" loading={creating}>
@@ -298,20 +333,24 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
         {students.length === 0 ? (
           <div className="py-16 text-center">
             <Users className="h-10 w-10 text-slate-200 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">No students yet.</p>
-            <p className="text-xs text-slate-300 mt-1">Click "Add Student" to create the first account.</p>
+            <p className="text-sm text-slate-400">No staff yet.</p>
+            <p className="text-xs text-slate-300 mt-1">Click "Add Staff" to create the first account.</p>
           </div>
         ) : (
           <ul className="divide-y divide-slate-100">
-            {students.map((student) => (
-              <li key={student.id} className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors">
-                <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-semibold text-[#1a3d8f]">
+            {students.map((student, i) => (
+              <li
+                key={student.id}
+                className="flex items-center gap-4 px-5 py-4 hover:bg-brand-light/40 transition-colors animate-brand-fade-up"
+                style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}
+              >
+                <div className="w-9 h-9 rounded-full bg-brand-light flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-semibold text-brand">
                     {student.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <Link href={`/instructor/students/${student.id}`} className="flex-1 min-w-0 group">
-                  <p className="text-sm font-medium text-slate-900 truncate group-hover:text-[#1a3d8f] transition-colors">{student.name}</p>
+                  <p className="text-sm font-medium text-slate-900 truncate group-hover:text-brand transition-colors">{student.name}</p>
                   <p className="text-xs text-slate-400 truncate">{student.email}</p>
                 </Link>
                 <div className="flex items-center gap-4 flex-shrink-0">
@@ -322,14 +361,14 @@ export function StudentsManager({ initialStudents, courses }: StudentsManagerPro
                   <span className="hidden sm:block text-xs text-slate-300">
                     {formatDateShort(student.createdAt)}
                   </span>
-                  <Link href={`/instructor/students/${student.id}`} className="text-slate-300 hover:text-[#1a3d8f] transition-colors" title="View student">
+                  <Link href={`/instructor/students/${student.id}`} className="text-slate-300 hover:text-brand transition-colors" title="View staff member">
                     <ChevronRight className="h-4 w-4" />
                   </Link>
                   <button
                     onClick={() => handleDelete(student.id, student.name)}
                     disabled={deletingId === student.id}
                     className="text-slate-300 hover:text-red-500 disabled:opacity-40 transition-colors"
-                    title="Delete student"
+                    title="Delete staff account"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

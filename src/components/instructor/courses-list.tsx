@@ -13,6 +13,7 @@ interface Course {
   id: string;
   title: string;
   status: string;
+  type: string;
   coverImage: string | null;
   createdAt: string;
   _count: { enrollments: number; modules: number };
@@ -45,13 +46,17 @@ export function CoursesList({ initialCourses }: { initialCourses: Course[] }) {
 
   return (
     <div className="space-y-3">
-      {courses.map((course) => {
+      {courses.map((course, i) => {
         const completions = course.enrollments.filter((e) => e.completedAt).length;
         const isConfirming = confirmId === course.id;
         const isDeleting = deletingId === course.id;
 
         return (
-          <div key={course.id} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4">
+          <div
+            key={course.id}
+            className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all animate-brand-card-in"
+            style={{ animationDelay: `${Math.min(i, 10) * 50}ms` }}
+          >
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex-shrink-0 overflow-hidden">
               {course.coverImage ? (
                 <img src={course.coverImage} alt="" className="w-full h-full object-cover" />
@@ -71,11 +76,11 @@ export function CoursesList({ initialCourses }: { initialCourses: Course[] }) {
               <div className="flex items-center gap-4 text-sm text-slate-500">
                 <span className="flex items-center gap-1">
                   <BookOpen className="h-3.5 w-3.5" />
-                  {course._count.modules} modules
+                  {course.type === "SCORM" ? "SCORM package" : `${course._count.modules} modules`}
                 </span>
                 <span className="flex items-center gap-1">
                   <Users className="h-3.5 w-3.5" />
-                  {course._count.enrollments} students
+                  {course._count.enrollments} staff
                 </span>
                 <span className="text-slate-400">{completions} completions</span>
                 <span className="text-slate-400">{formatDate(course.createdAt)}</span>

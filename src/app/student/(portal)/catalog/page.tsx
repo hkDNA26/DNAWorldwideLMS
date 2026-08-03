@@ -1,69 +1,40 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Users, Search } from "lucide-react";
-import { EnrollButton } from "@/components/student/enroll-button";
+import { BookOpen, Users } from "lucide-react";
 
-interface PageProps {
-  searchParams: Promise<{ q?: string }>;
-}
-
-export default async function CatalogPage({ searchParams }: PageProps) {
+export default async function CatalogPage() {
   const session = await getSession();
   if (!session) return null;
 
-  const { q } = await searchParams;
-
-  const courses = await db.course.findMany({
-    where: {
-      status: "PUBLISHED",
-      ...(q ? { title: { contains: q, mode: "insensitive" } } : {}),
-    },
+  const enrollments = await db.enrollment.findMany({
+    where: { studentId: session.userId },
     include: {
-      instructor: { select: { name: true } },
-      _count: { select: { enrollments: true, modules: true } },
+      course: {
+        include: {
+          instructor: { select: { name: true } },
+          _count: { select: { enrollments: true, modules: true } },
+        },
+      },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { enrolledAt: "desc" },
   });
 
-  const enrolledIds = new Set(
-    (await db.enrollment.findMany({
-      where: { studentId: session.userId },
-      select: { courseId: true },
-    })).map((e) => e.courseId)
-  );
+  const courses = enrollments.map((e) => e.course);
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Browse Courses</h1>
-        <p className="text-slate-500 mt-1">Discover courses and start learning</p>
+        <h1 className="text-2xl font-bold" style={{color:"var(--color-brand)"}}>Your Courses</h1>
+        <p className="text-slate-500 mt-1">Courses your admin has enrolled you in</p>
       </div>
-
-      <form className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <input
-            name="q"
-            type="search"
-            defaultValue={q}
-            placeholder="Search courses..."
-            className="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3d8f] focus:border-transparent"
-          />
-        </div>
-      </form>
 
       {courses.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
-          <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-slate-900 mb-1">
-            {q ? `No courses found for "${q}"` : "No courses available yet"}
-          </h3>
-          <p className="text-slate-500">
-            {q ? "Try a different search term." : "Check back soon for new courses."}
-          </p>
+          <BookOpen className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-slate-900 mb-1">No courses yet</h3>
+          <p className="text-slate-500">Your admin hasn't enrolled you in any courses yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -89,16 +60,12 @@ export default async function CatalogPage({ searchParams }: PageProps) {
                   </span>
                   <span className="flex items-center gap-1">
                     <BookOpen className="h-3.5 w-3.5" />
-                    {course._count.modules} modules
+                    {course.type === "SCORM" ? "SCORM package" : `${course._count.modules} modules`}
                   </span>
                 </div>
-                {enrolledIds.has(course.id) ? (
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={`/student/learn/${course.id}`}>Continue Learning</Link>
-                  </Button>
-                ) : (
-                  <EnrollButton courseId={course.id} />
-                )}
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/student/learn/${course.id}`}>Continue Learning</Link>
+                </Button>
               </div>
             </div>
           ))}

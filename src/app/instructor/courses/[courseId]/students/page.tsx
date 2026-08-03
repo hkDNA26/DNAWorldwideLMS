@@ -15,7 +15,7 @@ export default async function StudentsPage({ params }: { params: Promise<Params>
 
   const course = await db.course.findUnique({
     where: { id: courseId },
-    select: { id: true, title: true, instructorId: true },
+    select: { id: true, title: true, instructorId: true, type: true },
   });
 
   if (!course || course.instructorId !== session.userId) notFound();
@@ -36,7 +36,10 @@ export default async function StudentsPage({ params }: { params: Promise<Params>
     enrolledAt: e.enrolledAt.toISOString(),
     completedAt: e.completedAt?.toISOString() ?? null,
     student: e.student,
-    progress: totalLessons > 0 ? Math.round((e.lessonProgress.length / totalLessons) * 100) : 0,
+    progress:
+      course.type === "SCORM"
+        ? e.completedAt ? 100 : 0
+        : totalLessons > 0 ? Math.round((e.lessonProgress.length / totalLessons) * 100) : 0,
     completedLessons: e.lessonProgress.length,
     totalLessons,
   }));
@@ -56,8 +59,8 @@ export default async function StudentsPage({ params }: { params: Promise<Params>
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-sm font-semibold leading-tight" style={{color:"#1a3d8f"}}>{course.title}</h1>
-            <p className="text-xs text-slate-400">Student Management</p>
+            <h1 className="text-sm font-semibold leading-tight" style={{color:"var(--color-brand)"}}>{course.title}</h1>
+            <p className="text-xs text-slate-400">Staff Management</p>
           </div>
         </div>
 
@@ -73,7 +76,7 @@ export default async function StudentsPage({ params }: { params: Promise<Params>
             <Link
               href={`/instructor/courses/${courseId}/preview/${firstLesson.id}`}
               target="_blank"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1a3d8f] hover:text-[#152f6d] hover:bg-indigo-50 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-brand hover:text-brand-dark hover:bg-indigo-50 rounded-lg transition-colors"
             >
               <Eye className="h-4 w-4" />
               Preview

@@ -4,7 +4,6 @@ import { PrismaClient } from "../src/generated/prisma/client.ts";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
-// @ts-expect-error Prisma 7 adapter API
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
 
 async function main() {
@@ -30,7 +29,7 @@ async function main() {
       name: "Alex Rivera",
       email: "instructor@forge.dev",
       passwordHash: await bcrypt.hash("password123", 12),
-      role: "INSTRUCTOR",
+      role: "ADMIN",
     },
   });
   console.log("Created instructor:", instructor.email);
@@ -41,7 +40,7 @@ async function main() {
       name: "Jordan Chen",
       email: "student@forge.dev",
       passwordHash: await bcrypt.hash("password123", 12),
-      role: "STUDENT",
+      role: "STAFF",
     },
   });
   console.log("Created student:", student.email);

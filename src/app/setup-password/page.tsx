@@ -58,7 +58,7 @@ function SetupPasswordForm() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img src="/logo.png" alt="DNA Worldwide" className="h-16 w-auto mx-auto mb-4" />
-          <h1 className="text-2xl font-bold" style={{ color: "#1a3d8f" }}>Set Your Password</h1>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--color-brand)" }}>Set Your Password</h1>
           <p className="text-slate-500 mt-1">Create a password to access your account</p>
         </div>
 

@@ -173,7 +173,7 @@ export function QuizPlayer({ quiz, latestAttempt, courseId, onPassed, onContinue
 
           {question.type === "SHORT_ANSWER" ? (
             <textarea
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#1a3d8f]"
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand"
               rows={3}
               placeholder="Your answer..."
               value={answers[question.id]?.text || ""}
@@ -192,8 +192,8 @@ export function QuizPlayer({ quiz, latestAttempt, courseId, onPassed, onContinue
                         : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selected ? "border-[#1a3d8f]" : "border-slate-300"}`}>
-                      {selected && <div className="w-2 h-2 rounded-full bg-[#1a3d8f]" />}
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selected ? "border-brand" : "border-slate-300"}`}>
+                      {selected && <div className="w-2 h-2 rounded-full bg-brand" />}
                     </div>
                     <input
                       type="radio"

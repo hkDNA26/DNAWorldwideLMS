@@ -5,7 +5,7 @@ import { DEFAULT_FIELDS } from "@/lib/certificate-defaults";
 
 export async function GET() {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const tpl = await db.certificateTemplate.findUnique({
       where: { instructorId: session.userId },
     });
@@ -25,7 +25,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { imageUrl, fields } = await request.json();
 
     const tpl = await db.certificateTemplate.upsert({

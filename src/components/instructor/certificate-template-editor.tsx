@@ -16,7 +16,6 @@ interface Props {
 const FIELD_COLORS: Record<string, string> = {
   studentName:    "#3b82f6",
   courseTitle:    "#8b5cf6",
-  instructorName: "#10b981",
   issuedDate:     "#f59e0b",
   certificateId:  "#6b7280",
 };
@@ -136,7 +135,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
           <label
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
-            className="flex flex-col items-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-[#1a3d8f] hover:bg-indigo-50/30 transition-colors"
+            className="flex flex-col items-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-brand hover:bg-indigo-50/30 transition-colors"
           >
             <Upload className="h-6 w-6 text-slate-400" />
             <span className="text-xs text-slate-500 text-center">
@@ -197,7 +196,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                   type="range" min={8} max={72}
                   value={selectedField.fontSize}
                   onChange={(e) => updateField(selectedField.key, { fontSize: Number(e.target.value) })}
-                  className="w-full accent-[#1a3d8f]"
+                  className="w-full accent-brand"
                 />
                 <span className="text-xs text-slate-500">{selectedField.fontSize}px</span>
               </div>
@@ -219,7 +218,7 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                   type="checkbox"
                   checked={selectedField.bold}
                   onChange={(e) => updateField(selectedField.key, { bold: e.target.checked })}
-                  className="rounded accent-[#1a3d8f]"
+                  className="rounded accent-brand"
                 />
                 <label htmlFor="bold-toggle" className="text-xs text-slate-600">Bold</label>
               </div>
@@ -232,8 +231,8 @@ export function CertificateTemplateEditor({ initialImageUrl, initialFields }: Pr
                       onClick={() => updateField(selectedField.key, { align: a })}
                       className={`flex-1 py-1 text-xs rounded border transition-colors ${
                         selectedField.align === a
-                          ? "bg-[#1a3d8f] text-white border-[#1a3d8f]"
-                          : "text-slate-500 border-slate-200 hover:border-[#1a3d8f]"
+                          ? "bg-brand text-white border-brand"
+                          : "text-slate-500 border-slate-200 hover:border-brand"
                       }`}
                     >
                       {a[0].toUpperCase() + a.slice(1)}

@@ -6,7 +6,7 @@ type Params = { moduleId: string };
 
 export async function PATCH(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { moduleId } = await params;
     const body = await request.json();
 
@@ -34,7 +34,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<Para
 
 export async function DELETE(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { moduleId } = await params;
 
     const module = await db.module.findUnique({

@@ -4,22 +4,23 @@ import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ArrowLeft } from "lucide-react";
 import { StudentDetailClient } from "@/components/instructor/student-detail-client";
+import { RESOURCES } from "@/lib/resources";
 
 type Params = { studentId: string };
 
 export default async function StudentDetailPage({ params }: { params: Promise<Params> }) {
   const session = await getSession();
-  if (!session || session.role !== "INSTRUCTOR") redirect("/login");
+  if (!session || session.role !== "ADMIN") redirect("/login");
 
   const { studentId } = await params;
 
   const student = await db.user.findUnique({
-    where: { id: studentId, role: "STUDENT" },
+    where: { id: studentId, role: "STAFF" },
     select: { id: true, name: true, email: true, createdAt: true },
   });
   if (!student) notFound();
 
-  const [enrollments, certificates, allCourses] = await Promise.all([
+  const [enrollments, certificates, allCourses, resourceAccess] = await Promise.all([
     db.enrollment.findMany({
       where: { studentId },
       include: {
@@ -48,6 +49,10 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
       where: { instructorId: session.userId, status: "PUBLISHED" },
       select: { id: true, title: true },
       orderBy: { title: "asc" },
+    }),
+    db.resourceAccess.findMany({
+      where: { userId: studentId },
+      select: { id: true, resource: true, grantedAt: true },
     }),
   ]);
 
@@ -84,6 +89,16 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
 
   const availableCourses = allCourses.filter((c) => !enrolledCourseIds.has(c.id));
 
+  const grantedResourceKeys = new Set(resourceAccess.map((r) => r.resource));
+  const grantedResources = resourceAccess.map((r) => {
+    const def = RESOURCES.find((res) => res.key === r.resource)!;
+    return { id: r.id, key: r.resource, label: def.label, grantedAt: r.grantedAt.toISOString() };
+  });
+  const availableResources = RESOURCES.filter((r) => !grantedResourceKeys.has(r.key)).map((r) => ({
+    key: r.key,
+    label: r.label,
+  }));
+
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <Link
@@ -91,13 +106,15 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 mb-6 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Students
+        Back to Staff
       </Link>
 
       <StudentDetailClient
         student={{ ...student, createdAt: student.createdAt.toISOString() }}
         courses={courses}
         availableCourses={availableCourses}
+        grantedResources={grantedResources}
+        availableResources={availableResources}
       />
     </div>
   );

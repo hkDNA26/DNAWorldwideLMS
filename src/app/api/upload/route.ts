@@ -4,7 +4,7 @@ import { parseFileUpload } from "@/lib/storage";
 
 export async function POST(request: Request) {
   try {
-    await requireAuth("INSTRUCTOR");
+    await requireAuth("ADMIN");
 
     const url = new URL(request.url);
     const type = url.searchParams.get("type") || "image";

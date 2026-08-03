@@ -6,7 +6,7 @@ type Params = { moduleId: string };
 
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { moduleId } = await params;
     const body = await request.json();
 
@@ -60,7 +60,7 @@ export async function POST(request: Request, { params }: { params: Promise<Param
 
 export async function PATCH(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { moduleId } = await params;
     const body = await request.json(); // [{ id, orderIndex }]
 

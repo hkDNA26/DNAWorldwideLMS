@@ -6,7 +6,7 @@ type Params = { courseId: string; enrollmentId: string };
 
 export async function DELETE(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId, enrollmentId } = await params;
 
     const course = await db.course.findUnique({ where: { id: courseId } });

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { deleteScormFiles } from "@/lib/scorm/extract";
 
 type Params = { courseId: string };
 
@@ -30,11 +31,11 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    if (session.role === "STUDENT" && course.status === "DRAFT") {
+    if (session.role === "STAFF" && course.status === "DRAFT") {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    if (session.role === "INSTRUCTOR" && course.instructorId !== session.userId) {
+    if (session.role === "ADMIN" && course.instructorId !== session.userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -49,7 +50,7 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
 
 export async function PATCH(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId } = await params;
     const body = await request.json();
 
@@ -79,7 +80,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<Para
 
 export async function DELETE(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId } = await params;
 
     const course = await db.course.findUnique({ where: { id: courseId } });
@@ -99,6 +100,10 @@ export async function DELETE(_req: Request, { params }: { params: Promise<Params
       // Now the course cascade handles Modules → Lessons → Quizzes → Questions → AnswerOptions
       await tx.course.delete({ where: { id: courseId } });
     });
+
+    if (course.type === "SCORM") {
+      await deleteScormFiles(courseId);
+    }
 
     return NextResponse.json({ data: { success: true } });
   } catch (err) {

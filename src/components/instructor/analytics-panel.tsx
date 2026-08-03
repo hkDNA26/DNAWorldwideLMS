@@ -26,6 +26,7 @@ interface CourseData {
   id: string;
   title: string;
   status: string;
+  type: string;
   totalLessons: number;
   enrollmentCount: number;
   completionCount: number;
@@ -184,10 +185,10 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
         onClick={() => setExpanded((v) => !v)}
       >
         <div className="flex items-center gap-4">
-          <div className="w-9 h-9 rounded-xl bg-[#1a3d8f]/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-brand/10 flex items-center justify-center flex-shrink-0">
             {expanded
-              ? <ChevronDown className="h-4 w-4 text-[#1a3d8f]" />
-              : <ChevronRight className="h-4 w-4 text-[#1a3d8f]" />}
+              ? <ChevronDown className="h-4 w-4 text-brand" />
+              : <ChevronRight className="h-4 w-4 text-brand" />}
           </div>
 
           <div className="flex-1 min-w-0">
@@ -202,8 +203,8 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <AnimatedBar value={course.avgProgress} color="#1a3d8f" />
-              <span className="text-xs font-medium text-[#1a3d8f] w-10 text-right">{course.avgProgress}%</span>
+              <AnimatedBar value={course.avgProgress} color="var(--color-brand)" />
+              <span className="text-xs font-medium text-brand w-10 text-right">{course.avgProgress}%</span>
             </div>
           </div>
 
@@ -232,7 +233,7 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-100">
-                  <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Student</th>
+                  <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Staff</th>
                   <th className="text-left px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden sm:table-cell">Progress</th>
                   <th className="text-left px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden md:table-cell">Enrolled</th>
                   <th className="text-left px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden md:table-cell">Completed</th>
@@ -244,7 +245,7 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
                   <tr key={enr.id} className="hover:bg-blue-50/30 transition-colors">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1a3d8f] to-[#2d5fc4] flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand to-brand-bright flex items-center justify-center flex-shrink-0 shadow-sm">
                           <span className="text-xs font-bold text-white">
                             {enr.student.name.charAt(0).toUpperCase()}
                           </span>
@@ -263,13 +264,15 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
                               className="h-1.5 rounded-full"
                               style={{
                                 width: `${enr.progress}%`,
-                                backgroundColor: enr.progress === 100 ? "#10b981" : "#1a3d8f",
+                                backgroundColor: enr.progress === 100 ? "#10b981" : "var(--color-brand)",
                               }}
                             />
                           </div>
                           <span className="text-xs text-slate-500 w-8 text-right">{enr.progress}%</span>
                         </div>
-                        <p className="text-xs text-slate-400">{enr.completedLessons}/{enr.totalLessons} lessons</p>
+                        <p className="text-xs text-slate-400">
+                          {course.type === "SCORM" ? (enr.completedAt ? "Completed" : "In progress") : `${enr.completedLessons}/${enr.totalLessons} lessons`}
+                        </p>
                       </div>
                     </td>
                     <td className="px-3 py-3.5 text-xs text-slate-500 hidden md:table-cell">
@@ -310,7 +313,7 @@ function CourseRow({ course, index }: { course: CourseData; index: number }) {
   );
 }
 
-const CHART_COLORS = ["#1a3d8f", "#2d5fc4", "#3b82f6", "#60a5fa", "#93c5fd"];
+const CHART_COLORS = ["var(--color-brand)", "var(--color-brand-bright)", "#3b82f6", "#60a5fa", "#93c5fd"];
 
 export function AnalyticsPanel({ summary, courses }: Props) {
   const overallRate = summary.totalEnrollments > 0
@@ -336,7 +339,7 @@ export function AnalyticsPanel({ summary, courses }: Props) {
           label="Total Courses"
           value={summary.totalCourses}
           icon={BookOpen}
-          gradient="linear-gradient(135deg, #1a3d8f 0%, #2d5fc4 100%)"
+          gradient="linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-bright) 100%)"
           color="bg-white/20"
           delay={0}
         />
@@ -396,7 +399,7 @@ export function AnalyticsPanel({ summary, courses }: Props) {
                   }}
                   cursor={{ fill: "#f8fafc" }}
                 />
-                <Bar dataKey="Enrolled" fill="#1a3d8f" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={1000} />
+                <Bar dataKey="Enrolled" fill="var(--color-brand)" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={1000} />
                 <Bar dataKey="Completed" fill="#10b981" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={1200} />
               </BarChart>
             </ResponsiveContainer>
@@ -406,12 +409,12 @@ export function AnalyticsPanel({ summary, courses }: Props) {
           <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col">
             <h2 className="text-sm font-semibold text-slate-700 mb-4">Overall Completion</h2>
             <div className="flex items-center justify-center mb-4">
-              <RingChart value={summary.totalCompletions} max={summary.totalEnrollments} color="#1a3d8f" size={120} />
+              <RingChart value={summary.totalCompletions} max={summary.totalEnrollments} color="var(--color-brand)" size={120} />
             </div>
             <div className="space-y-2.5 mt-auto">
               <div className="flex items-center justify-between text-xs text-slate-500">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#1a3d8f] inline-block" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-brand inline-block" />
                   Completed
                 </span>
                 <span className="font-semibold text-slate-700">{summary.totalCompletions}</span>

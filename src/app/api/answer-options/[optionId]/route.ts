@@ -6,7 +6,7 @@ type Params = { optionId: string };
 
 export async function DELETE(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { optionId } = await params;
 
     const option = await db.answerOption.findUnique({

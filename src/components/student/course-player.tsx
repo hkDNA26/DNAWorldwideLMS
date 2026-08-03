@@ -111,10 +111,13 @@ export function CoursePlayer({
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
-  const lessonUrl = (lessonId: string) =>
-    isPreview
-      ? `/instructor/courses/${course.id}/preview/${lessonId}`
-      : `/student/learn/${course.id}/${lessonId}`;
+  const lessonUrl = useCallback(
+    (lessonId: string) =>
+      isPreview
+        ? `/instructor/courses/${course.id}/preview/${lessonId}`
+        : `/student/learn/${course.id}/${lessonId}`,
+    [isPreview, course.id]
+  );
 
   const toggleModule = (id: string) => {
     setExpandedModules((prev) => {
@@ -143,14 +146,29 @@ export function CoursePlayer({
     return newIds;
   }, [isPreview, completedIds]);
 
-  // Navigate to next lesson or course completion
+  // Navigate onward from the current lesson. `newIds` must be the
+  // up-to-date completed set (including the lesson just finished) so this
+  // decides correctly rather than off a stale "was the course EVER
+  // completed" flag — that was the bug: a course only counts as done once
+  // every lesson is in `newIds`, not just because there's no next lesson
+  // positionally (a student can jump ahead and pass a later quiz while an
+  // earlier lesson, like the intro video, is still unwatched).
   const proceedNext = useCallback((newIds: Set<string>) => {
-    if (newIds.size === totalLessons && !enrollmentCompleted) {
+    if (newIds.size === totalLessons) {
       router.push(`/student/learn/${course.id}/complete`);
-    } else if (nextLesson) {
-      router.push(lessonUrl(nextLesson.id));
+      return;
     }
-  }, [totalLessons, enrollmentCompleted, nextLesson, course.id, router, lessonUrl]);
+    if (nextLesson) {
+      router.push(lessonUrl(nextLesson.id));
+      return;
+    }
+    // Positionally last, but something earlier is still incomplete (e.g. a
+    // skipped video) — send them there instead of a dead end.
+    const firstIncomplete = allLessons.find((l) => !newIds.has(l.id));
+    if (firstIncomplete) {
+      router.push(lessonUrl(firstIncomplete.id));
+    }
+  }, [totalLessons, nextLesson, allLessons, course.id, router, lessonUrl]);
 
   // VIDEO: auto-called when video plays to end
   const onVideoComplete = useCallback(async () => {
@@ -201,14 +219,13 @@ export function CoursePlayer({
     setCompletedIds(newIds);
   }, [isPreview, completedIds, currentLesson.id]);
 
-  // QUIZ: called by QuizPlayer when student clicks "Continue"
-  const onQuizContinue = useCallback(async () => {
+  // QUIZ: called by QuizPlayer when student clicks "Continue" — lesson
+  // completion was already recorded by onQuizPassed (or on a prior visit).
+  const onQuizContinue = useCallback(() => {
     const newIds = new Set(completedIds);
     newIds.add(currentLesson.id);
     proceedNext(newIds);
   }, [completedIds, currentLesson.id, proceedNext]);
-
-  const isCompleted = completedIds.has(currentLesson.id);
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
@@ -234,7 +251,7 @@ export function CoursePlayer({
         <aside className="w-72 flex-shrink-0 border-r border-slate-200 flex flex-col bg-white overflow-y-auto">
           <div className="p-4 border-b border-slate-200">
             {!isPreview && (
-              <Link href="/student/dashboard" className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 mb-3 transition-colors">
+              <Link href="/courses" className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 mb-3 transition-colors">
                 <ArrowLeft className="h-3.5 w-3.5" />
                 My Courses
               </Link>
@@ -273,14 +290,14 @@ export function CoursePlayer({
                           href={lessonUrl(lesson.id)}
                           className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors ${
                             isActive
-                              ? "bg-indigo-50 text-[#1a3d8f]"
+                              ? "bg-indigo-50 text-brand"
                               : "text-slate-600 hover:bg-slate-100"
                           }`}
                         >
                           {isDone ? (
                             <CheckCircle className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
                           ) : (
-                            <span className={`flex-shrink-0 ${isActive ? "text-[#1a3d8f]" : "text-slate-300"}`}>
+                            <span className={`flex-shrink-0 ${isActive ? "text-brand" : "text-slate-300"}`}>
                               {CONTENT_ICONS[lesson.contentType] || <Circle className="h-3.5 w-3.5" />}
                             </span>
                           )}
@@ -314,7 +331,7 @@ export function CoursePlayer({
           {currentLesson.contentType === "VIDEO" ? (
             <div className="flex flex-col h-full">
               {/* Full-width video */}
-              <div className="p-3 flex-shrink-0" style={{ backgroundColor: "#1a3d8f" }}>
+              <div className="p-3 flex-shrink-0" style={{ backgroundColor: "var(--color-brand)" }}>
                 <div className="rounded-xl overflow-hidden w-full" style={{ aspectRatio: "16/9" }}>
                   {currentLesson.videoUrl ? (
                     <VideoPlayer
@@ -351,15 +368,13 @@ export function CoursePlayer({
                         <RotateCcw className="h-4 w-4" />
                         Watch Again
                       </button>
-                      {(nextLesson || (!enrollmentCompleted && isCompleted)) && (
-                        <button
-                          onClick={onVideoContinue}
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a3d8f] text-white text-sm font-medium hover:bg-[#15336e] transition-colors"
-                        >
-                          {nextLesson ? "Next Lesson" : "Complete Course"}
-                          <ArrowRight className="h-4 w-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={onVideoContinue}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand text-white text-sm font-medium hover:bg-brand-dark transition-colors"
+                      >
+                        {nextLesson ? "Next Lesson" : "Complete Course"}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
                 )}
@@ -404,7 +419,7 @@ export function CoursePlayer({
                       <button
                         onClick={onTextContinue}
                         disabled={textProceedLoading}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a3d8f] text-white text-sm font-medium hover:bg-[#15336e] disabled:opacity-60 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand text-white text-sm font-medium hover:bg-brand-dark disabled:opacity-60 transition-colors"
                       >
                         {nextLesson ? "Next Lesson" : "Complete Course"}
                         <ArrowRight className="h-4 w-4" />

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
-import { CertificatePrintButton } from "@/components/certificate-print-button";
+import { CertificateDownloadButton } from "@/components/certificate-download-button";
 import type { TemplateField } from "@/lib/certificate-defaults";
 import { DEFAULT_FIELDS, formatCertificateId } from "@/lib/certificate-defaults";
 
@@ -32,7 +32,7 @@ export default async function CertificatePage({ params }: { params: Promise<Para
 
   const tplData = cert.course.instructor.certificateTemplate;
   const fields: TemplateField[] = tplData
-    ? (tplData.fields as TemplateField[])
+    ? (tplData.fields as unknown as TemplateField[])
     : DEFAULT_FIELDS;
   const imageUrl = tplData?.imageUrl ?? null;
 
@@ -60,13 +60,16 @@ export default async function CertificatePage({ params }: { params: Promise<Para
             // A4 landscape at screen resolution: 1122 × 794 — cap at viewport
             width: "min(1122px, 100%)",
             aspectRatio: "297 / 210",
-            backgroundImage: `url(${imageUrl})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundColor: "#ffffff",
             boxShadow: "0 25px 60px rgba(0,0,0,0.18)",
           }}
           id="certificate"
         >
+          {/* A real <img>, not a CSS background-image: background graphics
+             are dropped by many browsers' print/PDF pipelines unless the
+             user opts in, even with print-color-adjust set — actual image
+             content always prints regardless of that setting. */}
+          <img src={imageUrl!} alt="" className="absolute inset-0 w-full h-full object-cover" />
           {fields.map((field) => (
             <div
               key={field.key}
@@ -81,11 +84,12 @@ export default async function CertificatePage({ params }: { params: Promise<Para
                     ? "translate(-100%, -50%)"
                     : "translate(0, -50%)",
                 fontSize: `${field.fontSize}px`,
+                lineHeight: `${field.fontSize}px`,
+                fontFamily: "Arial, Helvetica, sans-serif",
                 color: field.color,
                 fontWeight: field.bold ? "700" : "400",
                 textAlign: field.align,
                 whiteSpace: "nowrap",
-                lineHeight: 1.2,
               }}
             >
               {fieldValues[field.key] ?? ""}
@@ -120,7 +124,7 @@ export default async function CertificatePage({ params }: { params: Promise<Para
 
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400 mb-1">DNA Worldwide</p>
 
-            <h1 className="text-4xl font-bold mb-3 mt-4" style={{ color: "#1a2c5b", fontFamily: "Georgia, serif" }}>
+            <h1 className="text-4xl font-bold mb-3 mt-4" style={{ color: "var(--color-brand-dark)", fontFamily: "Georgia, serif" }}>
               Certificate of Completion
             </h1>
 
@@ -144,7 +148,7 @@ export default async function CertificatePage({ params }: { params: Promise<Para
 
             <p className="text-sm text-slate-500 mt-6 mb-2 tracking-wide">has successfully completed the course</p>
 
-            <h2 className="text-2xl font-bold mb-8" style={{ color: "#1a2c5b", fontFamily: "Georgia, serif" }}>
+            <h2 className="text-2xl font-bold mb-8" style={{ color: "var(--color-brand-dark)", fontFamily: "Georgia, serif" }}>
               {cert.course.title}
             </h2>
 
@@ -194,11 +198,30 @@ export default async function CertificatePage({ params }: { params: Promise<Para
 
       {/* Actions */}
       <div className="mt-6 flex items-center gap-3 print:hidden">
-        <CertificatePrintButton />
+        <CertificateDownloadButton
+          filename={`${cert.course.title} Certificate.pdf`}
+          templateImageUrl={imageUrl}
+          fields={fields}
+          fieldValues={fieldValues}
+        />
         <p className="text-xs text-slate-400">
           Share this URL to verify authenticity — valid permanently.
         </p>
       </div>
+
+      <style>{`
+        @media print {
+          @page { size: landscape; margin: 0.4in; }
+          /* Browsers drop background-image/background-color on print by
+             default unless forced — without this the certificate template
+             artwork (and the built-in design's gold accents) vanish, leaving
+             only the floating text fields on a blank card. */
+          #certificate, #certificate * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

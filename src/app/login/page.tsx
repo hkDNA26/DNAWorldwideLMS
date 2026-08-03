@@ -2,28 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { AuthShell } from "@/components/brand/auth-shell";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/toast";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setErrors({});
+    setError(null);
     setLoading(true);
 
     const form = new FormData(e.currentTarget);
     const email = form.get("email") as string;
     const password = form.get("password") as string;
-
-    if (!email) { setErrors((p) => ({ ...p, email: "Email is required" })); setLoading(false); return; }
-    if (!password) { setErrors((p) => ({ ...p, password: "Password is required" })); setLoading(false); return; }
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -34,68 +29,51 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrors({ form: data.error || "Login failed" });
+        setError(data.error || "Incorrect email or password.");
+        setLoading(false);
         return;
       }
 
-      const role = data.data.role;
-      router.push(role === "INSTRUCTOR" ? "/instructor/dashboard" : "/student/dashboard");
+      router.push("/");
       router.refresh();
     } catch {
-      setErrors({ form: "Network error. Please try again." });
-    } finally {
+      setError("Network error — please try again.");
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-slate-50 px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <img src="/logo.png" alt="DNA Worldwide" className="h-16 w-auto mx-auto mb-4" />
-          <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>Welcome back to DNA Worldwide</h1>
-          <p className="text-slate-500 mt-1">Sign in to your account</p>
+    <AuthShell>
+      <div
+        className="w-[400px] bg-white/97 backdrop-blur-xl rounded-[20px] border border-white/50 p-9 pt-8 pb-7"
+        style={{ boxShadow: "0 30px 70px rgba(8,20,40,0.35)", animation: "brand-card-in 0.7s cubic-bezier(0.22,1,0.36,1) both" }}
+      >
+        <div className="text-center mb-6">
+          <img
+            src="/logo.png"
+            alt=""
+            className="w-[46px] h-[46px] mx-auto mb-2.5"
+            style={{ animation: "brand-mark-in 0.7s 0.15s cubic-bezier(0.22,1,0.36,1) both" }}
+          />
+          <h1 className="text-[19px] font-extrabold text-ink tracking-tight">DNA Worldwide</h1>
+          <p className="text-[12.5px] text-ink-faint mt-0.5">Staff Portal</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-          {errors.form && (
-            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
-              {errors.form}
+        <form onSubmit={handleLogin} className="space-y-4" style={{ animation: "brand-fade-up 0.3s ease both" }}>
+          <Input id="email" name="email" type="email" label="Email" placeholder="you@dnaworkplace.com" autoComplete="username" required />
+          <Input id="password" name="password" type="password" label="Password" placeholder="••••••••" autoComplete="current-password" required />
+
+          {error && (
+            <div className="p-2.5 rounded-lg bg-danger-bg border border-danger-line text-[13px] text-danger-ink">
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              label="Email address"
-              placeholder="you@example.com"
-              autoComplete="email"
-              error={errors.email}
-            />
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              label="Password"
-              placeholder="••••••••"
-              autoComplete="current-password"
-              error={errors.password}
-            />
-            <Button type="submit" className="w-full" size="lg" loading={loading}>
-              Sign in
-            </Button>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-slate-500">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#1a3d8f] font-medium hover:underline">
-              Create one free
-            </Link>
-          </p>
-        </div>
+          <Button type="submit" className="w-full" size="lg" loading={loading}>
+            Log in
+          </Button>
+        </form>
       </div>
-    </div>
+    </AuthShell>
   );
 }

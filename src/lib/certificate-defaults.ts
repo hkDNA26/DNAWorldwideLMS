@@ -10,10 +10,9 @@ export interface TemplateField {
 }
 
 export const DEFAULT_FIELDS: TemplateField[] = [
-  { key: "studentName",    label: "Student Name",    x: 50, y: 38, fontSize: 42, color: "#1a3a8f", bold: true,  align: "center" },
-  { key: "courseTitle",    label: "Course Title",     x: 50, y: 52, fontSize: 22, color: "#1a2c5b", bold: true,  align: "center" },
-  { key: "issuedDate",     label: "Date Issued",      x: 25, y: 76, fontSize: 14, color: "#374151", bold: false, align: "center" },
-  { key: "instructorName", label: "Instructor Name",  x: 75, y: 76, fontSize: 14, color: "#374151", bold: false, align: "center" },
+  { key: "studentName",    label: "Staff Name",       x: 50, y: 38, fontSize: 42, color: "#1a3a8f", bold: true,  align: "center" },
+  { key: "courseTitle",    label: "Course Title",     x: 50, y: 52, fontSize: 22, color: "var(--color-brand-dark)", bold: true,  align: "center" },
+  { key: "issuedDate",     label: "Date Issued",      x: 50, y: 76, fontSize: 14, color: "#374151", bold: false, align: "center" },
   { key: "certificateId",  label: "Certificate ID",   x: 50, y: 88, fontSize: 10, color: "#6b7280", bold: false, align: "center" },
 ];
 

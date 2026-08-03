@@ -8,13 +8,32 @@ datasource db {
 }
 
 enum Role {
-  INSTRUCTOR
-  STUDENT
+  ADMIN
+  STAFF
 }
 
 enum CourseStatus {
   DRAFT
   PUBLISHED
+}
+
+enum CourseType {
+  STANDARD
+  SCORM
+}
+
+enum ScormVersion {
+  SCORM_12
+  SCORM_2004
+}
+
+enum ScormStatus {
+  NOT_ATTEMPTED
+  INCOMPLETE
+  COMPLETED
+  PASSED
+  FAILED
+  BROWSED
 }
 
 enum ContentType {
@@ -29,12 +48,30 @@ enum QuestionType {
   SHORT_ANSWER
 }
 
+enum ResourceKey {
+  DRUG_SEARCH
+  ALCOHOL_CALCULATOR
+}
+
+model ResourceAccess {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource        ResourceKey
+  grantedAt       DateTime    @default(now())
+  notifiedAt      DateTime?
+  firstAccessedAt DateTime?
+  lastReminderAt  DateTime?
+
+  @@unique([userId, resource])
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String
   email        String   @unique
   passwordHash String
-  role         Role     @default(STUDENT)
+  role         Role     @default(STAFF)
   createdAt    DateTime @default(now())
 
   courses             Course[]
@@ -43,6 +80,7 @@ model User {
   certificates        Certificate[]
   certificateTemplate CertificateTemplate?
   inviteTokens        InviteToken[]
+  resourceAccess      ResourceAccess[]
 }
 
 model InviteToken {
@@ -70,7 +108,9 @@ model Course {
   title        String
   description  String
   coverImage   String?
+  estimatedTime String?
   status       CourseStatus @default(DRAFT)
+  type         CourseType   @default(STANDARD)
   instructorId String
   instructor   User         @relation(fields: [instructorId], references: [id])
   createdAt    DateTime     @default(now())
@@ -79,6 +119,20 @@ model Course {
   modules      Module[]
   enrollments  Enrollment[]
   certificates Certificate[]
+  scormPackage ScormPackage?
+}
+
+model ScormPackage {
+  id               String       @id @default(cuid())
+  courseId         String       @unique
+  course           Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  version          ScormVersion
+  entryPoint       String
+  extractedPath    String
+  originalFilename String
+  manifestTitle    String?
+  uploadedAt       DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 }
 
 model Module {
@@ -144,13 +198,24 @@ model AnswerOption {
 }
 
 model Enrollment {
-  id          String    @id @default(cuid())
-  studentId   String
-  student     User      @relation(fields: [studentId], references: [id])
-  courseId    String
-  course      Course    @relation(fields: [courseId], references: [id])
-  enrolledAt  DateTime  @default(now())
-  completedAt DateTime?
+  id              String    @id @default(cuid())
+  studentId       String
+  student         User      @relation(fields: [studentId], references: [id])
+  courseId        String
+  course          Course    @relation(fields: [courseId], references: [id])
+  enrolledAt      DateTime  @default(now())
+  completedAt     DateTime?
+  notifiedAt      DateTime?
+  firstAccessedAt DateTime?
+  lastReminderAt  DateTime?
+
+  scormStatus           ScormStatus?
+  scormScoreRaw         Float?
+  scormScoreMin         Float?
+  scormScoreMax         Float?
+  scormSuspendData      String?      @db.Text
+  scormLocation         String?
+  scormSessionUpdatedAt DateTime?
 
   lessonProgress LessonProgress[]
 

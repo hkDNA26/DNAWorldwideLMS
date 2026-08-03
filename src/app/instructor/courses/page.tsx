@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Plus, BookOpen } from "lucide-react";
 import { CoursesList } from "@/components/instructor/courses-list";
+import { CourseImportPanel } from "@/components/instructor/course-import-panel";
+import { ScormUploadPanel } from "@/components/instructor/scorm-upload-panel";
 
 export default async function InstructorCoursesPage() {
   const session = await getSession();
@@ -20,14 +22,19 @@ export default async function InstructorCoursesPage() {
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold" style={{color:"#1a3d8f"}}>My Courses</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold" style={{color:"var(--color-brand)"}}>My Courses</h1>
         <Button asChild>
           <Link href="/instructor/courses/new">
             <Plus className="h-4 w-4 mr-2" />
             New Course
           </Link>
         </Button>
+      </div>
+
+      <div className="mb-4 space-y-4">
+        <CourseImportPanel />
+        <ScormUploadPanel />
       </div>
 
       {courses.length === 0 ? (
@@ -43,7 +50,15 @@ export default async function InstructorCoursesPage() {
           </Button>
         </div>
       ) : (
-        <CoursesList initialCourses={courses} />
+        <CoursesList
+          initialCourses={courses.map((c) => ({
+            ...c,
+            createdAt: c.createdAt.toISOString(),
+            enrollments: c.enrollments.map((e) => ({
+              completedAt: e.completedAt?.toISOString() ?? null,
+            })),
+          }))}
+        />
       )}
     </div>
   );

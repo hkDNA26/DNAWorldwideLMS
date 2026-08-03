@@ -1,7 +1,21 @@
-export type Role = "INSTRUCTOR" | "STUDENT";
+export type Role = "ADMIN" | "STAFF";
 export type CourseStatus = "DRAFT" | "PUBLISHED";
+export type CourseType = "STANDARD" | "SCORM";
 export type ContentType = "TEXT" | "VIDEO" | "QUIZ";
 export type QuestionType = "MULTIPLE_CHOICE" | "TRUE_FALSE" | "SHORT_ANSWER";
+export type ScormVersion = "SCORM_12" | "SCORM_2004";
+
+export interface ScormPackage {
+  id: string;
+  courseId: string;
+  version: ScormVersion;
+  entryPoint: string;
+  extractedPath: string;
+  originalFilename: string;
+  manifestTitle: string | null;
+  uploadedAt: Date;
+  updatedAt: Date;
+}
 
 export interface User {
   id: string;
@@ -17,11 +31,13 @@ export interface Course {
   description: string;
   coverImage: string | null;
   status: CourseStatus;
+  type: CourseType;
   instructorId: string;
   instructor?: { name: string; email: string };
   createdAt: Date;
   updatedAt: Date;
   modules?: Module[];
+  scormPackage?: ScormPackage | null;
   _count?: {
     enrollments: number;
     modules: number;
@@ -33,7 +49,7 @@ export interface Module {
   courseId: string;
   title: string;
   orderIndex: number;
-  lessons?: Lesson[];
+  lessons: Lesson[];
 }
 
 export interface Lesson {
@@ -45,7 +61,7 @@ export interface Lesson {
   content: string | null;
   videoUrl: string | null;
   videoThumbnail?: string | null;
-  quiz?: Quiz | null;
+  quiz: Quiz | null;
 }
 
 export interface Quiz {
@@ -62,7 +78,7 @@ export interface Question {
   questionText: string;
   type: QuestionType;
   orderIndex: number;
-  answerOptions?: AnswerOption[];
+  answerOptions: AnswerOption[];
 }
 
 export interface AnswerOption {

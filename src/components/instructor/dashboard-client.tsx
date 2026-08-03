@@ -14,6 +14,7 @@ interface CourseData {
   id: string;
   title: string;
   status: string;
+  type: string;
   coverImage: string | null;
   enrollments: number;
   modules: number;
@@ -145,7 +146,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
       onMouseLeave={() => setHovered(false)}
     >
       {/* Cover */}
-      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#1a3d8f]/10 to-[#2d5fc4]/20">
+      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-brand/10 to-brand-bright/20">
         {course.coverImage ? (
           <img
             src={course.coverImage}
@@ -156,7 +157,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <BookOpen
-              className="h-12 w-12 text-[#1a3d8f]/30"
+              className="h-12 w-12 text-brand/30"
               style={{ transform: hovered ? "scale(1.1)" : "scale(1)", transition: "transform 0.4s ease" }}
             />
           </div>
@@ -173,7 +174,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
           <div className="bg-white/90 backdrop-blur-sm rounded-full p-0.5 shadow-md">
             <Ring
               pct={course.completionRate}
-              color={course.completionRate === 100 ? "#10b981" : "#1a3d8f"}
+              color={course.completionRate === 100 ? "#10b981" : "var(--color-brand)"}
               size={56}
             />
           </div>
@@ -184,7 +185,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
       <div className="p-4">
         <h3
           className="font-semibold text-slate-900 line-clamp-2 mb-3 transition-colors"
-          style={{ color: hovered ? "#1a3d8f" : undefined }}
+          style={{ color: hovered ? "var(--color-brand)" : undefined }}
         >
           {course.title}
         </h3>
@@ -196,7 +197,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
           </span>
           <span className="flex items-center gap-1">
             <BookOpen className="h-3.5 w-3.5" />
-            {course.modules} modules
+            {course.type === "SCORM" ? "SCORM package" : `${course.modules} modules`}
           </span>
           {course.completions > 0 && (
             <span className="flex items-center gap-1 text-emerald-600">
@@ -217,7 +218,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
               className="h-1.5 rounded-full"
               style={{
                 width: visible ? `${course.completionRate}%` : "0%",
-                backgroundColor: course.completionRate === 100 ? "#10b981" : "#1a3d8f",
+                backgroundColor: course.completionRate === 100 ? "#10b981" : "var(--color-brand)",
                 transition: "width 1.2s cubic-bezier(0.4,0,0.2,1) 600ms",
               }}
             />
@@ -226,7 +227,7 @@ function CourseCard({ course, index }: { course: CourseData; index: number }) {
 
         <Link
           href={`/instructor/courses/${course.id}/builder`}
-          className="flex items-center justify-center gap-1.5 w-full text-xs font-medium text-[#1a3d8f] border border-[#1a3d8f]/20 hover:bg-[#1a3d8f] hover:text-white rounded-xl py-2 transition-all"
+          className="flex items-center justify-center gap-1.5 w-full text-xs font-medium text-brand border border-brand/20 hover:bg-brand hover:text-white rounded-xl py-2 transition-all"
         >
           <Edit3 className="h-3.5 w-3.5" />
           Edit Course
@@ -254,7 +255,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
         }}
       >
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "#1a3d8f" }}>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--color-brand)" }}>
             Welcome back, {name.split(" ")[0]} 👋
           </h1>
           <p className="text-slate-500 mt-1">Here's what's happening with your courses today.</p>
@@ -273,11 +274,11 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
           label="Total Courses"
           value={summary.totalCourses}
           icon={BookOpen}
-          gradient="linear-gradient(135deg, #1a3d8f 0%, #2d5fc4 100%)"
+          gradient="linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-bright) 100%)"
           delay={0}
         />
         <StatCard
-          label="Total Students"
+          label="Total Staff"
           value={summary.totalStudents}
           icon={Users}
           gradient="linear-gradient(135deg, #0f766e 0%, #0d9488 100%)"
@@ -309,7 +310,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
               <h2 className="text-sm font-semibold text-slate-800">Enrolment Trend</h2>
               <p className="text-xs text-slate-400 mt-0.5">New enrolments over the last 8 weeks</p>
             </div>
-            <span className="text-xs bg-[#1a3d8f]/10 text-[#1a3d8f] font-medium px-3 py-1 rounded-full">
+            <span className="text-xs bg-brand/10 text-brand font-medium px-3 py-1 rounded-full">
               {trend.reduce((s, t) => s + t.enrollments, 0)} total
             </span>
           </div>
@@ -317,8 +318,8 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
             <AreaChart data={trend} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="enrollGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#1a3d8f" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="#1a3d8f" stopOpacity={0} />
+                  <stop offset="5%" stopColor="var(--color-brand)" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="var(--color-brand)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
@@ -331,16 +332,16 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
                   boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
                   fontSize: 12,
                 }}
-                cursor={{ stroke: "#1a3d8f", strokeWidth: 1, strokeDasharray: "4 4" }}
+                cursor={{ stroke: "var(--color-brand)", strokeWidth: 1, strokeDasharray: "4 4" }}
               />
               <Area
                 type="monotone"
                 dataKey="enrollments"
-                stroke="#1a3d8f"
+                stroke="var(--color-brand)"
                 strokeWidth={2.5}
                 fill="url(#enrollGrad)"
-                dot={{ fill: "#1a3d8f", r: 3, strokeWidth: 0 }}
-                activeDot={{ r: 5, fill: "#1a3d8f", strokeWidth: 2, stroke: "#fff" }}
+                dot={{ fill: "var(--color-brand)", r: 3, strokeWidth: 0 }}
+                activeDot={{ r: 5, fill: "var(--color-brand)", strokeWidth: 2, stroke: "#fff" }}
                 isAnimationActive
                 animationDuration={1400}
               />
@@ -382,7 +383,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
               </div>
               <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                 <div
-                  className="h-2 rounded-full bg-[#1a3d8f]"
+                  className="h-2 rounded-full bg-brand"
                   style={{ width: `${summary.avgCompletion}%`, transition: "width 1s ease 0.6s" }}
                 />
               </div>
@@ -399,7 +400,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
                       style={{
                         height: maxTrend > 0 ? `${(t.enrollments / maxTrend) * 44}px` : "2px",
                         minHeight: "2px",
-                        backgroundColor: i === trend.length - 1 ? "#1a3d8f" : "#cbd5e1",
+                        backgroundColor: i === trend.length - 1 ? "var(--color-brand)" : "#cbd5e1",
                         transition: `height 0.8s ease ${i * 60}ms`,
                       }}
                     />
@@ -415,7 +416,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
 
           <Link
             href="/instructor/analytics"
-            className="text-xs font-medium text-[#1a3d8f] hover:text-[#152f6d] flex items-center gap-1 mt-auto"
+            className="text-xs font-medium text-brand hover:text-brand-dark flex items-center gap-1 mt-auto"
           >
             View full analytics →
           </Link>
@@ -428,7 +429,7 @@ export function DashboardClient({ name, summary, trend, courses }: Props) {
           <h2 className="text-base font-semibold text-slate-800">Your Courses</h2>
           <Link
             href="/instructor/courses"
-            className="text-xs font-medium text-[#1a3d8f] hover:text-[#152f6d]"
+            className="text-xs font-medium text-brand hover:text-brand-dark"
           >
             View all →
           </Link>

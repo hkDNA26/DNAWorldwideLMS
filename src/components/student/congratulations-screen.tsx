@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import confetti from "canvas-confetti";
-import { Award, Download, Home, Star } from "lucide-react";
+import { ArrowLeft, Award, Download, Home, Star } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { DEFAULT_FIELDS, formatCertificateId, type TemplateField } from "@/lib/certificate-defaults";
+import { downloadCertificatePdf, downloadTemplateCertificatePdf } from "@/lib/download-certificate";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 
 interface CertData {
   studentName: string;
@@ -21,6 +23,8 @@ interface CertData {
 export function CongratulationsScreen({ cert }: { cert: CertData }) {
   const [visible, setVisible] = useState(false);
   const [certVisible, setCertVisible] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const { addToast } = useToast();
 
   const certId = formatCertificateId(cert.verificationCode, cert.issuedAt);
   const fields = cert.templateFields ?? DEFAULT_FIELDS;
@@ -30,6 +34,22 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
     instructorName: cert.instructorName,
     issuedDate: formatDate(cert.issuedAt),
     certificateId: certId,
+  };
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const filename = `${cert.courseTitle} Certificate.pdf`;
+      if (cert.templateImageUrl) {
+        await downloadTemplateCertificatePdf("certificate", cert.templateImageUrl, fields, fieldValues, filename);
+      } else {
+        await downloadCertificatePdf("certificate", filename);
+      }
+    } catch {
+      addToast("Couldn't generate the certificate — please try again.", "error");
+    } finally {
+      setDownloading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,7 +62,7 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
         angle: 60,
         spread: 55,
         origin: { x: 0, y: 0.65 },
-        colors: ["#1a3d8f", "#2d5fc4", "#f59e0b", "#10b981", "#ffffff"],
+        colors: ["var(--color-brand)", "var(--color-brand-bright)", "#f59e0b", "#10b981", "#ffffff"],
         scalar: 1.1,
       });
       // Right cannon
@@ -51,7 +71,7 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
         angle: 120,
         spread: 55,
         origin: { x: 1, y: 0.65 },
-        colors: ["#1a3d8f", "#2d5fc4", "#f59e0b", "#10b981", "#ffffff"],
+        colors: ["var(--color-brand)", "var(--color-brand-bright)", "#f59e0b", "#10b981", "#ffffff"],
         scalar: 1.1,
       });
       // Centre burst
@@ -66,8 +86,8 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
     }, 600);
     const t3 = setTimeout(() => {
       // Second wave
-      confetti({ particleCount: 40, angle: 60, spread: 45, origin: { x: 0, y: 0.6 }, colors: ["#1a3d8f", "#f59e0b", "#fff"] });
-      confetti({ particleCount: 40, angle: 120, spread: 45, origin: { x: 1, y: 0.6 }, colors: ["#1a3d8f", "#f59e0b", "#fff"] });
+      confetti({ particleCount: 40, angle: 60, spread: 45, origin: { x: 0, y: 0.6 }, colors: ["var(--color-brand)", "#f59e0b", "#fff"] });
+      confetti({ particleCount: 40, angle: 120, spread: 45, origin: { x: 1, y: 0.6 }, colors: ["var(--color-brand)", "#f59e0b", "#fff"] });
     }, 1800);
     const t4 = setTimeout(() => setCertVisible(true), 1200);
 
@@ -75,11 +95,22 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0d1f4e] via-[#1a3d8f] to-[#0d1f4e] flex flex-col items-center py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-brand-dark via-brand to-brand-dark flex flex-col items-center py-12 px-4 print:bg-white">
+
+      {/* Back to courses — always visible at the top so there's no dead end */}
+      <div className="w-full max-w-3xl mb-8 print:hidden">
+        <Link
+          href="/student/dashboard"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold transition-colors border border-white/25 backdrop-blur-sm"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          Back to My Courses
+        </Link>
+      </div>
 
       {/* Hero */}
       <div
-        className="text-center mb-12"
+        className="text-center mb-12 print:hidden"
         style={{
           transform: visible ? "translateY(0) scale(1)" : "translateY(-30px) scale(0.9)",
           opacity: visible ? 1 : 0,
@@ -93,15 +124,21 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
               <Award className="w-12 h-12 text-amber-400" />
             </div>
           </div>
-          {/* Orbiting stars */}
-          {[0, 60, 120, 180, 240, 300].map((deg, i) => (
+          {/* Orbiting stars — spacing comes entirely from animationDelay
+             (negative, so each star starts pre-advanced into its slot
+             instead of clustering at rotate(0) and drifting apart): the
+             spin keyframes below set `transform` themselves, which
+             overrides any static rotate() on the element for as long as
+             the animation runs, so a per-star inline rotate() here would
+             be a no-op. */}
+          {[0, 1, 2, 3, 4, 5].map((i) => (
             <Star
               key={i}
               className="absolute w-4 h-4 text-amber-300 fill-amber-300"
               style={{
-                transform: `rotate(${deg}deg) translateY(-52px)`,
+                transform: `translateY(-52px)`,
                 animation: `spin 6s linear infinite`,
-                animationDelay: `${i * 0.2}s`,
+                animationDelay: `${-i * 1}s`,
                 opacity: visible ? 1 : 0,
                 transition: `opacity 0.3s ease ${0.3 + i * 0.05}s`,
               }}
@@ -120,11 +157,12 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
         {/* Actions */}
         <div className="flex items-center justify-center gap-3 mt-8">
           <Button
-            onClick={() => window.print()}
+            onClick={handleDownload}
+            loading={downloading}
             className="bg-amber-400 hover:bg-amber-500 text-amber-900 font-semibold shadow-lg shadow-amber-400/30 border-0"
           >
-            <Download className="h-4 w-4 mr-2" />
-            Download Certificate
+            {!downloading && <Download className="h-4 w-4 mr-2" />}
+            {downloading ? "Generating..." : "Download Certificate"}
           </Button>
           <Button variant="outline" asChild className="border-white/30 text-white hover:bg-white/10 bg-transparent">
             <Link href="/student/dashboard">
@@ -149,17 +187,24 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
         {cert.templateImageUrl ? (
           <div
             id="certificate"
-            className="relative overflow-hidden mx-auto"
+            className="relative overflow-hidden mx-auto print:shadow-none"
             style={{
               width: "100%",
               aspectRatio: "297 / 210",
-              backgroundImage: `url(${cert.templateImageUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundColor: "#ffffff",
               boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
               borderRadius: "8px",
             }}
           >
+            {/* A real <img>, not a CSS background-image: background graphics
+               are dropped by many browsers' print/PDF pipelines unless the
+               user opts in, even with print-color-adjust set — actual image
+               content always prints regardless of that setting. */}
+            <img
+              src={cert.templateImageUrl}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
             {fields.map((field) => (
               <div
                 key={field.key}
@@ -174,6 +219,8 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
                       ? "translate(-100%, -50%)"
                       : "translate(0, -50%)",
                   fontSize: `${field.fontSize}px`,
+                  lineHeight: `${field.fontSize}px`,
+                  fontFamily: "Arial, Helvetica, sans-serif",
                   color: field.color,
                   fontWeight: field.bold ? "700" : "400",
                   textAlign: field.align,
@@ -214,7 +261,7 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
 
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400 mb-1">DNA Worldwide</p>
 
-              <h1 className="text-4xl font-bold mb-3 mt-4" style={{ color: "#1a2c5b", fontFamily: "Georgia, serif" }}>
+              <h1 className="text-4xl font-bold mb-3 mt-4" style={{ color: "var(--color-brand-dark)", fontFamily: "Georgia, serif" }}>
                 Certificate of Completion
               </h1>
 
@@ -238,7 +285,7 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
 
               <p className="text-sm text-slate-500 mt-5 mb-1 tracking-wide">has successfully completed the course</p>
 
-              <h2 className="text-2xl font-bold mb-6" style={{ color: "#1a2c5b", fontFamily: "Georgia, serif" }}>
+              <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--color-brand-dark)", fontFamily: "Georgia, serif" }}>
                 {cert.courseTitle}
               </h2>
 
@@ -286,14 +333,15 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
           </div>
         )}
 
-        {/* Bottom actions (print-hidden) */}
+        {/* Bottom actions (hidden if a browser print is triggered manually) */}
         <div className="flex items-center justify-center gap-3 mt-6 print:hidden">
           <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-amber-900 rounded-lg text-sm font-semibold shadow-lg transition-colors"
+            onClick={handleDownload}
+            disabled={downloading}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-amber-900 rounded-lg text-sm font-semibold shadow-lg transition-colors disabled:opacity-60"
           >
             <Download className="h-4 w-4" />
-            Download / Print Certificate
+            {downloading ? "Generating..." : "Download Certificate"}
           </button>
           <Link
             href={`/certificates/${cert.verificationCode}`}
@@ -305,12 +353,18 @@ export function CongratulationsScreen({ cert }: { cert: CertData }) {
         </div>
       </div>
 
-      {/* Print-only: clean white background */}
       <style>{`
-        @keyframes spin { from { transform: rotate(0deg) translateY(-52px); } to { transform: rotate(360deg) translateY(-52px); } }
+        @keyframes spin { from { transform: rotate(0deg) translateY(-52px); } to { transform: rotate(-360deg) translateY(-52px); } }
         @media print {
-          body { background: white !important; }
-          #certificate-wrapper { box-shadow: none !important; }
+          @page { size: landscape; margin: 0.4in; }
+          /* Browsers drop background-image/background-color on print by
+             default unless forced — without this the certificate template
+             artwork (and the built-in design's gold accents) vanish, leaving
+             only the floating text fields on a blank card. */
+          #certificate, #certificate * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
         }
       `}</style>
     </div>

@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
 
     const courses = await db.course.findMany({
       where: { instructorId: session.userId },

@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { grantCourseAccess } from "@/lib/access-grants";
 
 type Params = { courseId: string };
 
 export async function GET(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId } = await params;
 
     const course = await db.course.findUnique({ where: { id: courseId } });
@@ -32,9 +33,18 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
       enrolledAt: e.enrolledAt,
       completedAt: e.completedAt,
       student: e.student,
-      progress: totalLessons > 0 ? Math.round((e.lessonProgress.length / totalLessons) * 100) : 0,
+      progress:
+        course.type === "SCORM"
+          ? e.completedAt
+            ? 100
+            : 0
+          : totalLessons > 0
+            ? Math.round((e.lessonProgress.length / totalLessons) * 100)
+            : 0,
       completedLessons: e.lessonProgress.length,
       totalLessons,
+      scormStatus: e.scormStatus,
+      scormScoreRaw: e.scormScoreRaw,
     }));
 
     return NextResponse.json({ data: result });
@@ -48,7 +58,7 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
 
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId } = await params;
     const body = await request.json();
     const { email } = body;
@@ -71,7 +81,7 @@ export async function POST(request: Request, { params }: { params: Promise<Param
       return NextResponse.json({ error: "No user found with that email" }, { status: 404 });
     }
 
-    if (student.role !== "STUDENT") {
+    if (student.role !== "STAFF") {
       return NextResponse.json({ error: "That user is not a student" }, { status: 400 });
     }
 
@@ -79,15 +89,12 @@ export async function POST(request: Request, { params }: { params: Promise<Param
       where: { studentId_courseId: { studentId: student.id, courseId } },
     });
     if (existing) {
-      return NextResponse.json({ error: "Student is already enrolled" }, { status: 409 });
+      return NextResponse.json({ error: "Staff member is already enrolled" }, { status: 409 });
     }
 
-    const enrollment = await db.enrollment.create({
-      data: { studentId: student.id, courseId },
-      include: { student: { select: { id: true, name: true, email: true } } },
-    });
+    const enrollment = await grantCourseAccess(courseId, student, course.title, { notify: true });
 
-    return NextResponse.json({ data: enrollment }, { status: 201 });
+    return NextResponse.json({ data: { ...enrollment, student } }, { status: 201 });
   } catch (err) {
     if (err instanceof Error && (err.message === "UNAUTHORIZED" || err.message === "FORBIDDEN")) {
       return NextResponse.json({ error: err.message }, { status: 401 });

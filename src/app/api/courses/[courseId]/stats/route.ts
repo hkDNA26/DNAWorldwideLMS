@@ -6,7 +6,7 @@ type Params = { courseId: string };
 
 export async function GET(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { courseId } = await params;
 
     const course = await db.course.findUnique({ where: { id: courseId } });

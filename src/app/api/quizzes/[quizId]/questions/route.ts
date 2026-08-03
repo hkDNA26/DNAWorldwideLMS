@@ -6,7 +6,7 @@ type Params = { quizId: string };
 
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("INSTRUCTOR");
+    const session = await requireAuth("ADMIN");
     const { quizId } = await params;
     const body = await request.json();
 

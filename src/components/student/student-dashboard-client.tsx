@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 interface CourseEntry {
   enrollmentId: string;
   courseId: string;
+  courseType: string;
   title: string;
   instructor: string;
   coverImage: string | null;
@@ -101,11 +102,14 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
   const [hovered, setHovered] = useState(false);
   useEffect(() => { const t = setTimeout(() => setShow(true), 350 + index * 90); return () => clearTimeout(t); }, [index]);
 
-  const href = course.nextLessonId
-    ? `/student/learn/${course.courseId}/${course.nextLessonId}`
-    : `/student/learn/${course.courseId}/complete`;
+  const href =
+    course.courseType === "SCORM"
+      ? `/student/learn/${course.courseId}`
+      : course.nextLessonId
+        ? `/student/learn/${course.courseId}/${course.nextLessonId}`
+        : `/student/learn/${course.courseId}/complete`;
 
-  const ringColor = course.isCompleted ? "#10b981" : course.progress > 50 ? "#1a3d8f" : "#f59e0b";
+  const ringColor = course.isCompleted ? "#10b981" : course.progress > 50 ? "var(--color-brand)" : "#f59e0b";
 
   return (
     <div
@@ -125,7 +129,7 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
       }}
     >
       {/* Cover */}
-      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#1a3d8f]/10 to-[#2d5fc4]/20">
+      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-brand/10 to-brand-bright/20">
         {course.coverImage ? (
           <img
             src={course.coverImage}
@@ -136,7 +140,7 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <BookOpen
-              className="h-12 w-12 text-[#1a3d8f]/25"
+              className="h-12 w-12 text-brand/25"
               style={{ transform: hovered ? "scale(1.1)" : "scale(1)", transition: "transform 0.4s ease" }}
             />
           </div>
@@ -160,7 +164,7 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
       <div className="p-4">
         <h3
           className="font-semibold text-slate-900 line-clamp-2 mb-0.5 transition-colors"
-          style={{ color: hovered ? "#1a3d8f" : undefined }}
+          style={{ color: hovered ? "var(--color-brand)" : undefined }}
         >
           {course.title}
         </h3>
@@ -169,7 +173,7 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
         {/* Progress bar */}
         <div className="mb-4">
           <div className="flex justify-between text-xs text-slate-400 mb-1">
-            <span>{course.completedLessons}/{course.totalLessons} lessons</span>
+            <span>{course.courseType === "SCORM" ? (course.isCompleted ? "Completed" : "In progress") : `${course.completedLessons}/${course.totalLessons} lessons`}</span>
             <span className="font-medium" style={{ color: ringColor }}>{course.progress}%</span>
           </div>
           <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -198,7 +202,7 @@ function CourseCard({ course, index }: { course: CourseEntry; index: number }) {
             href={href}
             className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-semibold text-white transition-all"
             style={{
-              background: "linear-gradient(135deg, #1a3d8f 0%, #2d5fc4 100%)",
+              background: "linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-bright) 100%)",
               boxShadow: hovered ? "0 4px 16px rgba(26,61,143,0.35)" : "none",
             }}
           >
@@ -221,7 +225,7 @@ function HeroProgress({ summary }: { summary: Props["summary"] }) {
     <div
       className="relative overflow-hidden rounded-2xl p-6 text-white mb-8"
       style={{
-        background: "linear-gradient(135deg, #0d1f4e 0%, #1a3d8f 60%, #2d5fc4 100%)",
+        background: "linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand) 60%, var(--color-brand-bright) 100%)",
         transform: show ? "translateY(0)" : "translateY(20px)",
         opacity: show ? 1 : 0,
         transition: "transform 0.6s ease 150ms, opacity 0.6s ease 150ms",
@@ -307,7 +311,7 @@ export function StudentDashboardClient({ name, summary, courses }: Props) {
         }}
       >
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "#1a3d8f" }}>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--color-brand)" }}>
             {greeting}, {firstName} 👋
           </h1>
           <p className="text-slate-500 mt-1">
@@ -321,7 +325,7 @@ export function StudentDashboardClient({ name, summary, courses }: Props) {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard label="Courses Enrolled" value={summary.enrolled} icon={BookOpen}
-          gradient="linear-gradient(135deg, #1a3d8f 0%, #2d5fc4 100%)" delay={0} />
+          gradient="linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-bright) 100%)" delay={0} />
         <StatCard label="Completed" value={summary.completed} icon={CheckCircle}
           gradient="linear-gradient(135deg, #059669 0%, #10b981 100%)" delay={70} />
         <StatCard label="Certificates" value={summary.certificates} icon={Award}
@@ -339,8 +343,8 @@ export function StudentDashboardClient({ name, summary, courses }: Props) {
           className="text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm"
           style={{ opacity: headerShow ? 1 : 0, transition: "opacity 0.5s ease 300ms" }}
         >
-          <div className="w-16 h-16 bg-[#1a3d8f]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="h-8 w-8 text-[#1a3d8f]/40" />
+          <div className="w-16 h-16 bg-brand/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="h-8 w-8 text-brand/40" />
           </div>
           <h3 className="text-lg font-semibold text-slate-900 mb-1">No courses yet</h3>
           <p className="text-slate-500 text-sm">Your instructor will enrol you in courses. Check back soon.</p>
@@ -351,7 +355,7 @@ export function StudentDashboardClient({ name, summary, courses }: Props) {
           {inProgress.length > 0 && (
             <section>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-[#1a3d8f]" />
+                <div className="w-2 h-2 rounded-full bg-brand" />
                 <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Continue Learning</h2>
                 <span className="text-xs text-slate-400">({inProgress.length})</span>
               </div>

@@ -2,6 +2,10 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { db } from "./db";
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("JWT_SECRET environment variable must be set in production");
+}
+
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "fallback-secret-do-not-use-in-production"
 );
@@ -10,7 +14,7 @@ const COOKIE_NAME = "forge_session";
 
 export type SessionPayload = {
   userId: string;
-  role: "INSTRUCTOR" | "STUDENT";
+  role: "ADMIN" | "STAFF";
   name: string;
   email: string;
 };
@@ -55,7 +59,7 @@ export async function clearSessionCookie() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export async function requireAuth(requiredRole?: "INSTRUCTOR" | "STUDENT"): Promise<SessionPayload> {
+export async function requireAuth(requiredRole?: "ADMIN" | "STAFF"): Promise<SessionPayload> {
   const session = await getSession();
   if (!session) {
     throw new Error("UNAUTHORIZED");

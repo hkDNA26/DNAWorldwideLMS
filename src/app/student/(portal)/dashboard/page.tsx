@@ -41,7 +41,10 @@ export default async function StudentDashboard() {
     const completedIds = new Set(enr.lessonProgress.map((p) => p.lessonId));
     const totalLessons = allLessons.length;
     const completedLessons = enr.lessonProgress.length;
-    const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+    const isScorm = enr.course.type === "SCORM";
+    const progress = isScorm
+      ? enr.completedAt ? 100 : 0
+      : totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
     // First uncompleted lesson, or first lesson if none completed
     const nextLesson =
@@ -52,6 +55,7 @@ export default async function StudentDashboard() {
     return {
       enrollmentId: enr.id,
       courseId: enr.courseId,
+      courseType: enr.course.type,
       title: enr.course.title,
       instructor: enr.course.instructor.name,
       coverImage: enr.course.coverImage,

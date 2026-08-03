@@ -41,7 +41,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
       });
       const data = await res.json();
       if (!res.ok) {
-        addToast(data.error || "Failed to enroll student", "error");
+        addToast(data.error || "Failed to enroll staff member", "error");
         return;
       }
       const newEnrollment: EnrolledStudent = {
@@ -68,7 +68,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
         method: "DELETE",
       });
       if (!res.ok) {
-        addToast("Failed to remove student", "error");
+        addToast("Failed to remove staff member", "error");
         return;
       }
       setEnrollments((prev) => prev.filter((e) => e.id !== enrollmentId));
@@ -83,14 +83,14 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
       {/* Enroll form */}
       <div className="bg-white rounded-xl border border-slate-200 p-5">
         <h2 className="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
-          <UserPlus className="h-4 w-4 text-[#1a3d8f]" />
-          Enroll a Student
+          <UserPlus className="h-4 w-4 text-brand" />
+          Enroll a Staff Member
         </h2>
         <form onSubmit={handleEnroll} className="flex gap-3">
           <div className="flex-1">
             <Input
               type="email"
-              placeholder="student@example.com"
+              placeholder="staff@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -101,7 +101,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
           </Button>
         </form>
         <p className="text-xs text-slate-400 mt-2">
-          The student must already have an account with this email.
+          The staff member must already have an account with this email.
         </p>
       </div>
 
@@ -110,25 +110,25 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
             <Users className="h-4 w-4 text-slate-400" />
-            Enrolled Students
+            Enrolled Staff
           </h2>
           <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
-            {enrollments.length} {enrollments.length === 1 ? "student" : "students"}
+            {enrollments.length} {enrollments.length === 1 ? "staff member" : "staff members"}
           </span>
         </div>
 
         {enrollments.length === 0 ? (
           <div className="py-12 text-center">
             <Users className="h-10 w-10 text-slate-200 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">No students enrolled yet.</p>
-            <p className="text-xs text-slate-300 mt-1">Use the form above to add students.</p>
+            <p className="text-sm text-slate-400">No staff enrolled yet.</p>
+            <p className="text-xs text-slate-300 mt-1">Use the form above to add staff.</p>
           </div>
         ) : (
           <ul className="divide-y divide-slate-100">
             {enrollments.map((enrollment) => (
               <li key={enrollment.id} className="flex items-center gap-4 px-5 py-4">
                 <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-semibold text-[#1a3d8f]">
+                  <span className="text-sm font-semibold text-brand">
                     {enrollment.student.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -151,7 +151,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
                     <div className="mt-1.5 flex items-center gap-2">
                       <div className="flex-1 bg-slate-100 rounded-full h-1.5 max-w-[120px]">
                         <div
-                          className="bg-[#1a3d8f] h-1.5 rounded-full transition-all"
+                          className="bg-brand h-1.5 rounded-full transition-all"
                           style={{ width: `${enrollment.progress}%` }}
                         />
                       </div>
@@ -171,7 +171,7 @@ export function StudentsPanel({ courseId, initialEnrollments }: StudentsPanelPro
                     onClick={() => handleRemove(enrollment.id, enrollment.student.name)}
                     disabled={removingId === enrollment.id}
                     className="text-slate-300 hover:text-red-500 disabled:opacity-40 transition-colors"
-                    title="Remove student"
+                    title="Remove staff member"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

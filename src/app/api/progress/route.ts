@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { recordCourseCompletion } from "@/lib/sheets";
+import { markCourseComplete } from "@/lib/course-completion";
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth("STUDENT");
+    const session = await requireAuth("STAFF");
     const body = await request.json();
     const { lessonId } = body;
 
@@ -49,30 +49,7 @@ export async function POST(request: Request) {
     const allComplete = allLessons.every((l) => completedIds.has(l.id));
 
     if (allComplete && !enrollment.completedAt) {
-      await db.enrollment.update({
-        where: { id: enrollment.id },
-        data: { completedAt: new Date() },
-      });
-
-      const existing = await db.certificate.findUnique({
-        where: { studentId_courseId: { studentId: session.userId, courseId: lesson.module.courseId } },
-      });
-      if (!existing) {
-        await db.certificate.create({
-          data: { studentId: session.userId, courseId: lesson.module.courseId },
-        });
-
-        // Record completion in Google Sheet
-        const [student, course] = await Promise.all([
-          db.user.findUnique({ where: { id: session.userId }, select: { name: true } }),
-          db.course.findUnique({ where: { id: lesson.module.courseId }, select: { title: true } }),
-        ]);
-        if (student && course) {
-          recordCourseCompletion(student.name, course.title).catch((err) =>
-            console.error("Google Sheets update failed:", err)
-          );
-        }
-      }
+      await markCourseComplete(enrollment.id, session.userId, lesson.module.courseId);
     }
 
     return NextResponse.json({ data: progress });

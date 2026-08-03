@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+/*
+ * Sales Drug Search Console palette — single source of truth for brand color.
+ * Ported from ~/Documents/drug-panel-search/public/style.css so the merged
+ * portal matches the console's design exactly instead of the LMS's old
+ * hardcoded-per-file #1a3d8f/indigo styling.
+ */
+@theme {
+  --color-brand: #1d4f8c;
+  --color-brand-dark: #0f3564;
+  --color-brand-bright: #3568ad;
+  --color-brand-light: #e9f0f8;
+  --color-brand-line: #c9dced;
+  --color-accent: #2e8659;
+
+  --color-ink: #16202c;
+  --color-ink-soft: #4c5a68;
+  --color-ink-faint: #7c8896;
+  --color-paper: #f5f7fa;
+  --color-line: #e1e6ec;
+  --color-line-soft: #eef1f5;
+
+  --color-warn-bg: #fff4e5;
+  --color-warn-ink: #8a5a00;
+  --color-warn-line: #f2d9a8;
+  --color-danger-bg: #fdecec;
+  --color-danger-ink: #a3281c;
+  --color-danger-line: #f3c8c3;
+}
+
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
@@ -7,10 +36,82 @@
 
   body {
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
   }
+}
+
+/* ---------- DNA helix + auth-page animations (ported from the console) ---------- */
+
+@keyframes brand-bg-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes dna-twist {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+}
+
+@keyframes brand-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -30px) scale(1.08); }
+}
+
+@keyframes brand-card-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes brand-mark-in {
+  from { opacity: 0; transform: scale(0.6) rotate(-20deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes brand-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-brand-card-in { animation: brand-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-brand-fade-up { animation: brand-fade-up 0.5s ease-out both; }
+
+@keyframes summary-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(46, 134, 89, 0.45); }
+  100% { box-shadow: 0 0 0 14px rgba(46, 134, 89, 0); }
+}
+.animate-summary-pulse { animation: summary-pulse 0.6s ease-out; }
+
+@keyframes price-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-price-in { animation: price-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.select-input {
+  width: 100%;
+  padding: 11px 38px 11px 14px;
+  font-size: 14.5px;
+  font-family: inherit;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  border: 1.5px solid var(--color-line);
+  border-radius: 9px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c8f87' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.select-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(46, 134, 89, 0.15);
+  background-color: white;
 }
 
 /* TipTap editor styles */

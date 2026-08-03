@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Award, CheckCircle, Circle, ChevronDown, ChevronRight,
-  Download, Mail, Trash2, Plus, BookOpen, User, X, Clock,
+  Download, Mail, Trash2, Plus, BookOpen, User, X, Clock, Wrench, ShieldOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { formatDateShort } from "@/lib/utils";
+import type { ResourceKey } from "@/generated/prisma/enums";
 
 interface Lesson {
   id: string;
@@ -38,10 +39,19 @@ interface CourseEntry {
   modules: Module[];
 }
 
+interface GrantedResource {
+  id: string;
+  key: ResourceKey;
+  label: string;
+  grantedAt: string;
+}
+
 interface Props {
   student: { id: string; name: string; email: string; createdAt: string };
   courses: CourseEntry[];
   availableCourses: { id: string; title: string }[];
+  grantedResources: GrantedResource[];
+  availableResources: { key: ResourceKey; label: string }[];
 }
 
 function ProgressRing({ pct, color }: { pct: number; color: string }) {
@@ -71,7 +81,7 @@ function CourseCard({
   const [expanded, setExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
-  const ringColor = course.isCompleted ? "#10b981" : course.progress > 50 ? "#1a3d8f" : "#f59e0b";
+  const ringColor = course.isCompleted ? "#10b981" : course.progress > 50 ? "var(--color-brand)" : "#f59e0b";
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
@@ -177,12 +187,23 @@ function CourseCard({
   );
 }
 
-export function StudentDetailClient({ student, courses: initialCourses, availableCourses: initialAvailable }: Props) {
+export function StudentDetailClient({
+  student,
+  courses: initialCourses,
+  availableCourses: initialAvailable,
+  grantedResources: initialGrantedResources,
+  availableResources: initialAvailableResources,
+}: Props) {
   const [courses, setCourses] = useState(initialCourses);
   const [availableCourses, setAvailableCourses] = useState(initialAvailable);
   const [showAddCourse, setShowAddCourse] = useState(false);
   const [addingCourseId, setAddingCourseId] = useState<string | null>(null);
   const [sendingReminder, setSendingReminder] = useState(false);
+  const [resources, setResources] = useState(initialGrantedResources);
+  const [availableResources, setAvailableResources] = useState(initialAvailableResources);
+  const [showAddResource, setShowAddResource] = useState(false);
+  const [grantingResourceKey, setGrantingResourceKey] = useState<ResourceKey | null>(null);
+  const [revokingResourceId, setRevokingResourceId] = useState<string | null>(null);
   const { addToast } = useToast();
   const router = useRouter();
 
@@ -202,7 +223,7 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
         setAvailableCourses((prev) => [...prev, { id: removed.courseId, title: removed.title }]
           .sort((a, b) => a.title.localeCompare(b.title)));
       }
-      addToast("Student removed from course", "success");
+      addToast("Staff member removed from course", "success");
     } catch {
       addToast("Failed to remove enrollment", "error");
     }
@@ -231,6 +252,42 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
     }
   };
 
+  const handleGrantResource = async (key: ResourceKey, label: string) => {
+    setGrantingResourceKey(key);
+    try {
+      const res = await fetch("/api/resource-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId: student.id, resource: key }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed");
+      setResources((prev) => [...prev, data.data]);
+      setAvailableResources((prev) => prev.filter((r) => r.key !== key));
+      setShowAddResource(false);
+      addToast(`Granted access to ${label}`, "success");
+    } catch (err) {
+      addToast(err instanceof Error ? err.message : "Failed to grant access", "error");
+    } finally {
+      setGrantingResourceKey(null);
+    }
+  };
+
+  const handleRevokeResource = async (id: string, key: ResourceKey, label: string) => {
+    setRevokingResourceId(id);
+    try {
+      const res = await fetch(`/api/resource-access/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      setResources((prev) => prev.filter((r) => r.id !== id));
+      setAvailableResources((prev) => [...prev, { key, label }]);
+      addToast(`Access to ${label} revoked`, "success");
+    } catch {
+      addToast("Failed to revoke access", "error");
+    } finally {
+      setRevokingResourceId(null);
+    }
+  };
+
   const handleSendReminder = async () => {
     setSendingReminder(true);
     try {
@@ -249,7 +306,7 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
       {/* Student header card */}
       <div
         className="rounded-2xl p-6 mb-6 text-white relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0d1f4e 0%, #1a3d8f 60%, #2d5fc4 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand) 60%, var(--color-brand-bright) 100%)" }}
       >
         <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/5" />
         <div className="absolute right-20 bottom-0 w-24 h-24 rounded-full bg-white/5" />
@@ -262,7 +319,7 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
               <h1 className="text-xl font-bold">{student.name}</h1>
               <p className="text-blue-300 text-sm">{student.email}</p>
               <p className="text-blue-400 text-xs mt-0.5">
-                Student since {formatDateShort(student.createdAt)}
+                Staff since {formatDateShort(student.createdAt)}
               </p>
             </div>
           </div>
@@ -302,7 +359,7 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
         {availableCourses.length > 0 && (
           <button
             onClick={() => setShowAddCourse((v) => !v)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-[#1a3d8f]/30 text-[#1a3d8f] hover:bg-[#1a3d8f]/5 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-brand/30 text-brand hover:bg-brand/5 transition-colors"
           >
             {showAddCourse ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
             {showAddCourse ? "Cancel" : "Add to Course"}
@@ -345,7 +402,7 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
           {availableCourses.length > 0 && (
             <button
               onClick={() => setShowAddCourse(true)}
-              className="mt-3 text-sm font-medium text-[#1a3d8f] hover:underline"
+              className="mt-3 text-sm font-medium text-brand hover:underline"
             >
               Add to a course →
             </button>
@@ -355,6 +412,78 @@ export function StudentDetailClient({ student, courses: initialCourses, availabl
         <div className="space-y-3">
           {courses.map((c) => (
             <CourseCard key={c.enrollmentId} course={c} onUnenroll={handleUnenroll} />
+          ))}
+        </div>
+      )}
+
+      {/* Resources section */}
+      <div className="flex items-center justify-between mb-4 mt-8">
+        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+          Resource Access ({resources.length})
+        </h2>
+        {availableResources.length > 0 && (
+          <button
+            onClick={() => setShowAddResource((v) => !v)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-brand/30 text-brand hover:bg-brand/5 transition-colors"
+          >
+            {showAddResource ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+            {showAddResource ? "Cancel" : "Grant Access"}
+          </button>
+        )}
+      </div>
+
+      {showAddResource && (
+        <div className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+          <p className="text-xs font-medium text-slate-500 mb-3">Select a resource to grant access to:</p>
+          <div className="space-y-1">
+            {availableResources.map((r) => (
+              <button
+                key={r.key}
+                onClick={() => handleGrantResource(r.key, r.label)}
+                disabled={grantingResourceKey === r.key}
+                className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 text-left transition-colors disabled:opacity-60"
+              >
+                <div className="flex items-center gap-2">
+                  <Wrench className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm text-slate-700">{r.label}</span>
+                </div>
+                {grantingResourceKey === r.key ? (
+                  <span className="text-xs text-slate-400">Granting…</span>
+                ) : (
+                  <Plus className="h-4 w-4 text-slate-400" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {resources.length === 0 ? (
+        <div className="text-center py-10 bg-white rounded-xl border border-slate-200">
+          <Wrench className="h-8 w-8 text-slate-200 mx-auto mb-2" />
+          <p className="text-sm text-slate-500">No resource access granted yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {resources.map((r) => (
+            <div
+              key={r.id}
+              className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3"
+            >
+              <Wrench className="h-4 w-4 text-slate-400 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-slate-900">{r.label}</p>
+                <p className="text-xs text-slate-400">Granted {formatDateShort(r.grantedAt)}</p>
+              </div>
+              <button
+                onClick={() => handleRevokeResource(r.id, r.key, r.label)}
+                disabled={revokingResourceId === r.id}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                title="Revoke access"
+              >
+                <ShieldOff className="h-3.5 w-3.5" />
+              </button>
+            </div>
           ))}
         </div>
       )}

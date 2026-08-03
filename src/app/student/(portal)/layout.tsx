@@ -5,7 +5,7 @@ import { StudentNav } from "@/components/student/nav";
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
 
-  if (!session || session.role !== "STUDENT") {
+  if (!session || session.role !== "STAFF") {
     redirect("/login");
   }
 
