@@ -124,6 +124,73 @@ export async function sendStudentInviteEmail(
   });
 }
 
+export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string) {
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:40px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+        <tr>
+          <td style="background:#1d4f8c;padding:28px 40px;text-align:center;">
+            <img
+              src="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/logo.png"
+              alt="DNA Worldwide"
+              width="120"
+              style="display:block;margin:0 auto 10px;max-width:120px;height:auto;"
+            />
+            <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:-0.3px;">
+              DNA Worldwide
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:36px 40px 32px;">
+            <p style="margin:0 0 16px;color:#1e293b;font-size:16px;font-weight:600;">
+              Hello ${name},
+            </p>
+            <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.6;">
+              We received a request to reset the password on your DNA Worldwide account.
+              Click the button below to choose a new password. This link expires in
+              <strong>1 hour</strong>.
+            </p>
+            <div style="text-align:center;margin:0 0 28px;">
+              <a href="${resetUrl}"
+                 style="display:inline-block;background:#1d4f8c;color:#ffffff;text-decoration:none;
+                        font-size:15px;font-weight:600;padding:14px 32px;border-radius:8px;">
+                Reset Your Password
+              </a>
+            </div>
+            <p style="margin:0;color:#94a3b8;font-size:13px;line-height:1.6;">
+              Or copy and paste this link into your browser:<br>
+              <a href="${resetUrl}" style="color:#1d4f8c;word-break:break-all;">${resetUrl}</a>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f8fafc;padding:20px 40px;border-top:1px solid #e2e8f0;">
+            <p style="margin:0;color:#94a3b8;font-size:12px;text-align:center;">
+              If you didn't request a password reset, you can safely ignore this email —
+              your password won't be changed.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+  await sendEmail({
+    to,
+    subject: "Reset your DNA Worldwide password",
+    html,
+    text: `Hello ${name},\n\nWe received a request to reset the password on your DNA Worldwide account.\n\nReset it here: ${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, you can ignore this email.`,
+  });
+}
+
 function assignmentEmailHtml(studentName: string, itemLabel: string, itemUrl: string, itemWord: string) {
   return `
 <!DOCTYPE html>

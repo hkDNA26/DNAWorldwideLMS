@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AuthShell } from "@/components/brand/auth-shell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -61,11 +62,21 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4" style={{ animation: "brand-fade-up 0.3s ease both" }}>
           <Input id="email" name="email" type="email" label="Email" placeholder="you@dnaworkplace.com" autoComplete="username" required />
-          <Input id="password" name="password" type="password" label="Password" placeholder="••••••••" autoComplete="current-password" required />
+          <div>
+            <Input id="password" name="password" type="password" label="Password" placeholder="••••••••" autoComplete="current-password" required />
+            <div className="text-right mt-1.5">
+              <Link href="/forgot-password" className="text-[12.5px] text-ink-faint hover:text-ink transition-colors">
+                Forgot password?
+              </Link>
+            </div>
+          </div>
 
           {error && (
             <div className="p-2.5 rounded-lg bg-danger-bg border border-danger-line text-[13px] text-danger-ink">
-              {error}
+              {error}{" "}
+              <Link href="/forgot-password" className="font-semibold underline">
+                Reset your password
+              </Link>
             </div>
           )}
 
