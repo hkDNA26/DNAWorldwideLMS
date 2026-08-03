@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
-import { Edit3, Upload, PackageOpen, FileArchive } from "lucide-react";
+import { Edit3, Upload, PackageOpen, FileArchive, ImageIcon } from "lucide-react";
 import type { Course, ScormPackage } from "@/types";
 
 interface ScormBuilderProps {
@@ -19,6 +19,7 @@ export function ScormBuilder({ course: initialCourse, scormPackage: initialPacka
   const [editingCourse, setEditingCourse] = useState(false);
   const [courseForm, setCourseForm] = useState({ title: course.title, description: course.description });
   const [replacing, setReplacing] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
 
   const togglePublish = useCallback(async () => {
     const newStatus = course.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED";
@@ -45,6 +46,35 @@ export function ScormBuilder({ course: initialCourse, scormPackage: initialPacka
       addToast("Course info saved", "success");
     }
   }, [course.id, courseForm, addToast]);
+
+  const uploadCover = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      setUploadingCover(true);
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/upload?type=cover", { method: "POST", body: form });
+        const data = await res.json();
+        if (!data.data?.url) {
+          addToast(data.error || "Failed to upload cover image", "error");
+          return;
+        }
+        await fetch(`/api/courses/${course.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ coverImage: data.data.url }),
+        });
+        setCourse((p) => ({ ...p, coverImage: data.data.url }));
+        addToast("Cover image updated", "success");
+      } finally {
+        setUploadingCover(false);
+        e.target.value = "";
+      }
+    },
+    [course.id, addToast]
+  );
 
   const replacePackage = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +139,23 @@ export function ScormBuilder({ course: initialCourse, scormPackage: initialPacka
             </button>
           </div>
         )}
+
+        <div className="mt-4 flex items-center gap-3">
+          {course.coverImage ? (
+            <img src={course.coverImage} alt="" className="w-16 h-16 rounded-lg object-cover border border-slate-200 flex-shrink-0" />
+          ) : (
+            <div className="w-16 h-16 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
+              <ImageIcon className="h-5 w-5 text-slate-300" />
+            </div>
+          )}
+          <label
+            className={`inline-flex items-center gap-2 text-sm text-brand cursor-pointer hover:underline ${uploadingCover ? "opacity-50 pointer-events-none" : ""}`}
+          >
+            <Upload className="h-4 w-4" />
+            {uploadingCover ? "Uploading..." : course.coverImage ? "Replace header image" : "Upload header image"}
+            <input type="file" accept="image/*" className="hidden" onChange={uploadCover} disabled={uploadingCover} />
+          </label>
+        </div>
 
         <Button
           size="sm"
