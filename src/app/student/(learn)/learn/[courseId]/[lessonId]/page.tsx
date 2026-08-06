@@ -20,6 +20,13 @@ export default async function LearnPage({ params }: { params: Promise<Params> })
     redirect(`/student/catalog`);
   }
 
+  if (!enrollment.firstAccessedAt) {
+    await db.enrollment.update({
+      where: { id: enrollment.id },
+      data: { firstAccessedAt: new Date() },
+    });
+  }
+
   const course = await db.course.findUnique({
     where: { id: courseId },
     include: {
