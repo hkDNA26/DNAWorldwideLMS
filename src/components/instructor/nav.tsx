@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, BookOpen, Users, BarChart2, Award, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, BarChart2, Award, FileText, LogOut, ArrowLeft } from "lucide-react";
 
 const navItems = [
   { href: "/instructor/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/instructor/courses", label: "My Courses", icon: BookOpen },
   { href: "/instructor/students", label: "Staff", icon: Users },
+  { href: "/instructor/documents", label: "PDF Library", icon: FileText },
   { href: "/instructor/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/instructor/certificate-template", label: "Certificate", icon: Award },
 ];

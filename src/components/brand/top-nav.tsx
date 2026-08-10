@@ -21,7 +21,7 @@ export function TopNav({ email, isAdmin }: { email: string; isAdmin: boolean }) 
   return (
     <header
       className="sticky top-0 z-20 shadow-md"
-      style={{ background: "linear-gradient(135deg, var(--color-brand-dark), var(--color-brand))" }}
+      style={{ background: "linear-gradient(135deg, var(--color-brand-dark), var(--color-brand) 55%, #0f766e)" }}
     >
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3">

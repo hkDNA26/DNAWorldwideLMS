@@ -53,6 +53,24 @@ enum ResourceKey {
   ALCOHOL_CALCULATOR
 }
 
+enum PdfCategory {
+  INFORMATION_BOOKLET
+  NEWSLETTER
+}
+
+model PdfDocument {
+  id           String      @id @default(cuid())
+  category     PdfCategory
+  title        String
+  fileUrl      String
+  fileName     String
+  fileSize     Int
+  uploadedById String?
+  createdAt    DateTime    @default(now())
+
+  @@index([category, createdAt])
+}
+
 model ResourceAccess {
   id              String      @id @default(cuid())
   userId          String
