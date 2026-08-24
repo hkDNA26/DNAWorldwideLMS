@@ -3,7 +3,6 @@ import { ArrowRight, TestTubes } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { getResourceAccessMap } from "@/lib/resource-access";
 import { RESOURCES } from "@/lib/resources";
-import { LIBRARY_CATEGORIES } from "@/lib/library";
 import { BackLink } from "@/components/portal/back-link";
 
 interface Tile {
@@ -21,17 +20,10 @@ export default async function ResourcesPage() {
   const access = await getResourceAccessMap(session.userId, session.role);
   const grantedTools = RESOURCES.filter((resource) => access[resource.key] === "GRANTED");
 
-  // PDF libraries (booklets, newsletters) plus a couple of always-on reference pages are
-  // available to all staff; everything in RESOURCES (including Videos, Collectors,
-  // Clinics, Street Drug Search) is gated and depends on per-user access grants.
+  // Sample Types is the one remaining always-on reference page; everything else in
+  // RESOURCES (PDF libraries, Videos, Collectors, Clinics, Street Drug Search) is gated
+  // and depends on per-user access grants.
   const libraryTiles: Tile[] = [
-    ...LIBRARY_CATEGORIES.map((c) => ({
-      key: c.category,
-      label: c.label,
-      description: c.description,
-      icon: c.icon,
-      href: c.href,
-    })),
     {
       key: "SAMPLE_TYPES",
       label: "Suitable Sample Types for Alcohol Testing",

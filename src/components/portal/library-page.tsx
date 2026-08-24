@@ -1,14 +1,14 @@
-import { getSession } from "@/lib/auth";
+import { requireResourceAccess } from "@/lib/resource-access";
 import { db } from "@/lib/db";
 import { BackLink } from "@/components/portal/back-link";
 import { PdfList } from "@/components/portal/pdf-list";
 import { getLibraryCategory } from "@/lib/library";
-import type { PdfCategory } from "@/generated/prisma/enums";
+import type { PdfCategory, ResourceKey } from "@/generated/prisma/enums";
 
-/** Shared staff-facing listing for any file-library category. */
+/** Shared staff-facing listing for any file-library category. PdfCategory and
+ * ResourceKey share the same names for these four values by design. */
 export async function LibraryPage({ category }: { category: PdfCategory }) {
-  const session = await getSession();
-  if (!session) return null;
+  await requireResourceAccess(category as unknown as ResourceKey);
 
   const def = getLibraryCategory(category);
   const documents = await db.pdfDocument.findMany({

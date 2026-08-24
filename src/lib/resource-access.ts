@@ -14,6 +14,10 @@ export async function getResourceAccessMap(userId: string, role: "ADMIN" | "STAF
       CLINICS: "GRANTED" as AccessState,
       VIDEOS: "GRANTED" as AccessState,
       STREET_DRUG_SEARCH: "GRANTED" as AccessState,
+      INFORMATION_BOOKLET: "GRANTED" as AccessState,
+      NEWSLETTER: "GRANTED" as AccessState,
+      POWERPOINT_TEMPLATE: "GRANTED" as AccessState,
+      CPD_MATERIAL: "GRANTED" as AccessState,
     };
   }
 
@@ -43,6 +47,10 @@ export async function getResourceAccessMap(userId: string, role: "ADMIN" | "STAF
     CLINICS: "NONE",
     VIDEOS: "NONE",
     STREET_DRUG_SEARCH: "NONE",
+    INFORMATION_BOOKLET: "NONE",
+    NEWSLETTER: "NONE",
+    POWERPOINT_TEMPLATE: "NONE",
+    CPD_MATERIAL: "NONE",
   };
   for (const row of rows) {
     map[row.resource] = "GRANTED";

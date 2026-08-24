@@ -1,5 +1,6 @@
 import { FlaskConical, Beer, Clapperboard, Users, Globe2, SearchCheck, type LucideIcon } from "lucide-react";
 import type { ResourceKey } from "@/generated/prisma/enums";
+import { LIBRARY_CATEGORIES } from "@/lib/library";
 
 interface ResourceDef {
   key: ResourceKey;
@@ -53,6 +54,15 @@ export const RESOURCES: ResourceDef[] = [
     icon: SearchCheck,
     href: "/resources/street-drug-search",
   },
+  // The PDF library categories (PdfCategory) share the exact same names as their
+  // ResourceKey counterparts, so this reuses their definitions directly.
+  ...LIBRARY_CATEGORIES.map((c) => ({
+    key: c.category as unknown as ResourceKey,
+    label: c.label,
+    description: c.description,
+    icon: c.icon,
+    href: c.href,
+  })),
 ];
 
 export function getResource(key: ResourceKey) {
