@@ -1,12 +1,11 @@
-import { getSession } from "@/lib/auth";
+import { requireResourceAccess } from "@/lib/resource-access";
 import { db } from "@/lib/db";
 import { BackLink } from "@/components/portal/back-link";
 import { CollectorsExplorer } from "@/components/portal/collectors-explorer";
 import type { CollectorItem } from "@/lib/collectors";
 
 export default async function CollectorsPage() {
-  const session = await getSession();
-  if (!session) return null;
+  await requireResourceAccess("COLLECTORS");
 
   const rows = await db.collector.findMany({
     orderBy: { sortOrder: "asc" },

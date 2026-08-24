@@ -1,10 +1,9 @@
-import { getSession } from "@/lib/auth";
+import { requireResourceAccess } from "@/lib/resource-access";
 import { BackLink } from "@/components/portal/back-link";
 import { StreetDrugSearch } from "@/components/portal/street-drug-search";
 
 export default async function StreetDrugSearchPage() {
-  const session = await getSession();
-  if (!session) return null;
+  await requireResourceAccess("STREET_DRUG_SEARCH");
 
   return (
     <div>

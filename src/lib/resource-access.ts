@@ -10,15 +10,24 @@ export async function getResourceAccessMap(userId: string, role: "ADMIN" | "STAF
     return {
       DRUG_SEARCH: "GRANTED" as AccessState,
       ALCOHOL_CALCULATOR: "GRANTED" as AccessState,
+      COLLECTORS: "GRANTED" as AccessState,
+      CLINICS: "GRANTED" as AccessState,
+      VIDEOS: "GRANTED" as AccessState,
+      STREET_DRUG_SEARCH: "GRANTED" as AccessState,
     };
   }
 
   // Tender accounts get a fixed resource set (see the resources page) rather than
-  // per-user grants — the Alcohol Unit Calculator is part of that set.
+  // per-user grants — Alcohol Calculator, Videos and Street Drug Search are part of
+  // that set; Collectors and Clinics are staff-only.
   if (role === "TENDER") {
     return {
       DRUG_SEARCH: "NONE" as AccessState,
       ALCOHOL_CALCULATOR: "GRANTED" as AccessState,
+      COLLECTORS: "NONE" as AccessState,
+      CLINICS: "NONE" as AccessState,
+      VIDEOS: "GRANTED" as AccessState,
+      STREET_DRUG_SEARCH: "GRANTED" as AccessState,
     };
   }
 
@@ -30,6 +39,10 @@ export async function getResourceAccessMap(userId: string, role: "ADMIN" | "STAF
   const map: Record<string, AccessState> = {
     DRUG_SEARCH: "NONE",
     ALCOHOL_CALCULATOR: "NONE",
+    COLLECTORS: "NONE",
+    CLINICS: "NONE",
+    VIDEOS: "NONE",
+    STREET_DRUG_SEARCH: "NONE",
   };
   for (const row of rows) {
     map[row.resource] = "GRANTED";
@@ -45,7 +58,7 @@ export async function requireResourceAccess(resource: ResourceKey) {
 
   // Tender accounts get a fixed resource set rather than per-user grants.
   if (session.role === "TENDER") {
-    if (resource === "ALCOHOL_CALCULATOR") return session;
+    if (resource === "ALCOHOL_CALCULATOR" || resource === "VIDEOS" || resource === "STREET_DRUG_SEARCH") return session;
     redirect("/resources");
   }
 

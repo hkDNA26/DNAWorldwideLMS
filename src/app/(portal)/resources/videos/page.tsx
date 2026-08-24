@@ -1,11 +1,10 @@
-import { getSession } from "@/lib/auth";
+import { requireResourceAccess } from "@/lib/resource-access";
 import { db } from "@/lib/db";
 import { BackLink } from "@/components/portal/back-link";
 import { VideoGrid } from "@/components/portal/video-grid";
 
 export default async function VideosPage() {
-  const session = await getSession();
-  if (!session) return null;
+  await requireResourceAccess("VIDEOS");
 
   const videos = await db.videoResource.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],

@@ -1,4 +1,4 @@
-import { FlaskConical, Beer, type LucideIcon } from "lucide-react";
+import { FlaskConical, Beer, Clapperboard, Users, Globe2, SearchCheck, type LucideIcon } from "lucide-react";
 import type { ResourceKey } from "@/generated/prisma/enums";
 
 interface ResourceDef {
@@ -24,6 +24,34 @@ export const RESOURCES: ResourceDef[] = [
     description: "Calculate UK alcohol units for any drink, serving size and strength.",
     icon: Beer,
     href: "/resources/alcohol-calculator",
+  },
+  {
+    key: "VIDEOS",
+    label: "Videos",
+    description: "Training films and drug-profile videos to watch on demand.",
+    icon: Clapperboard,
+    href: "/resources/videos",
+  },
+  {
+    key: "COLLECTORS",
+    label: "Collector Profiles",
+    description: "Find our sample collectors by area, training or on the map.",
+    icon: Users,
+    href: "/resources/collectors",
+  },
+  {
+    key: "CLINICS",
+    label: "Global Clinic Locations",
+    description: "Browse our partner clinics worldwide by country, continent or map.",
+    icon: Globe2,
+    href: "/resources/clinics",
+  },
+  {
+    key: "STREET_DRUG_SEARCH",
+    label: "Drug Street Name Search",
+    description: "Type a street name to get the clinical name, classification, duration and risks.",
+    icon: SearchCheck,
+    href: "/resources/street-drug-search",
   },
 ];
 

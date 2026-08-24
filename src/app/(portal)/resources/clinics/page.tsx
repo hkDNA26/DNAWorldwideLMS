@@ -1,12 +1,11 @@
-import { getSession } from "@/lib/auth";
+import { requireResourceAccess } from "@/lib/resource-access";
 import { db } from "@/lib/db";
 import { BackLink } from "@/components/portal/back-link";
 import { ClinicsExplorer } from "@/components/portal/clinics-explorer";
 import type { ClinicItem } from "@/lib/clinics";
 
 export default async function ClinicsPage() {
-  const session = await getSession();
-  if (!session) return null;
+  await requireResourceAccess("CLINICS");
 
   const rows = await db.clinic.findMany({ orderBy: { sortOrder: "asc" } });
   const clinics: ClinicItem[] = rows.map((r) => ({

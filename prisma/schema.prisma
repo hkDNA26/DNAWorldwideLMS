@@ -53,6 +53,10 @@ enum QuestionType {
 enum ResourceKey {
   DRUG_SEARCH
   ALCOHOL_CALCULATOR
+  COLLECTORS
+  CLINICS
+  VIDEOS
+  STREET_DRUG_SEARCH
 }
 
 enum PdfCategory {
