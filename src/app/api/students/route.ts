@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { sendStudentInviteEmail } from "@/lib/email";
 import { RESOURCES } from "@/lib/resources";
+import { TENDER_COURSE_TITLES } from "@/lib/tender";
 import type { ResourceKey } from "@/generated/prisma/enums";
 import crypto from "crypto";
 
@@ -12,11 +13,14 @@ export async function GET() {
     await requireAuth("ADMIN");
 
     const students = await db.user.findMany({
-      where: { role: "STAFF" },
+      where: { role: { in: ["STAFF", "TENDER"] } },
       select: {
         id: true,
         name: true,
         email: true,
+        role: true,
+        organizationId: true,
+        organization: { select: { id: true, name: true, logoUrl: true } },
         createdAt: true,
         _count: { select: { enrollments: true } },
       },
@@ -43,10 +47,18 @@ export async function POST(request: Request) {
       sendInvite = false,
       courseIds = [] as string[],
       resourceKeys = [] as ResourceKey[],
+      role = "STAFF" as "STAFF" | "TENDER",
+      organizationId,
     } = body;
 
     if (!name?.trim() || !email?.trim()) {
       return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
+    }
+    if (role !== "STAFF" && role !== "TENDER") {
+      return NextResponse.json({ error: "Role must be STAFF or TENDER" }, { status: 400 });
+    }
+    if (role === "TENDER" && !organizationId) {
+      return NextResponse.json({ error: "Tender accounts must belong to an organization" }, { status: 400 });
     }
 
     if (!sendInvite) {
@@ -63,6 +75,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "A user with this email already exists" }, { status: 409 });
     }
 
+    if (organizationId) {
+      const org = await db.organization.findUnique({ where: { id: organizationId } });
+      if (!org) return NextResponse.json({ error: "Organization not found" }, { status: 404 });
+    }
+
     // Validate courseIds belong to this instructor
     let validCourseIds: string[] = [];
     if (courseIds.length > 0) {
@@ -73,9 +90,21 @@ export async function POST(request: Request) {
       validCourseIds = ownedCourses.map((c) => c.id);
     }
 
-    const validResourceKeys: ResourceKey[] = resourceKeys.filter((k: ResourceKey) =>
-      RESOURCES.some((r) => r.key === k)
-    );
+    // Tender accounts get a fixed resource set (see the resources page), not per-user
+    // grants, and are auto-enrolled in their fixed course list (see lib/tender.ts) —
+    // courses that don't exist here yet are simply skipped.
+    if (role === "TENDER") {
+      const tenderCourses = await db.course.findMany({
+        where: { title: { in: TENDER_COURSE_TITLES } },
+        select: { id: true },
+      });
+      for (const c of tenderCourses) {
+        if (!validCourseIds.includes(c.id)) validCourseIds.push(c.id);
+      }
+    }
+
+    const validResourceKeys: ResourceKey[] =
+      role === "TENDER" ? [] : resourceKeys.filter((k: ResourceKey) => RESOURCES.some((r) => r.key === k));
 
     const passwordHash = await bcrypt.hash(
       sendInvite ? crypto.randomBytes(16).toString("hex") : password,
@@ -88,7 +117,8 @@ export async function POST(request: Request) {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         passwordHash,
-        role: "STAFF",
+        role,
+        organizationId: role === "TENDER" ? organizationId : null,
         ...(validCourseIds.length > 0 && {
           enrollments: {
             create: validCourseIds.map((courseId) => ({ courseId })),
@@ -111,6 +141,9 @@ export async function POST(request: Request) {
         id: true,
         name: true,
         email: true,
+        role: true,
+        organizationId: true,
+        organization: { select: { id: true, name: true, logoUrl: true } },
         createdAt: true,
         _count: { select: { enrollments: true } },
         inviteTokens: sendInvite ? { select: { token: true }, orderBy: { createdAt: "desc" }, take: 1 } : false,

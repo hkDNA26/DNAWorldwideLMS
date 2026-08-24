@@ -15,6 +15,7 @@ export async function POST(request: Request) {
       image: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "images" },
       template: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "certificate-templates" },
       thumbnail: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "thumbnails" },
+      logo: { mimes: ["image/jpeg", "image/png", "image/webp", "image/svg+xml"], folder: "organizations" },
     };
 
     const config = allowedTypes[type];

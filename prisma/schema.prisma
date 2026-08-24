@@ -10,6 +10,7 @@ datasource db {
 enum Role {
   ADMIN
   STAFF
+  TENDER
 }
 
 enum CourseStatus {
@@ -40,6 +41,7 @@ enum ContentType {
   TEXT
   VIDEO
   QUIZ
+  EXTERNAL
 }
 
 enum QuestionType {
@@ -56,6 +58,8 @@ enum ResourceKey {
 enum PdfCategory {
   INFORMATION_BOOKLET
   NEWSLETTER
+  POWERPOINT_TEMPLATE
+  CPD_MATERIAL
 }
 
 model PdfDocument {
@@ -65,10 +69,68 @@ model PdfDocument {
   fileUrl      String
   fileName     String
   fileSize     Int
+  mimeType     String?
   uploadedById String?
   createdAt    DateTime    @default(now())
 
   @@index([category, createdAt])
+}
+
+model VideoResource {
+  id           String   @id @default(cuid())
+  title        String
+  provider     String   @default("vimeo")
+  videoId      String
+  videoHash    String?
+  thumbnailUrl String?
+  durationSec  Int?
+  sortOrder    Int      @default(0)
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  @@index([sortOrder, createdAt])
+}
+
+model Collector {
+  id           String   @id @default(cuid())
+  name         String
+  area         String
+  inTraining   Boolean  @default(false)
+  employment   String?
+  livesOutcode String?
+  covers       String?
+  capabilities String[]
+  avgAppTime   String?
+  notes        String?
+  photoUrl     String?
+  lat          Float?
+  lng          Float?
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([area])
+}
+
+model Clinic {
+  id             String   @id @default(cuid())
+  name           String
+  city           String?
+  country        String?
+  region         String?
+  address        String?
+  contactName    String?
+  email          String?
+  phone          String?
+  whatsapp       String?
+  photoUrl       String?
+  lat            Float?
+  lng            Float?
+  additionalInfo Json?
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  @@index([country])
+  @@index([region])
 }
 
 model ResourceAccess {
@@ -85,13 +147,15 @@ model ResourceAccess {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(STAFF)
-  createdAt    DateTime @default(now())
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  passwordHash   String
+  role           Role     @default(STAFF)
+  organizationId String?
+  createdAt      DateTime @default(now())
 
+  organization         Organization?         @relation(fields: [organizationId], references: [id])
   courses             Course[]
   enrollments         Enrollment[]
   quizAttempts        QuizAttempt[]
@@ -99,6 +163,17 @@ model User {
   certificateTemplate CertificateTemplate?
   inviteTokens        InviteToken[]
   resourceAccess      ResourceAccess[]
+}
+
+// A tender client (e.g. a council) whose TENDER-role users see white-labeled branding
+// instead of the DNA Worldwide identity while logged in.
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String?
+  createdAt DateTime @default(now())
+
+  users User[]
 }
 
 model InviteToken {
@@ -171,7 +246,7 @@ model Lesson {
   title       String
   orderIndex  Int
   contentType ContentType
-  content     String?
+  content     String?      // TEXT: rich-text HTML body. EXTERNAL: the iframe launch URL.
   videoUrl        String?
   videoThumbnail  String?
   createdAt       DateTime    @default(now())
@@ -234,6 +309,11 @@ model Enrollment {
   scormSuspendData      String?      @db.Text
   scormLocation         String?
   scormSessionUpdatedAt DateTime?
+
+  // Highest checkpoint reached inside an EXTERNAL-content lesson that's internally split
+  // into sequential parts (e.g. by quiz boundaries) — the embedded app posts a
+  // {type: "checkpoint-complete", checkpoint: n} message at each boundary. 0 = none yet.
+  externalCheckpoint Int @default(0)
 
   lessonProgress LessonProgress[]
 

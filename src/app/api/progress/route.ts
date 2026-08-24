@@ -5,7 +5,7 @@ import { markCourseComplete } from "@/lib/course-completion";
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth("STAFF");
+    const session = await requireAuth(["STAFF", "TENDER"]);
     const body = await request.json();
     const { lessonId } = body;
 

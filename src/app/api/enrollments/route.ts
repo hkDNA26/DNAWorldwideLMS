@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const session = await requireAuth("STAFF");
+    const session = await requireAuth(["STAFF", "TENDER"]);
 
     const enrollments = await db.enrollment.findMany({
       where: { studentId: session.userId },

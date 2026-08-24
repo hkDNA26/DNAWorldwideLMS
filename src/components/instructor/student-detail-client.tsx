@@ -5,12 +5,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Award, CheckCircle, Circle, ChevronDown, ChevronRight,
-  Download, Mail, Trash2, Plus, BookOpen, User, X, Clock, Wrench, ShieldOff,
+  Download, Mail, Trash2, Plus, BookOpen, User, X, Clock, Wrench, ShieldOff, Building2, Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { formatDateShort } from "@/lib/utils";
+import { TENDER_FIXED_ACCESS_SUMMARY } from "@/lib/tender";
 import type { ResourceKey } from "@/generated/prisma/enums";
+
+type Role = "STAFF" | "TENDER";
+
+interface Organization {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+}
 
 interface Lesson {
   id: string;
@@ -47,11 +57,20 @@ interface GrantedResource {
 }
 
 interface Props {
-  student: { id: string; name: string; email: string; createdAt: string };
+  student: {
+    id: string;
+    name: string;
+    email: string;
+    createdAt: string;
+    role: Role;
+    organizationId: string | null;
+    organization: Organization | null;
+  };
   courses: CourseEntry[];
   availableCourses: { id: string; title: string }[];
   grantedResources: GrantedResource[];
   availableResources: { key: ResourceKey; label: string }[];
+  organizations: Organization[];
 }
 
 function ProgressRing({ pct, color }: { pct: number; color: string }) {
@@ -188,12 +207,21 @@ function CourseCard({
 }
 
 export function StudentDetailClient({
-  student,
+  student: initialStudent,
   courses: initialCourses,
   availableCourses: initialAvailable,
   grantedResources: initialGrantedResources,
   availableResources: initialAvailableResources,
+  organizations: initialOrganizations,
 }: Props) {
+  const [student, setStudent] = useState(initialStudent);
+  const [organizations, setOrganizations] = useState(initialOrganizations);
+  const [changingRole, setChangingRole] = useState(false);
+  const [previewTender, setPreviewTender] = useState(false);
+  const [pendingOrgId, setPendingOrgId] = useState(student.organizationId ?? "");
+  const [newOrgName, setNewOrgName] = useState("");
+  const [newOrgLogo, setNewOrgLogo] = useState<File | null>(null);
+  const [creatingOrg, setCreatingOrg] = useState(false);
   const [courses, setCourses] = useState(initialCourses);
   const [availableCourses, setAvailableCourses] = useState(initialAvailable);
   const [showAddCourse, setShowAddCourse] = useState(false);
@@ -301,6 +329,71 @@ export function StudentDetailClient({
     }
   };
 
+  const handleCreateOrg = async () => {
+    if (!newOrgName.trim()) {
+      addToast("Organization name is required", "error");
+      return;
+    }
+    setCreatingOrg(true);
+    try {
+      let logoUrl: string | undefined;
+      if (newOrgLogo) {
+        const fd = new FormData();
+        fd.append("file", newOrgLogo);
+        const uploadRes = await fetch("/api/upload?type=logo", { method: "POST", body: fd });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          addToast(uploadData.error || "Logo upload failed", "error");
+          return;
+        }
+        logoUrl = uploadData.data.url;
+      }
+      const res = await fetch("/api/organizations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newOrgName, logoUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        addToast(data.error || "Failed to create organization", "error");
+        return;
+      }
+      setOrganizations((prev) => [...prev, data.data].sort((a, b) => a.name.localeCompare(b.name)));
+      setPendingOrgId(data.data.id);
+      setNewOrgName("");
+      setNewOrgLogo(null);
+      addToast(`${data.data.name} created`, "success");
+    } finally {
+      setCreatingOrg(false);
+    }
+  };
+
+  const handleChangeRole = async (role: Role) => {
+    if (role === "TENDER" && !pendingOrgId) {
+      addToast("Pick or create an organization first", "error");
+      return;
+    }
+    setChangingRole(true);
+    try {
+      const res = await fetch(`/api/students/${student.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role, organizationId: role === "TENDER" ? pendingOrgId : undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        addToast(data.error || "Failed to update role", "error");
+        return;
+      }
+      const org = organizations.find((o) => o.id === data.data.organizationId) ?? null;
+      setStudent((prev) => ({ ...prev, role: data.data.role, organizationId: data.data.organizationId, organization: org }));
+      addToast(`Role updated to ${role === "TENDER" ? "Tender" : "Staff"}`, "success");
+      router.refresh();
+    } finally {
+      setChangingRole(false);
+    }
+  };
+
   return (
     <div>
       {/* Student header card */}
@@ -312,14 +405,26 @@ export function StudentDetailClient({
         <div className="absolute right-20 bottom-0 w-24 h-24 rounded-full bg-white/5" />
         <div className="relative flex items-start justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
-              {student.name.charAt(0).toUpperCase()}
+            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 overflow-hidden">
+              {student.role === "TENDER" && student.organization?.logoUrl ? (
+                <img src={student.organization.logoUrl} alt="" className="w-full h-full object-cover" />
+              ) : (
+                student.name.charAt(0).toUpperCase()
+              )}
             </div>
             <div>
-              <h1 className="text-xl font-bold">{student.name}</h1>
+              <h1 className="text-xl font-bold flex items-center gap-2">
+                {student.name}
+                {student.role === "TENDER" && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-100 bg-amber-500/40 border border-amber-300/40 rounded-full px-2 py-0.5">
+                    Tender
+                  </span>
+                )}
+              </h1>
               <p className="text-blue-300 text-sm">{student.email}</p>
               <p className="text-blue-400 text-xs mt-0.5">
-                Staff since {formatDateShort(student.createdAt)}
+                {student.role === "TENDER" ? "Tender partner" : "Staff"} since {formatDateShort(student.createdAt)}
+                {student.organization && ` · ${student.organization.name}`}
               </p>
             </div>
           </div>
@@ -349,6 +454,117 @@ export function StudentDetailClient({
             {sendingReminder ? "Sending…" : "Send Reminder Email"}
           </button>
         </div>
+      </div>
+
+      {/* Role section */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8">
+        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">Role</h2>
+        <div className="flex gap-2 mb-3">
+          {(["STAFF", "TENDER"] as Role[]).map((r) => (
+            <button
+              key={r}
+              type="button"
+              disabled={changingRole}
+              onClick={() => {
+                if (r === student.role) return;
+                // Demoting to Staff needs no extra info — switch immediately. Promoting to
+                // Tender needs an organization first, so just reveal that picker.
+                if (r === "STAFF") { handleChangeRole("STAFF"); setPreviewTender(false); }
+                else setPreviewTender(true);
+              }}
+              className={`flex-1 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors disabled:opacity-60 ${
+                student.role === r
+                  ? "border-brand bg-brand-light text-brand"
+                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+              }`}
+            >
+              {r === "STAFF" ? "Staff" : "Tender"}
+            </button>
+          ))}
+        </div>
+
+        {student.role === "STAFF" && !previewTender && (
+          <p className="text-xs text-slate-500">
+            Standard staff access — courses and resource grants below.
+          </p>
+        )}
+
+        {(student.role === "TENDER" || previewTender) && (
+          <div className="space-y-3">
+            <p className="text-xs text-slate-500">
+              Tender accounts automatically get: {TENDER_FIXED_ACCESS_SUMMARY.join(", ")}.
+            </p>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-700 mb-1.5">Organization</label>
+              <div className="flex items-center gap-2">
+                <select
+                  value={pendingOrgId}
+                  onChange={(e) => setPendingOrgId(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm text-slate-900"
+                >
+                  <option value="">Select an organization…</option>
+                  {organizations.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.name}
+                    </option>
+                  ))}
+                </select>
+                {(student.role === "STAFF" || pendingOrgId !== student.organizationId) && (
+                  <Button
+                    type="button"
+                    loading={changingRole}
+                    disabled={!pendingOrgId}
+                    onClick={() => handleChangeRole("TENDER")}
+                  >
+                    {student.role === "STAFF" ? "Switch to Tender" : "Save"}
+                  </Button>
+                )}
+                {student.role === "STAFF" && (
+                  <Button type="button" variant="outline" onClick={() => { setPreviewTender(false); setPendingOrgId(""); }}>
+                    Cancel
+                  </Button>
+                )}
+              </div>
+              {student.organization && (
+                <div className="flex items-center gap-2 mt-2">
+                  {student.organization.logoUrl && (
+                    <img
+                      src={student.organization.logoUrl}
+                      alt=""
+                      className="w-6 h-6 rounded object-cover border border-slate-200"
+                    />
+                  )}
+                  <span className="text-xs text-slate-500">Currently: {student.organization.name}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2.5">
+              <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                <Building2 className="h-3.5 w-3.5" /> Or create a new organization
+              </p>
+              <Input
+                placeholder="Organization name, e.g. Swansea Council"
+                value={newOrgName}
+                onChange={(e) => setNewOrgName(e.target.value)}
+              />
+              <label className="flex items-center gap-2 text-xs text-slate-500 cursor-pointer">
+                <Upload className="h-3.5 w-3.5" />
+                {newOrgLogo ? newOrgLogo.name : "Upload logo (optional, SVG/PNG/JPG)"}
+                <input
+                  type="file"
+                  accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                  className="hidden"
+                  onChange={(e) => setNewOrgLogo(e.target.files?.[0] ?? null)}
+                />
+              </label>
+              <Button type="button" variant="outline" loading={creatingOrg} onClick={handleCreateOrg}>
+                Create organization
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Courses section */}
@@ -417,75 +633,96 @@ export function StudentDetailClient({
       )}
 
       {/* Resources section */}
-      <div className="flex items-center justify-between mb-4 mt-8">
-        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
-          Resource Access ({resources.length})
-        </h2>
-        {availableResources.length > 0 && (
-          <button
-            onClick={() => setShowAddResource((v) => !v)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-brand/30 text-brand hover:bg-brand/5 transition-colors"
-          >
-            {showAddResource ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-            {showAddResource ? "Cancel" : "Grant Access"}
-          </button>
-        )}
-      </div>
-
-      {showAddResource && (
-        <div className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
-          <p className="text-xs font-medium text-slate-500 mb-3">Select a resource to grant access to:</p>
-          <div className="space-y-1">
-            {availableResources.map((r) => (
-              <button
-                key={r.key}
-                onClick={() => handleGrantResource(r.key, r.label)}
-                disabled={grantingResourceKey === r.key}
-                className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 text-left transition-colors disabled:opacity-60"
-              >
-                <div className="flex items-center gap-2">
-                  <Wrench className="h-4 w-4 text-slate-400" />
-                  <span className="text-sm text-slate-700">{r.label}</span>
+      {student.role === "TENDER" ? (
+        <div className="mt-8">
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">Resource Access</h2>
+          <div className="bg-white border border-slate-200 rounded-xl p-4">
+            <p className="text-xs text-slate-500 mb-3">
+              Tender accounts get a fixed resource set (not individually granted):
+            </p>
+            <div className="space-y-2">
+              {TENDER_FIXED_ACCESS_SUMMARY.map((label) => (
+                <div key={label} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-50 border border-slate-200">
+                  <Wrench className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                  <span className="text-sm text-slate-700">{label}</span>
                 </div>
-                {grantingResourceKey === r.key ? (
-                  <span className="text-xs text-slate-400">Granting…</span>
-                ) : (
-                  <Plus className="h-4 w-4 text-slate-400" />
-                )}
-              </button>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      )}
-
-      {resources.length === 0 ? (
-        <div className="text-center py-10 bg-white rounded-xl border border-slate-200">
-          <Wrench className="h-8 w-8 text-slate-200 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No resource access granted yet.</p>
-        </div>
       ) : (
-        <div className="space-y-2">
-          {resources.map((r) => (
-            <div
-              key={r.id}
-              className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3"
-            >
-              <Wrench className="h-4 w-4 text-slate-400 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-900">{r.label}</p>
-                <p className="text-xs text-slate-400">Granted {formatDateShort(r.grantedAt)}</p>
-              </div>
+        <>
+          <div className="flex items-center justify-between mb-4 mt-8">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Resource Access ({resources.length})
+            </h2>
+            {availableResources.length > 0 && (
               <button
-                onClick={() => handleRevokeResource(r.id, r.key, r.label)}
-                disabled={revokingResourceId === r.id}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                title="Revoke access"
+                onClick={() => setShowAddResource((v) => !v)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-brand/30 text-brand hover:bg-brand/5 transition-colors"
               >
-                <ShieldOff className="h-3.5 w-3.5" />
+                {showAddResource ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+                {showAddResource ? "Cancel" : "Grant Access"}
               </button>
+            )}
+          </div>
+
+          {showAddResource && (
+            <div className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+              <p className="text-xs font-medium text-slate-500 mb-3">Select a resource to grant access to:</p>
+              <div className="space-y-1">
+                {availableResources.map((r) => (
+                  <button
+                    key={r.key}
+                    onClick={() => handleGrantResource(r.key, r.label)}
+                    disabled={grantingResourceKey === r.key}
+                    className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 text-left transition-colors disabled:opacity-60"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Wrench className="h-4 w-4 text-slate-400" />
+                      <span className="text-sm text-slate-700">{r.label}</span>
+                    </div>
+                    {grantingResourceKey === r.key ? (
+                      <span className="text-xs text-slate-400">Granting…</span>
+                    ) : (
+                      <Plus className="h-4 w-4 text-slate-400" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          )}
+
+          {resources.length === 0 ? (
+            <div className="text-center py-10 bg-white rounded-xl border border-slate-200">
+              <Wrench className="h-8 w-8 text-slate-200 mx-auto mb-2" />
+              <p className="text-sm text-slate-500">No resource access granted yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {resources.map((r) => (
+                <div
+                  key={r.id}
+                  className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3"
+                >
+                  <Wrench className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-slate-900">{r.label}</p>
+                    <p className="text-xs text-slate-400">Granted {formatDateShort(r.grantedAt)}</p>
+                  </div>
+                  <button
+                    onClick={() => handleRevokeResource(r.id, r.key, r.label)}
+                    disabled={revokingResourceId === r.id}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                    title="Revoke access"
+                  >
+                    <ShieldOff className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

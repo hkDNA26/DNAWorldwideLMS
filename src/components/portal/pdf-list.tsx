@@ -1,4 +1,5 @@
-import { FileText, Download, Eye } from "lucide-react";
+import { FileText, Download, Eye, Image as ImageIcon, Film, Presentation, type LucideIcon } from "lucide-react";
+import { formatFileSize } from "@/lib/format";
 
 export interface PdfListItem {
   id: string;
@@ -7,12 +8,16 @@ export interface PdfListItem {
   fileName: string;
   fileSize: number;
   createdAt: Date;
+  mimeType?: string | null;
 }
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+function iconFor(mime: string | null | undefined, fileName: string): LucideIcon {
+  const m = mime ?? "";
+  const f = fileName.toLowerCase();
+  if (m.startsWith("image/") || /\.(jpe?g|png|webp|gif)$/.test(f)) return ImageIcon;
+  if (m.startsWith("video/") || /\.(mp4|webm|mov)$/.test(f)) return Film;
+  if (m.includes("presentation") || m.includes("powerpoint") || /\.(pptx?|potx)$/.test(f)) return Presentation;
+  return FileText;
 }
 
 const dateFmt = new Intl.DateTimeFormat("en-GB", {
@@ -32,19 +37,21 @@ export function PdfList({ documents, emptyLabel }: { documents: PdfListItem[]; e
 
   return (
     <ul className="space-y-3">
-      {documents.map((doc, i) => (
+      {documents.map((doc, i) => {
+        const Icon = iconFor(doc.mimeType, doc.fileName);
+        return (
         <li
           key={doc.id}
           className="bg-white border border-line rounded-2xl p-4 sm:p-5 shadow-sm flex items-center gap-4 animate-brand-card-in"
           style={{ animationDelay: `${i * 50}ms` }}
         >
           <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center text-brand shrink-0">
-            <FileText className="w-5 h-5" />
+            <Icon className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[15px] font-semibold text-ink truncate">{doc.title}</p>
             <p className="text-[12.5px] text-ink-faint mt-0.5">
-              {dateFmt.format(doc.createdAt)} &middot; {formatSize(doc.fileSize)}
+              {dateFmt.format(doc.createdAt)} &middot; {formatFileSize(doc.fileSize)}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -67,7 +74,8 @@ export function PdfList({ documents, emptyLabel }: { documents: PdfListItem[]; e
             </a>
           </div>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 }

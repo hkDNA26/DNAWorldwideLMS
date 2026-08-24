@@ -76,7 +76,7 @@ export function MedicationSearch() {
             )}
             {suggestions.map((m, i) => (
               <li
-                key={m.brand}
+                key={`${m.brand}-${m.ingredient}-${m.group}`}
                 onMouseDown={(e) => { e.preventDefault(); selectMedication(m); }}
                 className={`px-3 py-2 rounded-lg text-sm cursor-pointer ${i === activeIndex ? "bg-brand-light" : "hover:bg-brand-light"}`}
               >

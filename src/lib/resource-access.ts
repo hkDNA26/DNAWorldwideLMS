@@ -5,10 +5,19 @@ import type { ResourceKey } from "@/generated/prisma/enums";
 
 export type AccessState = "GRANTED" | "NONE";
 
-export async function getResourceAccessMap(userId: string, isAdmin: boolean) {
-  if (isAdmin) {
+export async function getResourceAccessMap(userId: string, role: "ADMIN" | "STAFF" | "TENDER") {
+  if (role === "ADMIN") {
     return {
       DRUG_SEARCH: "GRANTED" as AccessState,
+      ALCOHOL_CALCULATOR: "GRANTED" as AccessState,
+    };
+  }
+
+  // Tender accounts get a fixed resource set (see the resources page) rather than
+  // per-user grants — the Alcohol Unit Calculator is part of that set.
+  if (role === "TENDER") {
+    return {
+      DRUG_SEARCH: "NONE" as AccessState,
       ALCOHOL_CALCULATOR: "GRANTED" as AccessState,
     };
   }
@@ -33,6 +42,12 @@ export async function requireResourceAccess(resource: ResourceKey) {
   if (!session) redirect("/login");
 
   if (session.role === "ADMIN") return session;
+
+  // Tender accounts get a fixed resource set rather than per-user grants.
+  if (session.role === "TENDER") {
+    if (resource === "ALCOHOL_CALCULATOR") return session;
+    redirect("/resources");
+  }
 
   const access = await db.resourceAccess.findUnique({
     where: { userId_resource: { userId: session.userId, resource } },

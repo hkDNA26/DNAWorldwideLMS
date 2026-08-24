@@ -14,13 +14,22 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
 
   const { studentId } = await params;
 
-  const student = await db.user.findUnique({
-    where: { id: studentId, role: "STAFF" },
-    select: { id: true, name: true, email: true, createdAt: true },
+  const studentRecord = await db.user.findUnique({
+    where: { id: studentId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      organizationId: true,
+      organization: { select: { id: true, name: true, logoUrl: true } },
+      createdAt: true,
+    },
   });
-  if (!student) notFound();
+  if (!studentRecord || studentRecord.role === "ADMIN") notFound();
+  const student = { ...studentRecord, role: studentRecord.role as "STAFF" | "TENDER" };
 
-  const [enrollments, certificates, allCourses, resourceAccess] = await Promise.all([
+  const [enrollments, certificates, allCourses, resourceAccess, organizations] = await Promise.all([
     db.enrollment.findMany({
       where: { studentId },
       include: {
@@ -53,6 +62,10 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
     db.resourceAccess.findMany({
       where: { userId: studentId },
       select: { id: true, resource: true, grantedAt: true },
+    }),
+    db.organization.findMany({
+      select: { id: true, name: true, logoUrl: true },
+      orderBy: { name: "asc" },
     }),
   ]);
 
@@ -106,7 +119,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 mb-6 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Staff
+        Back to Staff &amp; Tender Accounts
       </Link>
 
       <StudentDetailClient
@@ -115,6 +128,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
         availableCourses={availableCourses}
         grantedResources={grantedResources}
         availableResources={availableResources}
+        organizations={organizations}
       />
     </div>
   );

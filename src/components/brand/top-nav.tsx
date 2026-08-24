@@ -3,10 +3,31 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/brand/theme-toggle";
 
-export function TopNav({ email, isAdmin }: { email: string; isAdmin: boolean }) {
+interface Branding {
+  name: string;
+  subtitle: string;
+  logoUrl: string;
+}
+
+const DEFAULT_BRANDING: Branding = { name: "DNA Worldwide", subtitle: "Staff Portal", logoUrl: "/logo.png" };
+
+export function TopNav({
+  email,
+  isAdmin,
+  organization,
+}: {
+  email: string;
+  isAdmin: boolean;
+  organization?: { name: string; logoUrl: string | null } | null;
+}) {
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
+
+  const branding: Branding = organization
+    ? { name: organization.name, subtitle: "Partner Portal", logoUrl: organization.logoUrl || DEFAULT_BRANDING.logoUrl }
+    : DEFAULT_BRANDING;
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -25,16 +46,21 @@ export function TopNav({ email, isAdmin }: { email: string; isAdmin: boolean }) 
     >
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3">
-          <span className="grid place-items-center w-[42px] h-[42px] rounded-[10px] bg-white/95 border border-white/50 shadow shrink-0">
-            <img src="/logo.png" alt="" className="w-7 h-7 object-contain" />
+          <span className="grid place-items-center w-[42px] h-[42px] rounded-[10px] bg-white/95 border border-white/50 shadow shrink-0 overflow-hidden">
+            <img
+              src={branding.logoUrl}
+              alt=""
+              className={organization ? "w-full h-full object-cover" : "w-7 h-7 object-contain"}
+            />
           </span>
           <div>
-            <h1 className="text-white text-[17px] font-bold leading-tight">DNA Worldwide</h1>
-            <p className="text-white/75 text-xs leading-tight">Staff Portal</p>
+            <h1 className="text-white text-[17px] font-bold leading-tight">{branding.name}</h1>
+            <p className="text-white/75 text-xs leading-tight">{branding.subtitle}</p>
           </div>
         </Link>
 
         <div className="flex items-center gap-3.5">
+          <ThemeToggle className="text-white/85 hover:text-white hover:bg-white/15 border border-white/25 rounded-full p-2 w-9 h-9 transition-colors" />
           {isAdmin && (
             <Link
               href="/instructor/dashboard"

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clapperboard, Users, Globe2, TestTubes, SearchCheck } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { getResourceAccessMap } from "@/lib/resource-access";
 import { RESOURCES } from "@/lib/resources";
-import { PDF_CATEGORIES } from "@/lib/pdf-library";
+import { LIBRARY_CATEGORIES } from "@/lib/library";
 import { BackLink } from "@/components/portal/back-link";
 
 interface Tile {
@@ -18,18 +18,55 @@ export default async function ResourcesPage() {
   const session = await getSession();
   if (!session) return null;
 
-  const access = await getResourceAccessMap(session.userId, session.role === "ADMIN");
+  const access = await getResourceAccessMap(session.userId, session.role);
   const grantedTools = RESOURCES.filter((resource) => access[resource.key] === "GRANTED");
 
   // PDF libraries (booklets, newsletters) are available to all staff; the gated
   // staff tools below them still depend on per-user access grants.
-  const libraryTiles: Tile[] = PDF_CATEGORIES.map((c) => ({
-    key: c.category,
-    label: c.label,
-    description: c.description,
-    icon: c.icon,
-    href: c.href,
-  }));
+  const libraryTiles: Tile[] = [
+    ...LIBRARY_CATEGORIES.map((c) => ({
+      key: c.category,
+      label: c.label,
+      description: c.description,
+      icon: c.icon,
+      href: c.href,
+    })),
+    {
+      key: "VIDEOS",
+      label: "Videos",
+      description: "Training films and drug-profile videos to watch on demand.",
+      icon: Clapperboard,
+      href: "/resources/videos",
+    },
+    {
+      key: "COLLECTORS",
+      label: "Collector Profiles",
+      description: "Find our sample collectors by area, training or on the map.",
+      icon: Users,
+      href: "/resources/collectors",
+    },
+    {
+      key: "CLINICS",
+      label: "Global Clinic Locations",
+      description: "Browse our partner clinics worldwide by country, continent or map.",
+      icon: Globe2,
+      href: "/resources/clinics",
+    },
+    {
+      key: "SAMPLE_TYPES",
+      label: "Suitable Sample Types for Alcohol Testing",
+      description: "Which sample types suit excessive, abstinence and segmented testing when head hair isn't available.",
+      icon: TestTubes,
+      href: "/resources/sample-types",
+    },
+    {
+      key: "STREET_DRUG_SEARCH",
+      label: "Drug Street Name Search",
+      description: "Type a street name to get the clinical name, classification, duration and risks.",
+      icon: SearchCheck,
+      href: "/resources/street-drug-search",
+    },
+  ];
   const toolTiles: Tile[] = grantedTools.map((r) => ({
     key: r.key,
     label: r.label,
@@ -37,7 +74,10 @@ export default async function ResourcesPage() {
     icon: r.icon,
     href: r.href,
   }));
-  const tiles = [...libraryTiles, ...toolTiles];
+  // Tender accounts see a fixed, minimal resource set instead of the full staff library.
+  const TENDER_TILE_KEYS = new Set(["VIDEOS", "STREET_DRUG_SEARCH", "ALCOHOL_CALCULATOR"]);
+  const allTiles = [...libraryTiles, ...toolTiles];
+  const tiles = session.role === "TENDER" ? allTiles.filter((t) => TENDER_TILE_KEYS.has(t.key)) : allTiles;
 
   return (
     <div>

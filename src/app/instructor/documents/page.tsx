@@ -28,9 +28,9 @@ export default async function InstructorDocumentsPage() {
   return (
     <div className="max-w-4xl mx-auto px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-ink">PDF Library</h1>
+        <h1 className="text-2xl font-bold text-ink">Resource Library</h1>
         <p className="text-ink-soft mt-1">
-          Add or remove the information booklets and newsletters that staff can view and download in Resources.
+          Add or remove the booklets, newsletters, PowerPoint templates and CPD material that staff can view and download in Resources.
         </p>
       </div>
       <DocumentsManager documents={documents} />

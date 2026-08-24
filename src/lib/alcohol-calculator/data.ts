@@ -94,3 +94,36 @@ export function calculateUnits(abv: number, ml: number): number {
 
 // UK Chief Medical Officers' low-risk drinking guideline.
 export const WEEKLY_UNIT_GUIDELINE = 14;
+
+// WHO daily alcohol-consumption thresholds (World Health Organization survey).
+// "Excessive" is defined as reaching this many units of ethanol per day.
+export type Sex = "men" | "women";
+
+export const WHO_THRESHOLDS: Record<Sex, { excessiveUnits: number; excessiveGrams: number }> = {
+  men: { excessiveUnits: 7.5, excessiveGrams: 60 },
+  women: { excessiveUnits: 5, excessiveGrams: 40 },
+};
+
+// A 30-day month, used to translate the WHO daily "excessive" threshold into a monthly
+// reference figure — useful when interpreting a segmented hair test (~1 month/cm).
+export const MONTHLY_DAYS = 30;
+
+export const WHO_MONTHLY_THRESHOLDS: Record<Sex, { excessiveUnits: number; excessiveGrams: number }> = {
+  men: {
+    excessiveUnits: WHO_THRESHOLDS.men.excessiveUnits * MONTHLY_DAYS,
+    excessiveGrams: WHO_THRESHOLDS.men.excessiveGrams * MONTHLY_DAYS,
+  },
+  women: {
+    excessiveUnits: WHO_THRESHOLDS.women.excessiveUnits * MONTHLY_DAYS,
+    excessiveGrams: WHO_THRESHOLDS.women.excessiveGrams * MONTHLY_DAYS,
+  },
+};
+
+export type WhoLevel = "abstinence" | "occasional" | "excessive";
+
+/** Classify a day's total units against the WHO thresholds for the given sex. */
+export function whoLevel(units: number, sex: Sex): WhoLevel {
+  if (units <= 0) return "abstinence";
+  if (units >= WHO_THRESHOLDS[sex].excessiveUnits) return "excessive";
+  return "occasional";
+}

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle, Circle, ChevronDown, ChevronRight, FileText, Video, HelpCircle, Award, ArrowLeft, Eye, RotateCcw, ArrowRight } from "lucide-react";
+import { CheckCircle, Circle, ChevronDown, ChevronRight, FileText, Video, HelpCircle, Globe, Award, ArrowLeft, Eye, RotateCcw, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { QuizPlayer } from "./quiz-player";
@@ -68,12 +68,16 @@ interface CoursePlayerProps {
   certificate: Certificate | null;
   latestAttempt: QuizAttemptData | null;
   isPreview?: boolean;
+  // Highest checkpoint an EXTERNAL lesson's embedded app has signalled via postMessage
+  // (see Enrollment.externalCheckpoint). 0 if none reached yet or not applicable.
+  externalCheckpoint?: number;
 }
 
 const CONTENT_ICONS: Record<string, React.ReactNode> = {
   TEXT: <FileText className="h-3.5 w-3.5" />,
   VIDEO: <Video className="h-3.5 w-3.5" />,
   QUIZ: <HelpCircle className="h-3.5 w-3.5" />,
+  EXTERNAL: <Globe className="h-3.5 w-3.5" />,
 };
 
 export function CoursePlayer({
@@ -84,6 +88,7 @@ export function CoursePlayer({
   certificate: initialCert,
   latestAttempt,
   isPreview = false,
+  externalCheckpoint: initialCheckpoint = 0,
 }: CoursePlayerProps) {
   const router = useRouter();
   const { addToast } = useToast();
@@ -97,6 +102,15 @@ export function CoursePlayer({
 
   // Text: track when "Continue" has been clicked (marks complete)
   const [textProceedLoading, setTextProceedLoading] = useState(false);
+
+  // External: the embedded app signals completion via postMessage (it may
+  // live on any origin — e.g. the DNA Legal training module on Railway — so
+  // there's no fixed origin to allowlist). We verify the message really came
+  // from *this* iframe by comparing event.source to its contentWindow,
+  // rather than trusting an origin string.
+  const externalIframeRef = useRef<HTMLIFrameElement>(null);
+  const [externalCompleted, setExternalCompleted] = useState(false);
+  const [externalCheckpoint, setExternalCheckpoint] = useState(initialCheckpoint);
 
   const [expandedModules, setExpandedModules] = useState<Set<string>>(
     new Set(course.modules.map((m) => m.id))
@@ -226,6 +240,56 @@ export function CoursePlayer({
     newIds.add(currentLesson.id);
     proceedNext(newIds);
   }, [completedIds, currentLesson.id, proceedNext]);
+
+  // EXTERNAL: embedded app posts {type: "lesson-complete"} when the learner
+  // finishes. Reuses the exact same markLessonComplete/proceedNext path as
+  // every other content type, so completion, certificates, and progress
+  // stats all work identically.
+  const onExternalComplete = useCallback(async () => {
+    if (externalCompleted) return; // idempotent — an app might post more than once
+    setExternalCompleted(true);
+    if (isPreview) {
+      addToast("Preview mode — progress is not tracked", "info");
+      return;
+    }
+    await markLessonComplete(currentLesson.id);
+  }, [externalCompleted, isPreview, markLessonComplete, currentLesson.id, addToast]);
+
+  const onExternalContinue = useCallback(async () => {
+    const newIds = completedIds.has(currentLesson.id)
+      ? completedIds
+      : await markLessonComplete(currentLesson.id);
+    proceedNext(newIds);
+  }, [completedIds, currentLesson.id, markLessonComplete, proceedNext]);
+
+  // EXTERNAL: embedded app posts {type: "checkpoint-complete", checkpoint: n} at internal
+  // section boundaries (e.g. quiz 1, quiz 2) — purely a progress indicator, doesn't affect
+  // lesson/course completion. Ratchets forward only, and is a no-op in preview mode.
+  const onExternalCheckpoint = useCallback(async (checkpoint: number) => {
+    if (isPreview || checkpoint <= externalCheckpoint) return;
+    setExternalCheckpoint(checkpoint);
+    await fetch("/api/progress/checkpoint", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lessonId: currentLesson.id, checkpoint }),
+    });
+  }, [isPreview, externalCheckpoint, currentLesson.id]);
+
+  useEffect(() => {
+    if (currentLesson.contentType !== "EXTERNAL") return;
+    setExternalCompleted(completedIds.has(currentLesson.id));
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.source !== externalIframeRef.current?.contentWindow) return;
+      if (event.data?.type === "lesson-complete") onExternalComplete();
+      if (event.data?.type === "checkpoint-complete" && typeof event.data?.checkpoint === "number") {
+        onExternalCheckpoint(event.data.checkpoint);
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLesson.id, currentLesson.contentType]);
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
@@ -388,6 +452,55 @@ export function CoursePlayer({
                   </div>
                 )}
               </div>
+            </div>
+          ) : currentLesson.contentType === "EXTERNAL" ? (
+            <div className="flex flex-col h-full">
+              {/* 3-part progress — the lesson itself is one continuous embedded flow;
+                  these segments reflect internal checkpoints the app has signalled. */}
+              <div className="flex-shrink-0 flex items-center gap-2 px-8 py-3 border-b border-slate-200 bg-slate-50">
+                {["Part 1", "Part 2", "Part 3"].map((label, i) => {
+                  const reached = i < 2 ? externalCheckpoint > i : externalCompleted;
+                  return (
+                    <div key={label} className="flex items-center gap-2 flex-1">
+                      <div className={`h-1.5 flex-1 rounded-full transition-colors ${reached ? "bg-emerald-500" : "bg-slate-200"}`} />
+                      <span className={`text-xs font-medium whitespace-nowrap ${reached ? "text-emerald-700" : "text-slate-400"}`}>
+                        {label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex-1 min-h-0">
+                {currentLesson.content ? (
+                  <iframe
+                    ref={externalIframeRef}
+                    key={currentLesson.id}
+                    src={currentLesson.content}
+                    className="w-full h-full border-0"
+                    title={currentLesson.title}
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media; web-share"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-400">
+                    <Globe className="h-16 w-16" />
+                  </div>
+                )}
+              </div>
+              {externalCompleted && (
+                <div className="flex-shrink-0 border-t border-slate-200 bg-emerald-50 px-8 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
+                    <p className="font-semibold text-emerald-800">Lesson complete!</p>
+                  </div>
+                  <button
+                    onClick={onExternalContinue}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand text-white text-sm font-medium hover:bg-brand-dark transition-colors"
+                  >
+                    {nextLesson ? "Next Lesson" : "Complete Course"}
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="max-w-3xl mx-auto p-8">

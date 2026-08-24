@@ -18,6 +18,8 @@
   --color-ink-soft: #4c5a68;
   --color-ink-faint: #7c8896;
   --color-paper: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f3f7;
   --color-line: #e1e6ec;
   --color-line-soft: #eef1f5;
 
@@ -27,6 +29,91 @@
   --color-danger-bg: #fdecec;
   --color-danger-ink: #a3281c;
   --color-danger-line: #f3c8c3;
+}
+
+/* Enable class/attribute-driven `dark:` utilities (toggle sets data-theme). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Dark theme. The declarations live in one place (--dark-theme) and are applied
+ * in two situations, with no inline <script> and no flash of the wrong theme:
+ *   1. The user explicitly chose dark  -> html[data-theme="dark"] (set SSR from
+ *      a cookie, so it's correct on first paint).
+ *   2. The user hasn't chosen and their OS is dark -> the prefers-color-scheme
+ *      media query, but only when no explicit choice is present.
+ * An explicit light choice (data-theme="light") always wins over the OS.
+ *
+ * Because the whole UI is built on the semantic tokens below (bg-paper,
+ * text-ink, border-line, bg-surface, ...) most of it adapts automatically; the
+ * compatibility rules remap the few hardcoded Tailwind colors (bg-white,
+ * slate-*) still in use.
+ */
+:root[data-theme="dark"] {
+  --color-brand-light: #16304f;
+  --color-brand-line: #24466e;
+
+  --color-ink: #e7edf5;
+  --color-ink-soft: #a9b4c2;
+  --color-ink-faint: #7b8796;
+  --color-paper: #0e1620;
+  --color-surface: #16202c;
+  --color-surface-2: #1e2a38;
+  --color-line: #2a3644;
+  --color-line-soft: #222d3b;
+
+  --color-warn-bg: #382a12;
+  --color-warn-ink: #f0c886;
+  --color-warn-line: #5a4620;
+  --color-danger-bg: #3a1e1c;
+  --color-danger-ink: #f0a9a2;
+  --color-danger-line: #5a2b27;
+
+  & .bg-white { background-color: var(--color-surface); }
+  & .bg-slate-50, & .bg-slate-100, & .bg-indigo-50 { background-color: var(--color-surface-2); }
+  & .bg-slate-200 { background-color: #2a3644; }
+  & .bg-paper { background-color: var(--color-paper); }
+
+  & .text-slate-900, & .text-slate-800 { color: var(--color-ink); }
+  & .text-slate-700, & .text-slate-600 { color: var(--color-ink-soft); }
+  & .text-slate-500, & .text-slate-400 { color: var(--color-ink-faint); }
+
+  & .border-slate-200, & .border-slate-300 { border-color: var(--color-line); }
+  & .border-slate-100 { border-color: var(--color-line-soft); }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-brand-light: #16304f;
+    --color-brand-line: #24466e;
+
+    --color-ink: #e7edf5;
+    --color-ink-soft: #a9b4c2;
+    --color-ink-faint: #7b8796;
+    --color-paper: #0e1620;
+    --color-surface: #16202c;
+    --color-surface-2: #1e2a38;
+    --color-line: #2a3644;
+    --color-line-soft: #222d3b;
+
+    --color-warn-bg: #382a12;
+    --color-warn-ink: #f0c886;
+    --color-warn-line: #5a4620;
+    --color-danger-bg: #3a1e1c;
+    --color-danger-ink: #f0a9a2;
+    --color-danger-line: #5a2b27;
+
+    & .bg-white { background-color: var(--color-surface); }
+    & .bg-slate-50, & .bg-slate-100, & .bg-indigo-50 { background-color: var(--color-surface-2); }
+    & .bg-slate-200 { background-color: #2a3644; }
+    & .bg-paper { background-color: var(--color-paper); }
+
+    & .text-slate-900, & .text-slate-800 { color: var(--color-ink); }
+    & .text-slate-700, & .text-slate-600 { color: var(--color-ink-soft); }
+    & .text-slate-500, & .text-slate-400 { color: var(--color-ink-faint); }
+
+    & .border-slate-200, & .border-slate-300 { border-color: var(--color-line); }
+    & .border-slate-100 { border-color: var(--color-line-soft); }
+  }
 }
 
 @layer base {
@@ -111,7 +198,7 @@
   outline: none;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(46, 134, 89, 0.15);
-  background-color: white;
+  background-color: var(--color-surface);
 }
 
 /* TipTap editor styles */

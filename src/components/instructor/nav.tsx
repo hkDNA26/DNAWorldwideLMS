@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, BookOpen, Users, BarChart2, Award, FileText, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, BarChart2, Award, FileText, Clapperboard, LogOut, ArrowLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/brand/theme-toggle";
 
 const navItems = [
   { href: "/instructor/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/instructor/courses", label: "My Courses", icon: BookOpen },
   { href: "/instructor/students", label: "Staff", icon: Users },
-  { href: "/instructor/documents", label: "PDF Library", icon: FileText },
+  { href: "/instructor/documents", label: "Resource Library", icon: FileText },
+  { href: "/instructor/videos", label: "Videos", icon: Clapperboard },
   { href: "/instructor/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/instructor/certificate-template", label: "Certificate", icon: Award },
 ];
@@ -81,13 +83,16 @@ export function InstructorNav({ userName }: NavProps) {
             <p className="text-xs text-ink-faint">Admin</p>
           </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-ink-soft hover:bg-paper hover:text-ink transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 flex-1 px-3 py-2 rounded-lg text-sm font-medium text-ink-soft hover:bg-paper hover:text-ink transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+          <ThemeToggle className="shrink-0 p-2 w-9 h-9 rounded-lg text-ink-soft hover:bg-paper hover:text-ink transition-colors" />
+        </div>
       </div>
     </nav>
   );

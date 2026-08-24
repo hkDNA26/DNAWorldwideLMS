@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Award, LogOut } from "lucide-react";
+import { ThemeToggle } from "@/components/brand/theme-toggle";
 
 const navItems = [
   { href: "/student/dashboard", label: "My Learning", icon: LayoutDashboard },
@@ -65,13 +66,16 @@ export function StudentNav({ userName }: NavProps) {
             <p className="text-xs text-slate-500">Student</p>
           </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 flex-1 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+          <ThemeToggle className="shrink-0 p-2 w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" />
+        </div>
       </div>
     </nav>
   );

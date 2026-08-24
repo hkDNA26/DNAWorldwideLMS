@@ -1,6 +1,11 @@
-// Ported from the Sales Drug Search Console (~/Documents/drug-panel-search/public/data.js),
-// sourced from DNA Legal's "Where's Whally?" pricing spreadsheet. Static reference data —
-// no need to regenerate unless the underlying panel/pricing spreadsheet changes.
+// Static reference data — no need to regenerate unless the underlying panel/pricing
+// spreadsheet changes. Synced from the "Where's Whally?" spreadsheet via the scripts in
+// scripts/sync-*.js — run the relevant one and paste its output back in as the array below.
+//   PANELS                    <- "Back End DOA Panels" tab, rows 1-20   (scripts/sync-drug-panels.js)
+//   BLOOD_PANELS/URINE_PANELS <- "Back End DOA Panels" tab, rows 40-64  (scripts/sync-blood-urine-panels.js)
+//   MEDICATIONS                <- "Back end Medications" tab            (scripts/sync-medications.js)
+//   QUESTION_SETS               <- "Dashboard Back end" tab, curated FAQ subset (scripts/sync-question-sets.js)
+// DRUG_LIST is not sheet-synced (no dedicated source tab found — likely derivable from PANELS).
 
 export interface DrugGroup {
   label: string | null;
@@ -35,7 +40,7 @@ export interface QuestionSet {
 export const PANELS: Panel[] = [
   {
     "name": "5 Panel",
-    "price": 129.0,
+    "price": 129,
     "isPerDrug": false,
     "header": "5 panel - 21",
     "groups": [
@@ -89,7 +94,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "6 Panel",
-    "price": 139.0,
+    "price": 139,
     "isPerDrug": false,
     "header": "6 panel - 33",
     "groups": [
@@ -164,16 +169,10 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Pre-proceedings 7",
-    "price": 159.0,
+    "price": 159,
     "isPerDrug": false,
-    "header": null,
+    "header": "Pre-proceedings 7 - FTPP",
     "groups": [
-      {
-        "label": null,
-        "drugs": [
-          "Pre-proceedings 7 - FTPP"
-        ]
-      },
       {
         "label": "Amphetamine",
         "drugs": [
@@ -240,7 +239,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "8 Panel",
-    "price": 189.0,
+    "price": 189,
     "isPerDrug": false,
     "header": "8 panel - 36",
     "groups": [
@@ -330,7 +329,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Fast Track 9 Panel/AOM",
-    "price": 199.0,
+    "price": 199,
     "isPerDrug": false,
     "header": "FT 9 // AOM - 38",
     "groups": [
@@ -427,16 +426,10 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Sensitive 9 Panel/AOM",
-    "price": 199.0,
+    "price": 199,
     "isPerDrug": false,
-    "header": null,
+    "header": "S+ 9 // AOM - 38 (DP)",
     "groups": [
-      {
-        "label": "S+ 9 // AOM - 38",
-        "drugs": [
-          "DP"
-        ]
-      },
       {
         "label": "Amphetamine",
         "drugs": [
@@ -528,7 +521,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Level 2",
-    "price": 239.0,
+    "price": 239,
     "isPerDrug": false,
     "header": "Level 2 - 59",
     "groups": [
@@ -666,7 +659,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Level 3",
-    "price": 400.0,
+    "price": 400,
     "isPerDrug": false,
     "header": "Level 3 - 112",
     "groups": [
@@ -869,16 +862,10 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Full Medical Screen - WP",
-    "price": 295.0,
+    "price": 295,
     "isPerDrug": false,
-    "header": null,
+    "header": "Full Medical Screen - WP",
     "groups": [
-      {
-        "label": null,
-        "drugs": [
-          "Full Medical Screen - WP"
-        ]
-      },
       {
         "label": "Amphetamine",
         "drugs": [
@@ -1022,16 +1009,10 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Detailed Steroid screen 19 Hair",
-    "price": 600.0,
+    "price": 600,
     "isPerDrug": false,
-    "header": null,
+    "header": "Detailed steroid screen",
     "groups": [
-      {
-        "label": null,
-        "drugs": [
-          "Detailed steroid screen"
-        ]
-      },
       {
         "label": "Anabolic steroids GC",
         "drugs": [
@@ -1071,9 +1052,9 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Detailed Steroid screen 19 BH/Nails",
-    "price": 600.0,
+    "price": 600,
     "isPerDrug": false,
-    "header": null,
+    "header": "BH/Nail Steroids (Boldenone, DHEA, Mesterolone, Metandienone, Metenolone, Nandrolone, Nandrolone decanoate, Nandrolone phenylpropionate, Norandrostenedione, Stanozolol, Testosterone, Testosterone acetate, Testosterone benzoate, Testosterone cypionate, Testosterone decanoate, Testosterone enanthate, Testosterone phenylpropionate, Testosterone propionate, Trenbolone)",
     "groups": [
       {
         "label": "BH/Nail Steroids",
@@ -1104,16 +1085,10 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Core Class A+B",
-    "price": 289.0,
+    "price": 289,
     "isPerDrug": false,
-    "header": null,
+    "header": "Core Class A+B",
     "groups": [
-      {
-        "label": null,
-        "drugs": [
-          "Core Class A+B"
-        ]
-      },
       {
         "label": "Amphetamine",
         "drugs": [
@@ -1191,9 +1166,9 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Anti-Depressant Detailed",
-    "price": 170.0,
+    "price": 170,
     "isPerDrug": false,
-    "header": null,
+    "header": "Anti-Depressant Detailed (7-amino-flunitrazepam, 7-Amino-clonazepam, Alprazolam, Bromazepam, Chlordiazepoxide, Chlorpheniramine, Citalopram, Clobazam, Cyamemazine, Diazepam, Diphenhydramine, Doxylamin, Flunitrazepam, Fluoxetine, Haloperidol, Hydroxyzine, Levomepromazine, Loprazolam, Lorazepam, Lormetazaepam, Midazolam, Nitrazepam, Nordiazepam, Oxazepam, Paroxetine, Promazine, Promethazine, Scopolamine, Sertraline, Temazepam, Tetrazepam, Trazadone, Triazolam, Zolpidem, Zopliclone)",
     "groups": [
       {
         "label": "Anti-Depressant Detailed",
@@ -1240,9 +1215,9 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Pharmaceuticals",
-    "price": 295.0,
+    "price": 295,
     "isPerDrug": false,
-    "header": null,
+    "header": "Pharmaceuticals (7-Amino-clonazepam, Alfentanil, Aripiprazole, Amisulpride, Amitriptyline, Benperidol, Benzodiazepines, Carbamazepine, Citalopram, Clomipramine, Clonazepam, Clonidine, Chlorpheniramine, Chlorpromazine, Chlorprothixene, Clotiapine, Clozapine, Cyamemazine, Desipreamine, Dextromethorphan, Dosulepin, Doxepin, Doxylamine, Etomidate, Fluoxetine, Flupenthixol, Fluphenazine, Flupirtine, Flurazepam, Fluvoxamine, Gabapentin, Hydroxyzine, Imipramine, Levetiracetam, Loprazolam, Maprotiline, Medazepam, Melperone, Mianserin, Mirtazapine, Moclobemide, Modalfinil, Norclobazam, Nortilidine, Nortriptyline, Noscapine, Opipramol, Paroxetine, Pentazocine, Pipamperone, Pregabalin, Reboxetine, Risperidone, Scopolamine, Sertraline, Sulpiride, Tilidine, Trazodone, Thioridazine, Trimipramine, Venlafaxine, Viloxazine, Zalepon, Ziprasidone, Zotepine)",
     "groups": [
       {
         "label": "Pharmaceuticals",
@@ -1319,9 +1294,9 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Basic Metals Panel 4",
-    "price": 349.0,
+    "price": 349,
     "isPerDrug": false,
-    "header": null,
+    "header": "Basic Metals Panel 4 (Arsenic, Cadmium, Led, Mercury)",
     "groups": [
       {
         "label": "Basic Metals Panel 4",
@@ -1337,9 +1312,9 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Detailed Metals Panel 32",
-    "price": 799.0,
+    "price": 799,
     "isPerDrug": false,
-    "header": null,
+    "header": "Detailed Metals Panel 32 (Aluminium, Antimony, Arsenic, Barium, Beryllium, Bismuth, Bore, Cadmium, Chrome, Cobalt, Copper, Gallium, Germanium, Lead, Lithium, Manganese, Mercury, Molybdenum, Nickel, Palladium, Platinum, Rubidium, Selenium, Silver, Strontium, Tellurium, Thallium, Tin, Tungsten, Uranium, Vanadium, Zinc)",
     "groups": [
       {
         "label": "Detailed Metals Panel 32",
@@ -1383,7 +1358,7 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Specific drug testing (Normal)",
-    "price": 38.0,
+    "price": 66,
     "isPerDrug": true,
     "header": "Specific Drug Testing",
     "groups": [
@@ -1468,9 +1443,11 @@ export const PANELS: Panel[] = [
         ]
       },
       {
-        "label": null,
+        "label": "Tramadol",
         "drugs": [
-          "Tramadol (O-Desmethyltramadol, N-Desmethyltramadol, Tramadol)\""
+          "O-Desmethyltramadol",
+          "N-Desmethyltramadol",
+          "Tramadol"
         ]
       }
     ],
@@ -1478,3298 +1455,2489 @@ export const PANELS: Panel[] = [
   },
   {
     "name": "Specific drug testing (Z Drugs)",
-    "price": 149.0,
+    "price": 149,
     "isPerDrug": true,
     "header": "Z Drugs",
     "groups": [
       {
         "label": null,
         "drugs": [
-          "Methyl-PBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "1M-3PP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-AI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Amino-1-phenyl-butan 2-BA"
-        ]
-      },
-      {
-        "label": "2-Brom-4",
-        "drugs": [
-          "2-CA"
-        ]
-      },
-      {
-        "label": "2-Chlor-4",
-        "drugs": [
+          "Methyl-PBP",
+          "1M-3PP",
+          "2-AI",
+          "2-Amino-1-phenyl-butan 2-BA",
+          "2-Brom-4",
+          "2-CA",
+          "2-Chlor-4",
           "2-EEC",
-          "2-EMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Ethylamino-1-phenylbutan"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-FA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-FEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-FIC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-FMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-FMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-IA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-MAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-MEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-MeOMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Methoxyketamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Methyl-PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Methylamino-1-phenylbutan"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-oxo-3-hydroxy-LSD"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2-Thiothinon"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-DCPP"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-DMEC"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-DMMC"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-MDA"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-MDMA"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-MDMC"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "3-MDPV"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "4-DMEC"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "5-DMA"
-        ]
-      },
-      {
-        "label": "2",
-        "drugs": [
-          "5-DMMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "212-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25B-NBF"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25B-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25C-NBF"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25C-NBOH"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25C-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25D-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25E-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25G-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25H-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25I-NBF"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25I-NBMD"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25I-NBOH"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25I-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25N-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25T2-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "25T7-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-B"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-B-BZP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-B-fly"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-C"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-D"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-E"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-F"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-G"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-H"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-I"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-N"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-O"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-P"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-T"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-T-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-T-4"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "2C-T-7"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-BA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-BMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-CA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-CAF"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-EEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-EMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FA 4-MA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FEA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FIC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-FPM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-IA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-MA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-MEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-MeOMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-Methoxy-PCP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-Methyl-PBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-Methylbuphedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-Methylfentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3-Methylthiofentanyl"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-Dichloro-methylphenidate"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-Dimethoxy-\u03b1-PVP"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-DMA"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-DMEC"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-DMMC"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-EDMA"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-EDMC"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-MDPA"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-MDPHP"
-        ]
-      },
-      {
-        "label": "3",
-        "drugs": [
-          "4-MDPPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3\u2018-Fluor-\u03b1-PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "30C-NBOMe"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3C-B-fly"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "3C-P"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-AcO-DALT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluor-5-methoxy-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-APB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-APDB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-BA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-BMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Brom-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-CA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-CAB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Chlor-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Chlor-methamphetamine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-EAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-EEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-EMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-ETA"
-        ]
-      },
-      {
-        "label": "4-Ethyl-N",
-        "drugs": [
-          "N-DMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Ethylamphetamine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FIC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluor-PBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluor-PV8"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluor-PV9"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluor-\u03b1-PVP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluorpentedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Fluortropacocain"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-FMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-HA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-IA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MAPB"
-        ]
-      },
-      {
-        "label": "4-MBC",
-        "drugs": [
-          "Benzedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Me-\u03b1-ET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MEC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MeO-\u03b1-PVP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MeOPBP"
-        ]
-      },
-      {
-        "label": "4-Methoxy-N",
-        "drugs": [
-          "N-DMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methoxy-PV9"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-AMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-methylphenidate"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-N-methylbuphedron"
-        ]
-      },
-      {
-        "label": "4-Methyl-N",
-        "drugs": [
-          "N-DMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-PBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-\u03b1-ethyl-aminobutiophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methyl-\u03b1-ethyl-aminopentiophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methylaminorex"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methylbuphedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-Methylpentedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-MTA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-OH-DET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-OH-DiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-OH-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-OH-MET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4-OH-MiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-Brom-DMT"
-        ]
-      },
-      {
-        "label": "4",
-        "drugs": [
-          "4\u2018-Dimethyl-aminorex"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4\u2018-Chlor-\u03b1-PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4\u2018-Fluor-\u03b1-PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4\u2018-Methyl-PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "4\u2018-Methylhexedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "461 WIN-55"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-APDB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-APDI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-API"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-Chlor-AMT 5"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-DBFPV"
-        ]
-      },
-      {
-        "label": "5-DMA",
-        "drugs": [
-          "DOC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-DMMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-EAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-Fluor-AMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-Fluor-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-IAI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MAPDB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MDMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-AMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-DALT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-DiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-MiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-MeO-\u03b1-ET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-Methoxymethylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5-OH-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5CI-AB-PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5CI-NNEI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-AB PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-ADB-PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-ADBICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-AKB-48"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-AMB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "5F-APICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "6-EAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "6-Fluor-AMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "6-Fluor-DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "6-MAPB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "6-MAPDB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "7-APDB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "7-Dichloro-Tryptamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "7-Fluortryptamin DALT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "7-Me-\u03b1-ET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB FUBINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB FUBINACA 2- fluorobenzyl isomer"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB-001"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB-005"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB-CHMINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AB-PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ACEA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Acetyl-alpha-methylfentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ACPA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ADB-FUBINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ADB-PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ADBICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AKB-48"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "ALICB-122"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Allobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Alpha-Methylfentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Alpha-Methylthiofentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Alphenal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM 694"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-1220"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-1248"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-2201 benzimidazol analog"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-2201-2- hydroxyindol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-2232"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-2233"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AMB-PICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AMMI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Amobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Aniracetam"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "APICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Aprobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Barbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Barbituric acid"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "BB-22"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Benzphetamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "beta-hydroxy-3-methylfentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Beta-hydroxyfentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Betaxolol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "BHBA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "bk-2C-B Bromo-DragonFLY"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "bk-MDDMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "BMDP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Buphedron (MABP)*"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Butabarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Butalbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Butallylonal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Butethal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Carfentanil"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "CC-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Chlorphentermin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Clotermin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "CMP"
-        ]
-      },
-      {
-        "label": "CP 47 497-",
-        "drugs": [
-          "C8"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "CP 55 244"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "CP 55 940"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cumyl-5FPICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cumyl-BICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cumyl-PICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cumyl-PINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cumyl-THPICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cyclobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cyclopal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "D2PM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DBZP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Deschloro-N-ethyl-ketamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Desoxy-D2PM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Dibutylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Diclofensin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Diethylcathinon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Dimethocain"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Dimethylcathinon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DL-4662"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DMMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DOB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DOET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DOI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DOM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DOT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "EAM-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "EG-018"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "EMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "EPEA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Etaqualon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Ethcathinon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Ethylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Ethylphenidate"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Etomidate"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Eutylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FAB-144"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FDU-PB-22"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Fencamfamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Fentanyl N-oxide"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FLEA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Flupirtine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FUB-144"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FUB-AKB48"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FUB-AMB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FUB-JWH 018"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "FUB-NPB-22"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "HDMP-28"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Heptabarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Hexedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Hexethal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Hexobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "HMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "I-AMB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Isopentedro"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Isopropylphenidate"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-018 N-(5-bromopentyl) analog"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-022"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-030"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-080"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "WH-122 N-(4-pentenyl) analog"
-        ]
-      },
-      {
-        "label": "JWH-122 N-",
-        "drugs": [
-          "5-iodopentyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-180"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-182"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-200 analog1"
-        ]
-      },
-      {
-        "label": "JWH-210 \u2013",
-        "drugs": [
-          "CI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-213"
-        ]
-      },
-      {
-        "label": "JWH-250-ME-",
-        "drugs": [
-          "CI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-251"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-307"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-368"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-370"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-387"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-398"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-412"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Lisdexamfetamine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "M-1438"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "M-144"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MA-CHMINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MAB-CHMINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MAFP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MAM-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MAM-2201 N-(5-chloropentyl) analog"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mazindol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MBZP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MCHB-1"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDAI"
-        ]
-      },
-      {
-        "label": "MDDMA",
-        "drugs": [
-          "Dimethylone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDMB-CHMICA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDMB-CHMINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDMB-FUBINACA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDP2P"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDPBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDPH"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mebroqualon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mefenorex"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MEM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mephentermin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mephobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mepiprazol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MEPIRAPIM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Mescaline"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Methabarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Methylbenzodioxolylbutanamine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Methylmethaqualon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Methylphenobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MiPT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MMAI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MMB-018"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MMB-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MMDA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MN-18"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MN-24"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MN-25-2-methyl derivatives"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MO-CHMINAC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MPM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MTTA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-DMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Ethyl-N-methylcathinon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Ethylketamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Ethylnorpentedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Ethylpentylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Formyl-methamphetamin"
-        ]
-      },
-      {
-        "label": "N-Hydroxy-amphetamin*",
-        "drugs": [
-          "NOHA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Hydroxy-MDA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Methyl-2-AI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "N-Methylnantradol"
-        ]
-      },
-      {
-        "label": "N",
-        "drugs": [
-          "N-Dimethyl-MDA"
-        ]
-      },
-      {
-        "label": "N",
-        "drugs": [
-          "N-Dimethylpentylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Nabilone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Nabitan"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NAM"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Nantradol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Naphyron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NEB"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NESS-0327"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NIDA-41020"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NM2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NMT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NNEI"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Normephedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Norpethidine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Nortilidine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NPA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NPB-22"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NRG-3"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Olanzapine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "O-4310"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "OMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "OMMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "p-Fluorofentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PB-22"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PCE"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PCPr"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Penthedron"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Pentobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Pentorex"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "pFPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phenmetrazin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phenobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phentermin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phenylmethylbarbituric acid"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phenylpiperazin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Phenylpiracetam"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Pipradol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Piritramid"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PMMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PPMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Probarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Propallylonal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Propofol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Propylhexedrin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Psilocybin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PTI-1"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PTI-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PV10"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PV4"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PV9"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PX 1"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "PX 2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "R-MMC"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Ractopamide"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C1"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C10"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C2"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C3-allyl"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C3"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C4"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C5-cyclopropyl"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C5"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C6"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C7"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C8-phenethyl"
-        ]
-      },
-      {
-        "label": "RCS-4",
-        "drugs": [
-          "C8"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "RCS-8"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Rimonabant"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Rolicyclidin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SDB-005"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SDB-006"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SDB-006 N-phenylanalog"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Secobarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Selegilin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SER-601"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Sibutramin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Sigmodal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SLV-319"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SLV-326"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SR-144528"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "SR-147778"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Stanozolol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "STS-135"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Talbutal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Tenocyclidin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "THCCOOH"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thialbarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thiamylal"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thiobarbituric acid"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thiofentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thiopental"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Thiopropamin"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "THJ"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "THJ-018"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "THJ-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Tilidine"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "TMA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "TMA-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "TMA-6"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "UR-12"
-        ]
-      },
-      {
-        "label": "UR-12 UR-144 UR-144-",
-        "drugs": [
-          "5-bromopentyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "UR-144"
-        ]
-      },
-      {
-        "label": "UR-144-",
-        "drugs": [
-          "5-chloropentyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Vinbarbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Vinylbital"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "WIN-53365"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "WIN-54"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "XLR-11"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "XLR-12"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-Dimethylamino-pentiophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-ET"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-Ethylamino-pentiophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-Methylamino-hexanophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PAPP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PBT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PHP"
-        ]
-      },
-      {
-        "label": "\u03b1-PHPP",
-        "drugs": [
-          "PV8"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PipBP"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-Propylamino-pentiophenon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "\u03b1-PVT"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Cyclizine Hydrochloride"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-007"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-015"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-018"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-019"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-020"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-073"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-081"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-122"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-200"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-203"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-210"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "JWH-250"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-2201"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "CP 47 497"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "HU 210"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "WIN 55 21-2-2"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "DHEA"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Synthetic cannabinoids"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "NPS"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Acetone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Acebutolol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Atenolol"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "enanthate"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "epitestosterone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Epitestosterone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Isopropyl Fentanyl"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "MDPV"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Alfentanil"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "AM-624"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Butylon"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Methadone"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
-          "Zolpidem"
-        ]
-      },
-      {
-        "label": null,
-        "drugs": [
+          "2-EMC",
+          "2-Ethylamino-1-phenylbutan",
+          "2-FA",
+          "2-FEC",
+          "2-FIC",
+          "2-FMA",
+          "2-FMC",
+          "2-IA",
+          "2-MAPB",
+          "2-MEC",
+          "2-MeOMC",
+          "2-Methoxyketamin",
+          "2-Methyl-PPP",
+          "2-Methylamino-1-phenylbutan",
+          "2-oxo-3-hydroxy-LSD",
+          "2-Thiothinon",
+          "2",
+          "3-DCPP",
+          "2",
+          "3-DMEC",
+          "2",
+          "3-DMMC",
+          "2",
+          "3-MDA",
+          "2",
+          "3-MDMA",
+          "2",
+          "3-MDMC",
+          "2",
+          "3-MDPV",
+          "2",
+          "4-DMEC",
+          "2",
+          "5-DMA",
+          "2",
+          "5-DMMA",
+          "212-2",
+          "25B-NBF",
+          "25B-NBOMe",
+          "25C-NBF",
+          "25C-NBOH",
+          "25C-NBOMe",
+          "25D-NBOMe",
+          "25E-NBOMe",
+          "25G-NBOMe",
+          "25H-NBOMe",
+          "25I-NBF",
+          "25I-NBMD",
+          "25I-NBOH",
+          "25I-NBOMe",
+          "25N-NBOMe",
+          "25T2-NBOMe",
+          "25T7-NBOMe",
+          "2C-B",
+          "2C-B-BZP",
+          "2C-B-fly",
+          "2C-C",
+          "2C-D",
+          "2C-E",
+          "2C-F",
+          "2C-G",
+          "2C-H",
+          "2C-I",
+          "2C-N",
+          "2C-O",
+          "2C-P",
+          "2C-T",
+          "2C-T-2",
+          "2C-T-4",
+          "2C-T-7",
+          "3-BA",
+          "3-BMC",
+          "3-CA",
+          "3-CAF",
+          "3-EEC",
+          "3-EMC",
+          "3-FA 4-MA",
+          "3-FEA",
+          "3-FEC",
+          "3-FIC",
+          "3-FMA",
+          "3-FMC",
+          "3-FPM",
+          "3-IA",
+          "3-MA",
+          "3-MEC",
+          "3-MeOMC",
+          "3-Methoxy-PCP",
+          "3-Methyl-PBP",
+          "3-Methylbuphedron",
+          "3-Methylfentanyl",
+          "3-Methylthiofentanyl",
+          "3",
+          "4-Dichloro-methylphenidate",
+          "3",
+          "4-Dimethoxy-α-PVP",
+          "3",
+          "4-DMA",
+          "3",
+          "4-DMEC",
+          "3",
+          "4-DMMC",
+          "3",
+          "4-EDMA",
+          "3",
+          "4-EDMC",
+          "3",
+          "4-MDPA",
+          "3",
+          "4-MDPHP",
+          "3",
+          "4-MDPPP",
+          "3‘-Fluor-α-PPP",
+          "30C-NBOMe",
+          "3C-B-fly",
+          "3C-P",
+          "4-AcO-DALT",
+          "4-Fluor-5-methoxy-DMT",
+          "4-APB",
+          "4-APDB",
+          "4-BA",
+          "4-BMC",
+          "4-Brom-2",
+          "4-CA",
+          "4-CAB",
+          "4-Chlor-2",
+          "4-Chlor-methamphetamine",
+          "4-EAPB",
+          "4-EEC",
+          "4-EMC",
+          "4-ETA",
+          "4-Ethyl-N",
+          "N-DMC",
+          "4-Ethylamphetamine",
+          "4-FA",
+          "4-FBP",
+          "4-FEC",
+          "4-FIC",
+          "4-Fluor-PBP",
+          "4-Fluor-PV8",
+          "4-Fluor-PV9",
+          "4-Fluor-α-PVP",
+          "4-Fluorpentedron",
+          "4-Fluortropacocain",
+          "4-FMA",
+          "4-FMC",
+          "4-HA",
+          "4-IA",
+          "4-MAPB",
+          "4-MBC (Benzedron)",
+          "4-Me-α-ET",
+          "4-MEC",
+          "4-MeO-α-PVP",
+          "4-MeOPBP",
+          "4-Methoxy-N",
+          "N-DMC",
+          "4-Methoxy-PV9",
+          "4-Methyl-AMT",
+          "4-Methyl-methylphenidate",
+          "4-Methyl-N-methylbuphedron",
+          "4-Methyl-N",
+          "N-DMC",
+          "4-Methyl-PBP",
+          "4-Methyl-α-ethyl-aminobutiophenon",
+          "4-Methyl-α-ethyl-aminopentiophenon",
+          "4-Methylaminorex",
+          "4-Methylbuphedron",
+          "4-Methylpentedron",
+          "4-MMA",
+          "4-MTA",
+          "4-OH-DET",
+          "4-OH-DiPT",
+          "4-OH-DMT",
+          "4-OH-MET",
+          "4-OH-MiPT",
+          "5-Brom-DMT",
+          "4",
+          "4‘-Dimethyl-aminorex",
+          "4‘-Chlor-α-PPP",
+          "4‘-Fluor-α-PPP",
+          "4‘-Methyl-PPP",
+          "4‘-Methylhexedron",
+          "461 WIN-55",
+          "5-APDB",
+          "5-APDI",
+          "5-API",
+          "5-Chlor-AMT 5",
+          "5-DBFPV",
+          "5-DMA (DOC)",
+          "5-DMMA",
+          "5-EAPB",
+          "5-Fluor-AMT",
+          "5-Fluor-DMT",
+          "5-IAI",
+          "5-MAPB",
+          "5-MAPDB",
+          "5-MDMA",
+          "5-MeO-AMT",
+          "5-MeO-DALT",
+          "5-MeO-DiPT",
+          "5-MeO-DMT",
+          "5-MeO-MiPT",
+          "5-MeO-α-ET",
+          "5-Methoxymethylon",
+          "5-OH-DMT",
+          "5CI-AB-PINACA",
+          "5CI-NNEI",
+          "5F-AB PINACA",
+          "5F-ADB-PINACA",
+          "5F-ADBICA",
+          "5F-AKB-48",
+          "5F-AMB",
+          "5F-APICA",
+          "6-EAPB",
+          "6-Fluor-AMT",
+          "6-Fluor-DMT",
+          "6-MAPB",
+          "6-MAPDB",
+          "7-APDB",
+          "7-Dichloro-Tryptamin",
+          "7-Fluortryptamin DALT",
+          "7-Me-α-ET",
+          "AB FUBINACA",
+          "AB FUBINACA 2- fluorobenzyl isomer",
+          "AB-001",
+          "AB-005",
+          "AB-CHMINACA",
+          "AB-PINACA",
+          "ACEA",
+          "Acetyl-alpha-methylfentanyl",
+          "ACPA",
+          "ADB-FUBINACA",
+          "ADB-PINACA",
+          "ADBICA",
+          "AKB-48",
+          "ALICB-122",
+          "Allobarbital",
+          "Alpha-Methylfentanyl",
+          "Alpha-Methylthiofentanyl",
+          "Alphenal",
+          "AM 694",
+          "AM-1220",
+          "AM-1248",
+          "AM-2201 benzimidazol analog",
+          "AM-2201-2- hydroxyindol",
+          "AM-2232",
+          "AM-2233",
+          "AMB-PICA",
+          "AMMI",
+          "Amobarbital",
+          "AMT",
+          "Aniracetam",
+          "APICA",
+          "Aprobarbital",
+          "Barbital",
+          "Barbituric acid",
+          "BB-22",
+          "Benzphetamin",
+          "beta-hydroxy-3-methylfentanyl",
+          "Beta-hydroxyfentanyl",
+          "Betaxolol",
+          "BHBA",
+          "bk-2C-B Bromo-DragonFLY",
+          "bk-MDDMA",
+          "BMDP",
+          "Buphedron (MABP)*",
+          "Butabarbital",
+          "Butalbital",
+          "Butallylonal",
+          "Butethal",
+          "Carfentanil",
+          "CC-2201",
+          "Chlorphentermin",
+          "Clotermin",
+          "CMP",
+          "CP 47 497-(C8)",
+          "CP 55 244",
+          "CP 55 940",
+          "Cumyl-5FPICA",
+          "Cumyl-BICA",
+          "Cumyl-PICA",
+          "Cumyl-PINACA",
+          "Cumyl-THPICA",
+          "Cyclobarbital",
+          "Cyclopal",
+          "D2PM",
+          "DBZP",
+          "Deschloro-N-ethyl-ketamin",
+          "Desoxy-D2PM",
+          "DET",
+          "Dibutylon",
+          "Diclofensin",
+          "Diethylcathinon",
+          "Dimethocain",
+          "Dimethylcathinon",
+          "DiPT",
+          "DL-4662",
+          "DMMA",
+          "DMT",
+          "DOB",
+          "DOET",
+          "DOI",
+          "DOM",
+          "DOT",
+          "DPT",
+          "EAM-2201",
+          "EG-018",
+          "EMA",
+          "EPEA",
+          "Etaqualon",
+          "Ethcathinon",
+          "Ethylon",
+          "Ethylphenidate",
+          "Etomidate",
+          "Eutylon",
+          "FAB-144",
+          "FDU-PB-22",
+          "Fencamfamin",
+          "Fentanyl N-oxide",
+          "FLEA",
+          "Flupirtine",
+          "FUB-144",
+          "FUB-AKB48",
+          "FUB-AMB",
+          "FUB-JWH 018",
+          "FUB-NPB-22",
+          "HDMP-28",
+          "Heptabarbital",
+          "Hexedron",
+          "Hexethal",
+          "Hexobarbital",
+          "HMA",
+          "I-AMB",
+          "Isopentedro",
+          "Isopropylphenidate",
+          "JWH-018 N-(5-bromopentyl) analog",
+          "JWH-022",
+          "JWH-030",
+          "JWH-080",
+          "WH-122 N-(4-pentenyl) analog",
+          "JWH-122 N-(5-iodopentyl)",
+          "JWH-180",
+          "JWH-182",
+          "JWH-200 analog1",
+          "JWH-210 –(CI)",
+          "JWH-213",
+          "JWH-250-ME-(CI)",
+          "JWH-251",
+          "JWH-307",
+          "JWH-368",
+          "JWH-370",
+          "JWH-387",
+          "JWH-398",
+          "JWH-412",
+          "Lisdexamfetamine",
+          "M-1438",
+          "M-144",
+          "MA-CHMINACA",
+          "MAB-CHMINACA",
+          "MAFP",
+          "MAM-2201",
+          "MAM-2201 N-(5-chloropentyl) analog",
+          "Mazindol",
+          "MBZP",
+          "MCHB-1",
+          "MDAI",
+          "MDDMA (Dimethylone)",
+          "MDMB-CHMICA",
+          "MDMB-CHMINACA",
+          "MDMB-FUBINACA",
+          "MDP2P",
+          "MDPBP",
+          "MDPH",
+          "Mebroqualon",
+          "Mefenorex",
+          "MEM",
+          "Mephentermin",
+          "Mephobarbital",
+          "Mepiprazol",
+          "MEPIRAPIM",
+          "Mescaline",
+          "MET",
+          "Methabarbital",
+          "Methylbenzodioxolylbutanamine",
+          "Methylmethaqualon",
+          "Methylphenobarbital",
+          "MiPT",
+          "MMAI",
+          "MMB-018",
+          "MMB-2201",
+          "MMDA",
+          "MN-18",
+          "MN-24",
+          "MN-25-2-methyl derivatives",
+          "MO-CHMINAC",
+          "MPM",
+          "MTTA",
+          "N-DMA",
+          "N-Ethyl-N-methylcathinon",
+          "N-Ethylketamin",
+          "N-Ethylnorpentedron",
+          "N-Ethylpentylon",
+          "N-Formyl-methamphetamin",
+          "N-Hydroxy-amphetamin* (NOHA)",
+          "N-Hydroxy-MDA",
+          "N-Methyl-2-AI",
+          "N-Methylnantradol",
+          "N",
+          "N-Dimethyl-MDA",
+          "N",
+          "N-Dimethylpentylon",
+          "Nabilone",
+          "Nabitan",
+          "NAM",
+          "Nantradol",
+          "Naphyron",
+          "NEB",
+          "NESS-0327",
+          "NET",
+          "NIDA-41020",
+          "NM2201",
+          "NMT",
+          "NNEI",
+          "Normephedron",
+          "Norpethidine",
+          "Nortilidine",
+          "NPA",
+          "NPB-22",
+          "NRG-3",
+          "Olanzapine",
+          "O-4310",
+          "OMA",
+          "OMMA",
+          "p-Fluorofentanyl",
+          "PB-22",
+          "PCE",
+          "PCPr",
+          "Penthedron",
+          "Pentobarbital",
+          "Pentorex",
+          "pFPP",
+          "Phenmetrazin",
+          "Phenobarbital",
+          "Phentermin",
+          "Phenylmethylbarbituric acid",
+          "Phenylpiperazin",
+          "Phenylpiracetam",
+          "Pipradol",
+          "Piritramid",
+          "PMA",
+          "PMMA",
+          "PPMA",
+          "PPP",
+          "Probarbital",
+          "Propallylonal",
+          "Propofol",
+          "Propylhexedrin",
+          "Psilocybin",
+          "PTI-1",
+          "PTI-2",
+          "PV10",
+          "PV4",
+          "PV9",
+          "PX 1",
+          "PX 2",
+          "R-MMC",
+          "Ractopamide",
+          "RCS-4 (C1)",
+          "RCS-4 (C10)",
+          "RCS-4 (C2)",
+          "RCS-4 (C3-allyl)",
+          "RCS-4 (C3)",
+          "RCS-4 (C4)",
+          "RCS-4 (C5-cyclopropyl)",
+          "RCS-4 (C5)",
+          "RCS-4 (C6)",
+          "RCS-4 (C7)",
+          "RCS-4 (C8-phenethyl)",
+          "RCS-4 (C8)",
+          "RCS-8",
+          "Rimonabant",
+          "Rolicyclidin",
+          "SDB-005",
+          "SDB-006",
+          "SDB-006 N-phenylanalog",
+          "Secobarbital",
+          "Selegilin",
+          "SER-601",
+          "Sibutramin",
+          "Sigmodal",
+          "SLV-319",
+          "SLV-326",
+          "SR-144528",
+          "SR-147778",
+          "Stanozolol",
+          "STS-135",
+          "Talbutal",
+          "Tenocyclidin",
+          "THCCOOH",
+          "Thialbarbital",
+          "Thiamylal",
+          "Thiobarbituric acid",
+          "Thiofentanyl",
+          "Thiopental",
+          "Thiopropamin",
+          "THJ",
+          "THJ-018",
+          "THJ-2201",
+          "Tilidine",
+          "TMA",
+          "TMA-2",
+          "TMA-6",
+          "UR-12",
+          "UR-12 UR-144 UR-144-(5-bromopentyl)",
+          "UR-144",
+          "UR-144-(5-chloropentyl)",
+          "Vinbarbital",
+          "Vinylbital",
+          "WIN-53365",
+          "WIN-54",
+          "XLR-11",
+          "XLR-12",
+          "α-Dimethylamino-pentiophenon",
+          "α-ET",
+          "α-Ethylamino-pentiophenon",
+          "α-Methylamino-hexanophenon",
+          "α-PAPP",
+          "α-PBP",
+          "α-PBT",
+          "α-PHP",
+          "α-PHPP (PV8)",
+          "α-PipBP",
+          "α-Propylamino-pentiophenon",
+          "α-PVT",
+          "Cyclizine Hydrochloride",
+          "JWH-007",
+          "JWH-015",
+          "JWH-018",
+          "JWH-019",
+          "JWH-020",
+          "JWH-073",
+          "JWH-081",
+          "JWH-122",
+          "JWH-200",
+          "JWH-203",
+          "JWH-210",
+          "JWH-250",
+          "AM-2201",
+          "CP 47 497",
+          "HU 210",
+          "WIN 55 21-2-2",
+          "DHEA",
+          "Synthetic cannabinoids",
+          "NPS",
+          "Acetone",
+          "Acebutolol",
+          "Atenolol",
+          "enanthate",
+          "epitestosterone",
+          "Epitestosterone",
+          "Isopropyl Fentanyl",
+          "MDPV",
+          "Alfentanil",
+          "AM-624",
+          "Butylon",
+          "Methadone",
+          "Zolpidem",
           "Zopiclone"
         ]
       }
     ],
-    "rawLower": "z drugs \nmethyl-pbp\n1m-3pp\n2-ai\n2-amino-1-phenyl-butan 2-ba\n2-brom-4, 2-ca\n2-chlor-4, 2-eec, 2-emc\n2-ethylamino-1-phenylbutan\n2-fa\n2-fec\n2-fic\n2-fma\n2-fmc\n2-ia\n2-mapb\n2-mec\n2-meomc\n2-methoxyketamin\n2-methyl-ppp\n2-methylamino-1-phenylbutan\n2-oxo-3-hydroxy-lsd\n2-thiothinon\n2,3-dcpp\n2,3-dmec\n2,3-dmmc\n2,3-mda\n2,3-mdma\n2,3-mdmc\n2,3-mdpv\n2,4-dmec\n2,5-dma\n2,5-dmma\n212-2\n25b-nbf\n25b-nbome\n25c-nbf\n25c-nboh\n25c-nbome\n25d-nbome\n25e-nbome\n25g-nbome\n25h-nbome\n25i-nbf\n25i-nbmd\n25i-nboh\n25i-nbome\n25n-nbome\n25t2-nbome\n25t7-nbome\n2c-b\n2c-b-bzp\n2c-b-fly\n2c-c\n2c-d\n2c-e\n2c-f\n2c-g\n2c-h\n2c-i\n2c-n\n2c-o\n2c-p\n2c-t\n2c-t-2\n2c-t-4\n2c-t-7\n3-ba\n3-bmc\n3-ca\n3-caf\n3-eec\n3-emc\n3-fa 4-ma\n3-fea\n3-fec\n3-fic\n3-fma\n3-fmc\n3-fpm\n3-ia\n3-ma\n3-mec\n3-meomc\n3-methoxy-pcp\n3-methyl-pbp\n3-methylbuphedron\n3-methylfentanyl\n3-methylthiofentanyl\n3,4-dichloro-methylphenidate\n3,4-dimethoxy-\u03b1-pvp\n3,4-dma\n3,4-dmec\n3,4-dmmc\n3,4-edma\n3,4-edmc\n3,4-mdpa\n3,4-mdphp\n3,4-mdppp\n3\u2018-fluor-\u03b1-ppp\n30c-nbome\n3c-b-fly\n3c-p\n4-aco-dalt \n4-fluor-5-methoxy-dmt\n4-apb\n4-apdb\n4-ba\n4-bmc\n4-brom-2\n4-ca\n4-cab\n4-chlor-2\n4-chlor-methamphetamine\n4-eapb\n4-eec\n4-emc\n4-eta\n4-ethyl-n,n-dmc\n4-ethylamphetamine\n4-fa\n4-fbp\n4-fec\n4-fic\n4-fluor-pbp\n4-fluor-pv8\n4-fluor-pv9\n4-fluor-\u03b1-pvp\n4-fluorpentedron\n4-fluortropacocain\n4-fma\n4-fmc\n4-ha\n4-ia\n4-mapb\n4-mbc (benzedron)\n4-me-\u03b1-et\n4-mec\n4-meo-\u03b1-pvp\n4-meopbp\n4-methoxy-n,n-dmc\n4-methoxy-pv9\n4-methyl-amt\n4-methyl-methylphenidate\n4-methyl-n-methylbuphedron\n4-methyl-n,n-dmc\n4-methyl-pbp\n4-methyl-\u03b1-ethyl-aminobutiophenon\n4-methyl-\u03b1-ethyl-aminopentiophenon\n4-methylaminorex\n4-methylbuphedron\n4-methylpentedron\n4-mma\n4-mta\n4-oh-det\n4-oh-dipt\n4-oh-dmt\n4-oh-met\n4-oh-mipt\n5-brom-dmt\n4,4\u2018-dimethyl-aminorex\n4\u2018-chlor-\u03b1-ppp\n4\u2018-fluor-\u03b1-ppp\n4\u2018-methyl-ppp\n4\u2018-methylhexedron\n461 win-55\n5-apdb\n5-apdi\n5-api\n5-chlor-amt 5\n5-dbfpv\n5-dma (doc)\n5-dmma\n5-eapb\n5-fluor-amt\n5-fluor-dmt\n5-iai\n5-mapb\n5-mapdb\n5-mdma\n5-meo-amt\n5-meo-dalt\n5-meo-dipt\n5-meo-dmt\n5-meo-mipt\n5-meo-\u03b1-et\n5-methoxymethylon\n5-oh-dmt\n5ci-ab-pinaca\n5ci-nnei\n5f-ab pinaca\n5f-adb-pinaca\n5f-adbica\n5f-akb-48\n5f-amb\n5f-apica\n6-eapb\n6-fluor-amt\n6-fluor-dmt\n6-mapb\n6-mapdb\n7-apdb\n7-dichloro-tryptamin\n7-fluortryptamin dalt\n7-me-\u03b1-et\nab fubinaca\nab fubinaca 2- fluorobenzyl isomer\nab-001\nab-005\nab-chminaca\nab-pinaca\nacea\nacetyl-alpha-methylfentanyl\nacpa\nadb-fubinaca\nadb-pinaca\nadbica\nakb-48\nalicb-122\nallobarbital\nalpha-methylfentanyl\nalpha-methylthiofentanyl\nalphenal\nam 694\nam-1220\nam-1248\nam-2201 benzimidazol analog\nam-2201-2- hydroxyindol\nam-2232\nam-2233\namb-pica\nammi\namobarbital\namt\naniracetam\napica\naprobarbital\nbarbital\nbarbituric acid\nbb-22\nbenzphetamin\nbeta-hydroxy-3-methylfentanyl\nbeta-hydroxyfentanyl\nbetaxolol\nbhba\nbk-2c-b bromo-dragonfly\nbk-mddma\nbmdp\nbuphedron (mabp)*\nbutabarbital\nbutalbital\nbutallylonal\nbutethal\ncarfentanil\ncc-2201\nchlorphentermin\nclotermin\ncmp\ncp 47 497-(c8)\ncp 55 244\ncp 55 940\ncumyl-5fpica\ncumyl-bica\ncumyl-pica\ncumyl-pinaca\ncumyl-thpica\ncyclobarbital\ncyclopal\nd2pm\ndbzp\ndeschloro-n-ethyl-ketamin\ndesoxy-d2pm\ndet\ndibutylon\ndiclofensin\ndiethylcathinon\ndimethocain\ndimethylcathinon\ndipt\ndl-4662\ndmma\ndmt\ndob\ndoet\ndoi\ndom\ndot\ndpt\neam-2201\neg-018\nema\nepea\netaqualon\nethcathinon\nethylon\nethylphenidate\netomidate\neutylon\nfab-144\nfdu-pb-22\nfencamfamin\nfentanyl n-oxide\nflea\nflupirtine\nfub-144\nfub-akb48\nfub-amb\nfub-jwh 018\nfub-npb-22\nhdmp-28\nheptabarbital\nhexedron\nhexethal\nhexobarbital\nhma\ni-amb\nisopentedro\nisopropylphenidate\njwh-018 n-(5-bromopentyl) analog\njwh-022\njwh-030\njwh-080\nwh-122 n-(4-pentenyl) analog\njwh-122 n-(5-iodopentyl)\njwh-180\njwh-182\njwh-200 analog1\njwh-210 \u2013(ci)\njwh-213\njwh-250-me-(ci)\njwh-251\njwh-307\njwh-368\njwh-370\njwh-387\njwh-398\njwh-412\nlisdexamfetamine\nm-1438\nm-144\nma-chminaca\nmab-chminaca\nmafp\nmam-2201\nmam-2201 n-(5-chloropentyl) analog\nmazindol\nmbzp\nmchb-1\nmdai\nmddma (dimethylone)\nmdmb-chmica\nmdmb-chminaca\nmdmb-fubinaca\nmdp2p\nmdpbp\nmdph\nmebroqualon\nmefenorex\nmem\nmephentermin\nmephobarbital\nmepiprazol\nmepirapim\nmescaline\nmet\nmethabarbital\nmethylbenzodioxolylbutanamine\nmethylmethaqualon\nmethylphenobarbital\nmipt\nmmai\nmmb-018\nmmb-2201\nmmda\nmn-18\nmn-24\nmn-25-2-methyl derivatives\nmo-chminac\nmpm\nmtta\nn-dma\nn-ethyl-n-methylcathinon\nn-ethylketamin\nn-ethylnorpentedron\nn-ethylpentylon\nn-formyl-methamphetamin\nn-hydroxy-amphetamin* (noha)\nn-hydroxy-mda\nn-methyl-2-ai\nn-methylnantradol\nn,n-dimethyl-mda\nn,n-dimethylpentylon\nnabilone\nnabitan\nnam\nnantradol\nnaphyron\nneb\nness-0327\nnet\nnida-41020\nnm2201\nnmt\nnnei\nnormephedron\nnorpethidine\nnortilidine\nnpa\nnpb-22\nnrg-3\nolanzapine\no-4310\noma\nomma\np-fluorofentanyl\npb-22\npce\npcpr\npenthedron\npentobarbital\npentorex\npfpp\nphenmetrazin\nphenobarbital\nphentermin\nphenylmethylbarbituric acid\nphenylpiperazin\nphenylpiracetam\npipradol\npiritramid\npma\npmma\nppma\nppp\nprobarbital\npropallylonal\npropofol\npropylhexedrin\npsilocybin\npti-1\npti-2\npv10\npv4\npv9\npx 1\npx 2\nr-mmc\nractopamide\nrcs-4 (c1)\nrcs-4 (c10)\nrcs-4 (c2)\nrcs-4 (c3-allyl)\nrcs-4 (c3)\nrcs-4 (c4)\nrcs-4 (c5-cyclopropyl)\nrcs-4 (c5)\nrcs-4 (c6)\nrcs-4 (c7)\nrcs-4 (c8-phenethyl)\nrcs-4 (c8)\nrcs-8\nrimonabant\nrolicyclidin\nsdb-005\nsdb-006\nsdb-006 n-phenylanalog\nsecobarbital\nselegilin\nser-601\nsibutramin\nsigmodal\nslv-319\nslv-326\nsr-144528\nsr-147778\nstanozolol\nsts-135\ntalbutal\ntenocyclidin\nthccooh\nthialbarbital\nthiamylal\nthiobarbituric acid\nthiofentanyl\nthiopental\nthiopropamin\nthj\nthj-018\nthj-2201\ntilidine\ntma\ntma-2\ntma-6\nur-12\nur-12 ur-144 ur-144-(5-bromopentyl)\nur-144\nur-144-(5-chloropentyl)\nvinbarbital\nvinylbital\nwin-53365\nwin-54\nxlr-11\nxlr-12\n\u03b1-dimethylamino-pentiophenon\n\u03b1-et\n\u03b1-ethylamino-pentiophenon\n\u03b1-methylamino-hexanophenon\n\u03b1-papp\n\u03b1-pbp\n\u03b1-pbt\n\u03b1-php\n\u03b1-phpp (pv8)\n\u03b1-pipbp\n\u03b1-propylamino-pentiophenon\n\u03b1-pvt\ncyclizine hydrochloride\njwh-007\njwh-015\njwh-018\njwh-019\njwh-020\njwh-073\njwh-081\njwh-122\njwh-200\njwh-203\njwh-210\njwh-250\nam-2201\ncp 47 497\nhu 210\nwin 55 21-2-2\ndhea\nsynthetic cannabinoids\nnps\nacetone\nacebutolol\natenolol\nenanthate\nepitestosterone\nepitestosterone\nisopropyl fentanyl\nmdpv\nalfentanil\nam-624\nbutylon\nmethadone\nzolpidem\nzopiclone\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    "rawLower": "z drugs \nmethyl-pbp\n1m-3pp\n2-ai\n2-amino-1-phenyl-butan 2-ba\n2-brom-4, 2-ca\n2-chlor-4, 2-eec, 2-emc\n2-ethylamino-1-phenylbutan\n2-fa\n2-fec\n2-fic\n2-fma\n2-fmc\n2-ia\n2-mapb\n2-mec\n2-meomc\n2-methoxyketamin\n2-methyl-ppp\n2-methylamino-1-phenylbutan\n2-oxo-3-hydroxy-lsd\n2-thiothinon\n2,3-dcpp\n2,3-dmec\n2,3-dmmc\n2,3-mda\n2,3-mdma\n2,3-mdmc\n2,3-mdpv\n2,4-dmec\n2,5-dma\n2,5-dmma\n212-2\n25b-nbf\n25b-nbome\n25c-nbf\n25c-nboh\n25c-nbome\n25d-nbome\n25e-nbome\n25g-nbome\n25h-nbome\n25i-nbf\n25i-nbmd\n25i-nboh\n25i-nbome\n25n-nbome\n25t2-nbome\n25t7-nbome\n2c-b\n2c-b-bzp\n2c-b-fly\n2c-c\n2c-d\n2c-e\n2c-f\n2c-g\n2c-h\n2c-i\n2c-n\n2c-o\n2c-p\n2c-t\n2c-t-2\n2c-t-4\n2c-t-7\n3-ba\n3-bmc\n3-ca\n3-caf\n3-eec\n3-emc\n3-fa 4-ma\n3-fea\n3-fec\n3-fic\n3-fma\n3-fmc\n3-fpm\n3-ia\n3-ma\n3-mec\n3-meomc\n3-methoxy-pcp\n3-methyl-pbp\n3-methylbuphedron\n3-methylfentanyl\n3-methylthiofentanyl\n3,4-dichloro-methylphenidate\n3,4-dimethoxy-α-pvp\n3,4-dma\n3,4-dmec\n3,4-dmmc\n3,4-edma\n3,4-edmc\n3,4-mdpa\n3,4-mdphp\n3,4-mdppp\n3‘-fluor-α-ppp\n30c-nbome\n3c-b-fly\n3c-p\n4-aco-dalt \n4-fluor-5-methoxy-dmt\n4-apb\n4-apdb\n4-ba\n4-bmc\n4-brom-2\n4-ca\n4-cab\n4-chlor-2\n4-chlor-methamphetamine\n4-eapb\n4-eec\n4-emc\n4-eta\n4-ethyl-n,n-dmc\n4-ethylamphetamine\n4-fa\n4-fbp\n4-fec\n4-fic\n4-fluor-pbp\n4-fluor-pv8\n4-fluor-pv9\n4-fluor-α-pvp\n4-fluorpentedron\n4-fluortropacocain\n4-fma\n4-fmc\n4-ha\n4-ia\n4-mapb\n4-mbc (benzedron)\n4-me-α-et\n4-mec\n4-meo-α-pvp\n4-meopbp\n4-methoxy-n,n-dmc\n4-methoxy-pv9\n4-methyl-amt\n4-methyl-methylphenidate\n4-methyl-n-methylbuphedron\n4-methyl-n,n-dmc\n4-methyl-pbp\n4-methyl-α-ethyl-aminobutiophenon\n4-methyl-α-ethyl-aminopentiophenon\n4-methylaminorex\n4-methylbuphedron\n4-methylpentedron\n4-mma\n4-mta\n4-oh-det\n4-oh-dipt\n4-oh-dmt\n4-oh-met\n4-oh-mipt\n5-brom-dmt\n4,4‘-dimethyl-aminorex\n4‘-chlor-α-ppp\n4‘-fluor-α-ppp\n4‘-methyl-ppp\n4‘-methylhexedron\n461 win-55\n5-apdb\n5-apdi\n5-api\n5-chlor-amt 5\n5-dbfpv\n5-dma (doc)\n5-dmma\n5-eapb\n5-fluor-amt\n5-fluor-dmt\n5-iai\n5-mapb\n5-mapdb\n5-mdma\n5-meo-amt\n5-meo-dalt\n5-meo-dipt\n5-meo-dmt\n5-meo-mipt\n5-meo-α-et\n5-methoxymethylon\n5-oh-dmt\n5ci-ab-pinaca\n5ci-nnei\n5f-ab pinaca\n5f-adb-pinaca\n5f-adbica\n5f-akb-48\n5f-amb\n5f-apica\n6-eapb\n6-fluor-amt\n6-fluor-dmt\n6-mapb\n6-mapdb\n7-apdb\n7-dichloro-tryptamin\n7-fluortryptamin dalt\n7-me-α-et\nab fubinaca\nab fubinaca 2- fluorobenzyl isomer\nab-001\nab-005\nab-chminaca\nab-pinaca\nacea\nacetyl-alpha-methylfentanyl\nacpa\nadb-fubinaca\nadb-pinaca\nadbica\nakb-48\nalicb-122\nallobarbital\nalpha-methylfentanyl\nalpha-methylthiofentanyl\nalphenal\nam 694\nam-1220\nam-1248\nam-2201 benzimidazol analog\nam-2201-2- hydroxyindol\nam-2232\nam-2233\namb-pica\nammi\namobarbital\namt\naniracetam\napica\naprobarbital\nbarbital\nbarbituric acid\nbb-22\nbenzphetamin\nbeta-hydroxy-3-methylfentanyl\nbeta-hydroxyfentanyl\nbetaxolol\nbhba\nbk-2c-b bromo-dragonfly\nbk-mddma\nbmdp\nbuphedron (mabp)*\nbutabarbital\nbutalbital\nbutallylonal\nbutethal\ncarfentanil\ncc-2201\nchlorphentermin\nclotermin\ncmp\ncp 47 497-(c8)\ncp 55 244\ncp 55 940\ncumyl-5fpica\ncumyl-bica\ncumyl-pica\ncumyl-pinaca\ncumyl-thpica\ncyclobarbital\ncyclopal\nd2pm\ndbzp\ndeschloro-n-ethyl-ketamin\ndesoxy-d2pm\ndet\ndibutylon\ndiclofensin\ndiethylcathinon\ndimethocain\ndimethylcathinon\ndipt\ndl-4662\ndmma\ndmt\ndob\ndoet\ndoi\ndom\ndot\ndpt\neam-2201\neg-018\nema\nepea\netaqualon\nethcathinon\nethylon\nethylphenidate\netomidate\neutylon\nfab-144\nfdu-pb-22\nfencamfamin\nfentanyl n-oxide\nflea\nflupirtine\nfub-144\nfub-akb48\nfub-amb\nfub-jwh 018\nfub-npb-22\nhdmp-28\nheptabarbital\nhexedron\nhexethal\nhexobarbital\nhma\ni-amb\nisopentedro\nisopropylphenidate\njwh-018 n-(5-bromopentyl) analog\njwh-022\njwh-030\njwh-080\nwh-122 n-(4-pentenyl) analog\njwh-122 n-(5-iodopentyl)\njwh-180\njwh-182\njwh-200 analog1\njwh-210 –(ci)\njwh-213\njwh-250-me-(ci)\njwh-251\njwh-307\njwh-368\njwh-370\njwh-387\njwh-398\njwh-412\nlisdexamfetamine\nm-1438\nm-144\nma-chminaca\nmab-chminaca\nmafp\nmam-2201\nmam-2201 n-(5-chloropentyl) analog\nmazindol\nmbzp\nmchb-1\nmdai\nmddma (dimethylone)\nmdmb-chmica\nmdmb-chminaca\nmdmb-fubinaca\nmdp2p\nmdpbp\nmdph\nmebroqualon\nmefenorex\nmem\nmephentermin\nmephobarbital\nmepiprazol\nmepirapim\nmescaline\nmet\nmethabarbital\nmethylbenzodioxolylbutanamine\nmethylmethaqualon\nmethylphenobarbital\nmipt\nmmai\nmmb-018\nmmb-2201\nmmda\nmn-18\nmn-24\nmn-25-2-methyl derivatives\nmo-chminac\nmpm\nmtta\nn-dma\nn-ethyl-n-methylcathinon\nn-ethylketamin\nn-ethylnorpentedron\nn-ethylpentylon\nn-formyl-methamphetamin\nn-hydroxy-amphetamin* (noha)\nn-hydroxy-mda\nn-methyl-2-ai\nn-methylnantradol\nn,n-dimethyl-mda\nn,n-dimethylpentylon\nnabilone\nnabitan\nnam\nnantradol\nnaphyron\nneb\nness-0327\nnet\nnida-41020\nnm2201\nnmt\nnnei\nnormephedron\nnorpethidine\nnortilidine\nnpa\nnpb-22\nnrg-3\nolanzapine\no-4310\noma\nomma\np-fluorofentanyl\npb-22\npce\npcpr\npenthedron\npentobarbital\npentorex\npfpp\nphenmetrazin\nphenobarbital\nphentermin\nphenylmethylbarbituric acid\nphenylpiperazin\nphenylpiracetam\npipradol\npiritramid\npma\npmma\nppma\nppp\nprobarbital\npropallylonal\npropofol\npropylhexedrin\npsilocybin\npti-1\npti-2\npv10\npv4\npv9\npx 1\npx 2\nr-mmc\nractopamide\nrcs-4 (c1)\nrcs-4 (c10)\nrcs-4 (c2)\nrcs-4 (c3-allyl)\nrcs-4 (c3)\nrcs-4 (c4)\nrcs-4 (c5-cyclopropyl)\nrcs-4 (c5)\nrcs-4 (c6)\nrcs-4 (c7)\nrcs-4 (c8-phenethyl)\nrcs-4 (c8)\nrcs-8\nrimonabant\nrolicyclidin\nsdb-005\nsdb-006\nsdb-006 n-phenylanalog\nsecobarbital\nselegilin\nser-601\nsibutramin\nsigmodal\nslv-319\nslv-326\nsr-144528\nsr-147778\nstanozolol\nsts-135\ntalbutal\ntenocyclidin\nthccooh\nthialbarbital\nthiamylal\nthiobarbituric acid\nthiofentanyl\nthiopental\nthiopropamin\nthj\nthj-018\nthj-2201\ntilidine\ntma\ntma-2\ntma-6\nur-12\nur-12 ur-144 ur-144-(5-bromopentyl)\nur-144\nur-144-(5-chloropentyl)\nvinbarbital\nvinylbital\nwin-53365\nwin-54\nxlr-11\nxlr-12\nα-dimethylamino-pentiophenon\nα-et\nα-ethylamino-pentiophenon\nα-methylamino-hexanophenon\nα-papp\nα-pbp\nα-pbt\nα-php\nα-phpp (pv8)\nα-pipbp\nα-propylamino-pentiophenon\nα-pvt\ncyclizine hydrochloride\njwh-007\njwh-015\njwh-018\njwh-019\njwh-020\njwh-073\njwh-081\njwh-122\njwh-200\njwh-203\njwh-210\njwh-250\nam-2201\ncp 47 497\nhu 210\nwin 55 21-2-2\ndhea\nsynthetic cannabinoids\nnps\nacetone\nacebutolol\natenolol\nenanthate\nepitestosterone\nepitestosterone\nisopropyl fentanyl\nmdpv\nalfentanil\nam-624\nbutylon\nmethadone\nzolpidem\nzopiclone\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+  },
+  {
+    "name": "Synthetic Cannabinoids and NPS (Italian Lab)",
+    "price": 350,
+    "isPerDrug": false,
+    "header": "1-(1,3-Diphenylpropan-2-yl)pyrrolidine",
+    "groups": [
+      {
+        "label": null,
+        "drugs": [
+          "1-(4-methylbenzyl) piperazine",
+          "1-(5-methyl-2-thienyl)-propan-2-amine",
+          "1",
+          "3-dimethylbutylamine",
+          "11-Nor-9(R)-carboxy-Hexahydrocannabinol",
+          "1B-LSD",
+          "1cP-AL-LAD",
+          "1cP-LSD",
+          "1-Ethyl-pyrrolidinylmethyl N-desalkyl etonitazene",
+          "1-Naphthoyl indole",
+          "1-napthyl U-47700",
+          "1-phenylbutan-2-amine",
+          "1p-LSD",
+          "1T-LSD",
+          "1V-LSD",
+          "2-(1-(4-Fluorobenzyl)-1H-indol-3-yl)acetic Acid",
+          "2'",
+          "ortho-Difluoro Fentanyl",
+          "2",
+          "2",
+          "3",
+          "3­-Tetramethyl­-Cyclopropyl Fentanyl",
+          "2",
+          "3",
+          "5-Trimethoxyamphetamine",
+          "2",
+          "3",
+          "6-Trimethoxyamphetamine",
+          "2",
+          "3-Benzodioxole Fentanyl",
+          "2'",
+          "3'-Dimethoxy Fentanyl",
+          "2",
+          "3-DMMC",
+          "2",
+          "3-MDA",
+          "2",
+          "3-seco-Fentanyl",
+          "2",
+          "4",
+          "5-TMMC",
+          "2'",
+          "4'-Dimethoxy Fentanyl",
+          "2'",
+          "5'-Dimethoxy 3'",
+          "4'-Dimethyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Bromo alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Bromo Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Butyl alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Chloro alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Chloro Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Ethyl alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Ethyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Ethylthio Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Iodo alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Iodo Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Isopropyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Isopropylthio Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Methyl alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Methylthio Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Nitro Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Propyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Propylthio Fentanyl",
+          "2'",
+          "5'-Dimethoxy 4'-Trifluoro Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy alpha-Methyl Fentanyl",
+          "2'",
+          "5'-Dimethoxy Fentanyl",
+          "2",
+          "5-DMA",
+          "2'",
+          "6'-Dimethoxy Fentanyl",
+          "2-[4-(2-methoxyphenyl)piperazin-1-yl]-1",
+          "2-diphenylethanol",
+          "25B-NBF",
+          "25B-NBOH",
+          "25B-NBOMe",
+          "25C-NBF",
+          "25C-NBOH",
+          "25C-NBOMe",
+          "25CN-NBOH",
+          "25D-NBOMe",
+          "25E-NBOH",
+          "25E-NBOMe",
+          "25G-NBOMe",
+          "25H-NBOH",
+          "25H-NBOMe",
+          "25I-NBF",
+          "25I-NBMD",
+          "25I-NBOH",
+          "25I-NBOMe",
+          "25I-NBOMe-M (2-desmethyl-)",
+          "25I-NBOMe-M (5-desmethyl-)",
+          "25I-NBOMe-M (para-HO)",
+          "25IP-NBOMe",
+          "25N-NBOMe",
+          "25P-NBOMe",
+          "25T2-NBOMe",
+          "25T4-NBOMe",
+          "25T7-NBOMe",
+          "25T-NBOMe",
+          "2-AI",
+          "2-bromo-4",
+          "5-Dimethoxyphenethylamin",
+          "2-bromo-deschloroketamine",
+          "2C-B",
+          "2C-B-FLY",
+          "2C-C",
+          "2C-D",
+          "2-CDMC",
+          "2C-E",
+          "2-CEC",
+          "2C-E-FLY",
+          "2C-G",
+          "2C-G-4",
+          "2C-G-N",
+          "2C-H",
+          "2-chloro-MDA",
+          "2C-I",
+          "2-CMC",
+          "2C-N",
+          "2C-O-4",
+          "2C-P",
+          "2C-T",
+          "2C-T-2",
+          "2C-T-4",
+          "2C-T-7",
+          "2-diphenylmethylpyrrolidine",
+          "2-DPMP",
+          "2-Ethylethcathinone",
+          "2-FA",
+          "2-FEC",
+          "2-Fluoro ADB",
+          "2-Fluoro AMB",
+          "2'-Fluoro Fentanyl",
+          "2-Fluoro MT-45",
+          "2-fluoro NNEI",
+          "2-fluoro-2-oxo PCE",
+          "2-Fluorodeschloroketamine",
+          "2-fluoroethamphetamine",
+          "2-Fluorofentanyl",
+          "2-Fluoro-JWH-019",
+          "2-Fluoropentylindole",
+          "2-Fluoroviminol",
+          "2-FMA",
+          "2-FMC",
+          "2-FPPP",
+          "2-Hydroxyethylflurazepam",
+          "2-MAPB",
+          "2-MeO-Ketamine",
+          "2'-Methyl Acetyl Fentanyl",
+          "2-Methyl AP-237",
+          "2-Methyl carfentanil",
+          "2-Methyl DMT",
+          "2'-Methyl Fentanyl",
+          "2-Methylamphetamine",
+          "2-methylethylbuphedrone",
+          "2-Methylfentanyl",
+          "2-MMC",
+          "2-Naphthyl U-47700",
+          "2-Oxo-3-hydroxy-LSD",
+          "3 4-difluoro U-47700",
+          "3",
+          "3-Dimethylfentanyl",
+          "3'",
+          "4'",
+          "5'-Trimethoxy alpha-Methyl Fentanyl",
+          "3",
+          "4-CTMP",
+          "3",
+          "4-dichloro-N",
+          "N-Dimethcathinone",
+          "3'",
+          "4'-Dimethoxy Fentanyl",
+          "3",
+          "4-dimethoxy-a-PHP",
+          "3",
+          "4-dimethoxy-a-PVP",
+          "3",
+          "4-Dimethyl Alpha-PVP",
+          "3",
+          "4-dimethylmethcathinone noreph. metab.",
+          "3",
+          "4-DMA",
+          "3",
+          "4-DMMC",
+          "3",
+          "4-EDMC",
+          "3",
+          "4-ethylenedioxy U-47700",
+          "3",
+          "4-ethylenedioxy U-51754",
+          "3",
+          "4-MDMA methylene homologue",
+          "3'",
+          "4'-Methylenedioxy alpha-Methyl Fentanyl",
+          "3",
+          "4-methylenedioxy U-47700",
+          "3",
+          "4-Methylenedioxy-alpha-propylaminobutiophenone",
+          "3",
+          "4-Methylenedioxy-N-cyclohexylcathinone",
+          "3",
+          "5-ADB-4en-PFUPPYCA",
+          "3'",
+          "5'-Dimethoxy Fentanyl",
+          "3",
+          "5-Dimethyl-cyclopentylfentanyl",
+          "3",
+          "5-Dimethylfentanyl",
+          "3",
+          "6-DMPM",
+          "3'-4'-Dichloro-3''-fluorofentanyl",
+          "3'-4'-Methylenedioxyfentanyl",
+          "3-Allylfentanyl",
+          "3-CAF",
+          "3C-B-fly",
+          "3-CDMC",
+          "3C-E",
+          "3-CEC",
+          "3-Chlorocathinone",
+          "3-Chlorophenmetrazine",
+          "3CL-PCP",
+          "3-CMC",
+          "3C-P",
+          "3-EMC",
+          "3-Ethylethcathinone",
+          "3-Ethylfentanyl",
+          "3F-4-ANBP",
+          "3-FA",
+          "3F-alpha-PHP",
+          "3F-alpha-PiHP",
+          "3-FEC",
+          "3-Fluoro ADB",
+          "3-fluoro AMB",
+          "3'-Fluoro Fentanyl",
+          "3-Fluoro NNEI",
+          "3-Fluoroethamphetamine",
+          "3-Fluorophenmetrazine",
+          "3-Fluropentylindole",
+          "3-FMA",
+          "3-FMC",
+          "3F-MT-45",
+          "3F-N-ethylhexedrone",
+          "3F-PCP",
+          "3F-Phenetrazine",
+          "3-FPM-M",
+          "O",
+          "N-bis-dealkyl-",
+          "3-Furanyl Fentanyl",
+          "3-HO-PCE",
+          "3-Hydroxybromazepam",
+          "3-Hydroxyflubromazepam",
+          "3-Hydroxyphenazepam",
+          "3-MAPB",
+          "3-Me Buphedrone",
+          "3'-Me-4F-iBF",
+          "3-MEC",
+          "3-MeOMC",
+          "3-MeO-PCE",
+          "3-MeO-PCMMo",
+          "3-MeO-PCMo",
+          "3-MeO-PCP",
+          "3-Me-PCP",
+          "3-Me-PCPy",
+          "3-Methoxyfentanyl",
+          "3'-Methyl Acetyl Fentanyl",
+          "3'-Methyl Fentanyl",
+          "3-Methyl fentanyl",
+          "3-Methyl phenoxy acetylfentanil",
+          "3-Methylamphetamine",
+          "3-Methyl-furanylfentanyl",
+          "3-Methylmethamphetamine",
+          "3-Methylphenmetrazine",
+          "3-Methylthio-fentanyl",
+          "3-MMA",
+          "3-MMC",
+          "3-OH-PCP",
+          "3'-ortho-Difluoro Fentanyl",
+          "3-Phenylpropionylfentanyl",
+          "4' hydroxy Nitazene",
+          "4-(m-Hydroxyphenyl)fentanyl",
+          "4-(Trifluoromethyl)-U-47700",
+          "4",
+          "5-MDAI (4,5-Methylenedioxy-2-aminoindane)",
+          "4-Acetoxy MiPT",
+          "4-Acetoxy-MALT",
+          "4-AcO-DALT",
+          "4-AcO-DET",
+          "4-AcO-DIPT",
+          "4-AcO-DMT",
+          "4-AcO-DPT",
+          "4-ACO-EPT",
+          "4-AcO-MET",
+          "4-Anilino-1-Benzylpiperidine",
+          "4-ANPP",
+          "4-APDB",
+          "4-benzylpiperidine",
+          "4Br-MAR",
+          "4-Bromoamphetamine",
+          "4-Bromomethcathinone",
+          "4''-Bromo-ohmefentanyl",
+          "4-CAB",
+          "4-CBC",
+          "4-CDMC",
+          "4-chloro CUMYL-PINACA",
+          "4-chloro Pentedrone",
+          "4-Chloroamphetamine",
+          "4-Chloro-Buphedrone",
+          "4'-chloro-deschloroalprazolam",
+          "4-Chloroethcathinone",
+          "4-chloromethcathinone",
+          "4-CIC",
+          "4-Cl-3-MMC",
+          "4Cl-iBF",
+          "4Cl-MDMB-BINACA",
+          "4-Cl-PPP",
+          "4Cl-PVP",
+          "4-CMA",
+          "4-CN-AB-BUTICA",
+          "4-cyano CUMYL-BUT7AICA",
+          "4-cyano CUMYL-BUTINACA",
+          "4-cyano CUMYL-BUTINACA Isomer 2",
+          "4-cyano CUMYL-BUTINACA N-Butanoic Acid",
+          "4-cyano MDMB-BUTINACA",
+          "4-EAPB",
+          "4-EEC",
+          "4-ethyl pentedrone",
+          "4-Ethylmethcathinone",
+          "4-ethyl-n",
+          "n-DMC",
+          "4-F MDMB-BICA N-(4-hydroxybutyl) M",
+          "4F-ABINACA",
+          "4F-alpha-PVP",
+          "4F-Buphedrone",
+          "4-FEC",
+          "4F-Ephedrine",
+          "4F-iBF",
+          "4-Fluoro ADB",
+          "4-fluoro AMB",
+          "4'-Fluoro Fentanyl",
+          "4-fluoro MDMB-BUTICA butanoic acid metabolite",
+          "4-fluoro MDMB-BUTINACA 2'-indazole butanoic acid isomer",
+          "4-fluoro MDMB-BUTINACA 2'-indazole isomer",
+          "4-Fluoro MDMB-BUTINACA 3-carboxy-2'-indazole Metabolite",
+          "4-fluoro MDMB-BUTINACA 3-carboxyindazole metabolite",
+          "4-fluoro MDMB-BUTINACA N-(4-hydroxybutyl) metabolite",
+          "4-fluoro MDMB-BUTINACA N-(butanoic acid) 3",
+          "3-dimethylbutanoic acid metabolite",
+          "4-fluoro PBP",
+          "4-fluoro-2-oxo PCE (4-FDCNEK)",
+          "4-fluoro-3-methyl-alpha-PVP",
+          "4-Fluoro-ABUTINACA N-(4-hydroxybutyl) metabolite",
+          "4-Fluoro-ABUTINACA N-butanoic acid metabolite",
+          "4-Fluoroamphetamine",
+          "4-fluoro-CUMYL-5-fluoro-PICA",
+          "4-fluoro-CUMYL-5-fluoro-PINACA",
+          "4-Fluoro-DMBA-BINACA",
+          "4-Fluoroethamphetamine",
+          "4-Fluoroethylphenidate",
+          "4-Fluorofentanyl",
+          "4-fluoromethylphenidate",
+          "4-fluoro-N-ethylbuphedron",
+          "4-fluoro-N-ethyl-Pentedrone",
+          "4''-Fluoro-ohmefentanyl",
+          "4-Fluoropentedrone",
+          "4-Fluorophenibut",
+          "4-Fluorotropacocaine",
+          "4-FMA",
+          "4F-MDMB-BICA",
+          "4F-MDMB-BINACA",
+          "4F-MDMB-BUTINACA N-butanoic acid metabolite",
+          "4F-NPP",
+          "4F-PHP",
+          "4F-PV8",
+          "4F-PV8 piperidine analogue",
+          "4F-PV9",
+          "4-HO-DET",
+          "4-HO-MET",
+          "4-HO-MiPT",
+          "4-HO-MPT",
+          "4-HTMPIPO",
+          "4-hydroxy amphetamine",
+          "4-Hydroxy DPT",
+          "4-Hydroxy EPT",
+          "4-Hydroxy MALT",
+          "4-Hydroxy McPT",
+          "4'-Hydroxyclobazam",
+          "4-Hydroxymethamphetamine",
+          "4-hydroxy-Xylazin",
+          "4-MA-NBOMe",
+          "4-MAPB",
+          "4-MEAP",
+          "4-MEC",
+          "4-MeO-BF",
+          "4-MeO-PCP",
+          "4-MeOPP",
+          "4-MeO-PV9",
+          "4-MeO-PVP",
+          "4-Methoxy DiPT",
+          "4-Methoxy DMT",
+          "4-Methoxy MiPT",
+          "4-Methoxy PCE",
+          "4''-Methoxyfentanyl",
+          "4-methoxy-N",
+          "N-Dimethylcathinone",
+          "4'-Methyl Acetyl Fentanyl",
+          "4-Methyl AET",
+          "4-Methyl Fentanyl",
+          "4'-Methyl Hexedrone",
+          "4-methylaminoantipyrine",
+          "4-Methylaminorex",
+          "4-methylamphetamine",
+          "4-methylbuphedrone",
+          "4-Methyldiethcathinone",
+          "4'-Methylfentanyl",
+          "4-Methyl-N",
+          "N-dimethylcathinone",
+          "4-Methylpentedrone",
+          "4-Methylthio-N-benzylcathinone",
+          "4-MeTMP",
+          "4-MMA",
+          "4-MPH",
+          "4-MTA",
+          "4''-Nitrofentanyl",
+          "4-OH DiPT",
+          "4-OH-DALT",
+          "4-Phenyl Fentanyl",
+          "4-Phenyl U-51754",
+          "4-PrO-DMT",
+          "5",
+          "3-AB-CHMFUPPYCA",
+          "5",
+          "6-Dichloro Desmethylchlorphine",
+          "5",
+          "7-Dichloro Tryptamine",
+          "5-aminoisotonitazene",
+          "5-APB",
+          "5-APB NBOMe",
+          "5-APDB",
+          "5-APDI",
+          "5-BPDi",
+          "5-Br-DMT",
+          "5-Bromo APINACA",
+          "5-Bromo THJ 018",
+          "5-Bromo-MMB-PICA",
+          "5-Chloro AB-PINACA",
+          "5-Chloro AKB48",
+          "5-Chloro DMT",
+          "5-chloro THJ 018",
+          "5-Chloro Tryptamine",
+          "5Cl-NNEI",
+          "5-DBFPV",
+          "5-EAPB",
+          "5F EDMB-PINACA",
+          "5F-3",
+          "5-AB-PFUPPYCA",
+          "5F-AB-001",
+          "5F-AB-FUPPYCA",
+          "5F-ABICA",
+          "5F-AB-PINACA",
+          "5F-ADB",
+          "5F-ADB metabolite 2",
+          "5F-ADBICA",
+          "5F-AEB",
+          "5F-AKB48",
+          "5F-AMB",
+          "5F-A-P7AICA",
+          "5F-APINAC",
+          "5F-BZO-POXIZID",
+          "5F-CUMYL-P7AICA",
+          "5F-Cumyl-PeGACLONE",
+          "5F-CUMYL-PINACA",
+          "5F-EDMB-PICA",
+          "5F-EMB-PICA",
+          "5-fluoro 7-QUPAIC",
+          "5-fluoro AB-7-PAICA",
+          "5-fluoro AB-PINACA 3-carboxyindazole metabolite",
+          "5-fluoro AB-PINACA N-(4-hydroxypentyl) metabolite",
+          "5-Fluoro ADB-PINACA",
+          "5-Fluoro ADB-PINACA isomer 2",
+          "5-Fluoro AMB metabolite 2",
+          "5-fluoro AMB metabolite 3",
+          "5-Fluoro AMB metabolite 5",
+          "5-Fluoro AMB metabolite 7",
+          "5-Fluoro AMT",
+          "5-Fluoro BEPIRAPIM",
+          "5-fluoro CUMYL-P7AICA N-pentanoic acid metabolite",
+          "5-fluoro CUMYL-PeGACLONE N-(5-hydroxypentyl) metabolite",
+          "5-fluoro CUMYL-PeGACLONE N-pentanoic acid metabolite",
+          "5-Fluoro CUMYL-PICA",
+          "5-Fluoro CYPPICA",
+          "5-fluoro ethylbenzyl-PICA",
+          "5-fluoro MDMB-7-PAICA butanoic acid metabolite",
+          "5-fluoro MDMB-PICA metabolite 2",
+          "5-fluoro MDMB-PICA metabolite 4",
+          "5-Fluoro MDMB-PICA metabolite 7",
+          "5-fluoro MDMB-PICA metabolite 8",
+          "5-fluoro MDMB-PICA metabolite 9",
+          "5-fluoro MN-18",
+          "5-Fluoro NNEI",
+          "5-fluoro PB-22 3-carboxyindole metabolite",
+          "5-fluoro phenyl-PICA",
+          "5-Fluoro PY-PICA",
+          "5-Fluoro SDB-005",
+          "5-fluoro SDB-006",
+          "5-Fluoro-2-ADB-PINACA isomer 2",
+          "5-fluoro-3",
+          "5-ADB-PFUPPYCA",
+          "5-fluoro-AKB48 N-(4-hydroxypentyl) metabolite",
+          "5-Fluoro-MMB-PICA ester hydrolysis metabolite",
+          "5-Fluoro-MPP-PICA ester hydrolysis metabolite",
+          "5-Fluoropentyl-3-pyridinoylindole",
+          "5-Fluoropentylindole",
+          "5-fluoro-tert-Butylbenzyl-PINACA",
+          "5F-MDMB-P4AICA",
+          "5F-MDMB-P7AICA",
+          "5F-MDMB-PICA",
+          "5F-MDMB-PINACA COOH metabolite",
+          "5F-NPB-22",
+          "5F-PB-22",
+          "5F-PCN",
+          "5F-PY-PINACA",
+          "5F-THJ",
+          "5-HTP",
+          "5-Hydroxy Tryptamine",
+          "5-Hydroxy-N-methyl Tryptamine",
+          "5-IAI",
+          "5-IT",
+          "5-MAPB",
+          "5-MAPDB",
+          "5-MAPDI",
+          "5-MBPB",
+          "5-MeO-Amt",
+          "5-MeO-DALT",
+          "5-MeO-DiBF",
+          "5-MeO-DIPT",
+          "5-MeO-DMT",
+          "5-MeO-MALT",
+          "5-MeO-MiPT",
+          "5-MeO-TMT",
+          "5-Methoxy AET",
+          "5-Methoxy DET",
+          "5-Methoxy DPT",
+          "5-Methoxy EiPT",
+          "5-Methoxy EPT",
+          "5-Methoxy MET",
+          "5-Methoxy-N",
+          "N-Dibutyl Tryptamine",
+          "5-Methoxy-N",
+          "N-Diisobutyl Tryptamine",
+          "5-methyl Etodesnitazene",
+          "5-PPDi",
+          "5-Trifluoromethyl isotodesnitazene",
+          "6-(2-Aminopropyl)indole",
+          "6-Acetylcodeine",
+          "6-APB",
+          "6-APDB",
+          "6-EAPB",
+          "6-Fluoro DET",
+          "6-MAPB",
+          "6-Methoxy DiPT",
+          "7-aminoclonazepam",
+          "7-Aminoflunitrazepam",
+          "7-Aminonitrazepam",
+          "7-APB",
+          "7-APDB",
+          "7-Fluoro Tryptamine",
+          "7-Hydroxymitragynine",
+          "7-Methoxy DiPT",
+          "7'-methoxy NABUTIE",
+          "7-OH-CBD",
+          "8-Aminoclonazolam",
+          "8-aminoflunitrazolam",
+          "8-Chlorotheophylline",
+          "9(R)-Hexahydrocannabinol",
+          "A-3665",
+          "A-796",
+          "260",
+          "A-796260 Degradant",
+          "A-834735",
+          "A-834735 Degradant",
+          "A-836339",
+          "AB-001",
+          "AB-005",
+          "AB-005 azepane isomer",
+          "AB-7-FUBAICA",
+          "AB-BICA",
+          "AB-CHFUPYCA",
+          "AB-CHMICA",
+          "AB-CHMINACA",
+          "AB-CHMINACA 2'-Indazole Isomer",
+          "AB-CHMINACA metabolite M1A",
+          "AB-CHMINACA metabolite M1B",
+          "AB-CHMINACA metabolite M2",
+          "AB-CHMINACA metabolite M3A",
+          "AB-CHMINACA Metabolite M4",
+          "AB-CHMINACA metabolite M5A",
+          "AB-CHMINACA metabolite M6",
+          "AB-CHMINACA metabolite M7",
+          "AB-FUBICA",
+          "AB-FUBINACA",
+          "AB-FUBINACA 2B",
+          "AB-FUBINACA metabolite 4",
+          "AB-FUBINACA-2-Fluorbenzyl",
+          "AB-FUBINACA-3-Fluorbenzyl",
+          "AB-PICA",
+          "AB-PINACA",
+          "AB-PINACA (5-OH-Pentyl)",
+          "AB-PINACA 3-Carboxyindazole Metabolite",
+          "AB-PINACA carboxylic acid",
+          "AB-PINACA N-(4-hydroxypentyl) metabolite",
+          "AB-PINACA pentanoic acid",
+          "Acetildenafil",
+          "Acetyl fentanyl",
+          "Acetyl norfentanyl",
+          "Acetylbenzylfentanyl",
+          "Acetyl-carfentanil",
+          "ACHMINACA",
+          "Aconitine",
+          "Acrylfentanyl",
+          "ADAMANTYL-THPINACA",
+          "ADB-4en-PINACA",
+          "ADB-5Br-BUTINACA",
+          "ADB-5'Br-BUTINACA 3",
+          "3-Dimethylbutanoic Acid",
+          "ADB-5Br-INACA",
+          "ADB-5F-BUTINACA",
+          "ADB-BICA",
+          "ADB-BINACA",
+          "ADB-BUTINACA",
+          "ADB-BUTINACA N-(4-hydroxybutyl) metabolite",
+          "ADB-BUTINACA N-butanoic acid metabolite",
+          "ADB-CHMICA",
+          "ADB-CHMINACA (M10(Lacton)",
+          "ADB-CHMINACA (M3(Valin-4-OH-Cyclohexyl))",
+          "ADB-FUBIATA",
+          "ADB-FUBIATA 3",
+          "3-dimethylbutanoic Acid metabolite",
+          "ADB-FUBICA",
+          "ADB-FUBINACA",
+          "ADB-HEXINACA",
+          "ADB-IATA",
+          "ADBICA",
+          "ADBICA N-(4-hydroxypentyl) metabolite",
+          "ADBICA N-(5-hydroxypentyl) metabolite",
+          "ADBICA N-pentanoic acid",
+          "ADB-INACA",
+          "ADB-P-5Br-INACA",
+          "ADB-P7AICA",
+          "ADB-PHETINACA",
+          "ADB-PINACA",
+          "ADB-PINACA N-(4-hydroxypentyl) metabolite",
+          "ADB-PINACA N-(5-hydroxypentyl) metabolite",
+          "ADB-PINACA pentanoic acid metabolite",
+          "Adinazolam",
+          "Adrafinil",
+          "A-FUB7AICA",
+          "AFUBIATA",
+          "AH-7563",
+          "AH-7921",
+          "AH-7959",
+          "AH-8507",
+          "AH-8529",
+          "AH-8532",
+          "AH-8533",
+          "AKB48",
+          "AKB48 N-(4-fluorobenzyl) analog",
+          "AKB48 N-(4-hydroxypentyl) metabolite",
+          "AKB48 N-(5-hydroxypentyl) metabolite",
+          "AKB48 N-pentanoic acid metabolite",
+          "AKB-57",
+          "ALD-52",
+          "ALEPH-2",
+          "ALEPH-4",
+          "Alfa-hydroxy bromazolam",
+          "Alfentanil",
+          "AL-LAD",
+          "Allylescaline",
+          "alpha",
+          "3-Dimethylfentanyl",
+          "alpha-Dimethyl Fentanyl",
+          "alpha-Hydroxy Midazolam",
+          "Alpha-hydroxyalprazolam",
+          "alpha-hydroxyetizolam",
+          "alpha-Hydroxyflualprazolam",
+          "Alpha-Hydroxytriazolam",
+          "alpha'-Methoxy Fentanyl",
+          "alpha-Methyl Acetyl Fentanyl",
+          "alpha'-Methyl Butyryl Fentanyl",
+          "alpha-Methyl Butyryl Fentanyl",
+          "alpha-Methyl fentanyl",
+          "alpha-Methyl Thiofentanyl",
+          "alpha-Methyl-acrylfentanyl",
+          "alpha-Methyl-p-fluorofentanyl",
+          "alpha-Naphyrone",
+          "alpha-PBP",
+          "alpha-PCYP",
+          "alpha-PHP",
+          "Alpha-PiHP",
+          "alpha-PPP",
+          "Alpha-PVP",
+          "alpha-PVT",
+          "alpha-Pyrrolidino-2-phenylacetophenone",
+          "Alprazolam",
+          "AM-1220",
+          "AM-1220 azepane isomer",
+          "AM-1235",
+          "AM-1241",
+          "AM-1248",
+          "AM-1248 azepane isomer",
+          "AM-2201",
+          "AM-2201 (2-OH-indole)",
+          "AM-2201 (5-OH-indole)",
+          "AM-2201 6-hydroxyindole metabolite",
+          "AM-2201 7-hydroxyindole metabolite",
+          "AM-2201 8-Quinolinyl Carboxamide",
+          "AM-2201 N-(4-hydroxypentyl)",
+          "AM-2232",
+          "AM-2233",
+          "AM-2233 azepane isomer",
+          "AM-3102",
+          "AM-630",
+          "AM-679",
+          "AM-694",
+          "AM694 N-(5-hydroxypentyl) metabolite",
+          "AM694 N-pentanoic acid metabolite",
+          "Amantadine",
+          "AMB",
+          "AMB-FUBICA",
+          "AMB-FUBINACA",
+          "AMB-FUBINACA acid",
+          "AMB-PICA (Valin)",
+          "a'-Methyl etonitazene",
+          "Amfepramone",
+          "Aminorex",
+          "Amphetamine",
+          "Amphetamine-N-Propyl",
+          "AMT",
+          "AP-237",
+          "AP-238",
+          "APAA",
+          "APICA",
+          "APICA (N-4-OH-Pentyl)",
+          "APICA N-(5-hydroxypentyl) metabolite",
+          "APICA N-pentanoic acid metabolite",
+          "a-PNP",
+          "A-PONASA",
+          "APP-BINACA",
+          "APP-BUTINACA oxidative deamination metabolite",
+          "APP-CHMINACA",
+          "APP-FUBINACA",
+          "APP-PICA",
+          "APP-PICA oxidative deamination metabolite",
+          "Arecoline",
+          "ATHPINACA isomer 2",
+          "Atomoxetine",
+          "Atropine",
+          "AZEFUBIM",
+          "Azidoindolene 1",
+          "Baclofen",
+          "BB-22",
+          "BB-22 3-carboxyindole metabolite",
+          "BDB",
+          "Benocyclidine",
+          "Bentazepam",
+          "Benzatropine",
+          "Benzedrone",
+          "Benzodioxole fentanyl",
+          "Benzofuranyl-fentanyl",
+          "Benzoylecgonine",
+          "Benzoylfentanyl",
+          "Benzphetamine",
+          "Benzyl Acryl Fentanyl",
+          "Benzyl carfentanil",
+          "Benzyl Fentanyl",
+          "Benzyl-4-CN BUTINACA",
+          "Benzylone",
+          "beta-Hydroxy Acetyl Thiofentanyl",
+          "beta-Hydroxy-3-methyl-thienylfentanyl",
+          "beta-Hydroxy-carfentanil",
+          "Betahydroxyfentanyl",
+          "beta-Hydroxy-p-fluorofentanyl",
+          "beta-hydroxy-PHP",
+          "beta-Hydroxy-sufentanil",
+          "Beta-Hydroxythiofentanyl",
+          "beta-Methoxy-2C-B",
+          "beta-Methyl Acetyl Fentanyl",
+          "beta-Methyl fentanyl",
+          "Bk-2C-B",
+          "bk-IVP",
+          "bk-MDDMA",
+          "BMPEA",
+          "BOH-2C-B",
+          "Boldenone",
+          "Bretazenil",
+          "Brifentanyl",
+          "Bromadol",
+          "Bromantane",
+          "Bromazepam",
+          "Bromazepam cleavage product",
+          "Bromazolam",
+          "Bromo-DragonFLY",
+          "Brorphine",
+          "Brotizolam",
+          "Bufotenine",
+          "Buphedrone",
+          "Bupivacaine",
+          "Buprenorphine",
+          "Bupropion",
+          "Butonitazene",
+          "Butorphanol",
+          "Butylone",
+          "Butyryl fentanyl",
+          "Butyryl Norfentanyl",
+          "Butyryl-carfentanyl",
+          "Butyrylfentanyl Carboxy Metabolite",
+          "Butyrylremifentanil",
+          "BZO-4en-POXIZID",
+          "BZO-CHMOXIZID",
+          "BZO-HEXOXIZID",
+          "BZO-HEXOXIZID 4-hydroxybenzoyl metabolite",
+          "BZO-POXIZID",
+          "BZP",
+          "Camazepam",
+          "Camfetamine",
+          "Cannabigerol",
+          "Carfentanil",
+          "Cathinone",
+          "CB-13",
+          "CB-25",
+          "CB-52",
+          "CB-86",
+          "CBL-018",
+          "Cephaeline",
+          "CH-FUBIATA",
+          "Chlordiazepoxide",
+          "Chlorphine",
+          "CHM-122",
+          "CHO-4'Me-5'Br-FUBOXPYRA",
+          "CH-PIATA",
+          "CH-PIATA N-Pentanoic Acid metabolite",
+          "Cinolazepam",
+          "cis-3-Methyl butyryl fentanyl",
+          "Cl-2201",
+          "Clobazam",
+          "Clobromazolam",
+          "Clodesnitazene",
+          "Clonazepam",
+          "Clonazolam",
+          "Cloniprazepam",
+          "Clonitazene",
+          "Clotiazepam",
+          "Clotizolam",
+          "Clozapine",
+          "Cl-Pseudoephedrine",
+          "Cocaine",
+          "Codeine",
+          "Coluracetam",
+          "CP-47",
+          "497",
+          "CP-47",
+          "497-C8-homolog",
+          "CP-55",
+          "940",
+          "CPCPP",
+          "CPE",
+          "Crotonylfentanyl",
+          "Cumyl-BC-HpMeGaClone-221",
+          "CUMYL-BICA",
+          "Cumyl-Cb-MeGaClone",
+          "CUMYL-CBMICA",
+          "CUMYL-CBMINACA",
+          "Cumyl-CH-MeGaClone",
+          "Cumyl-CHSINACA",
+          "Cumyl-ClCHSINACA",
+          "Cumyl-INACA",
+          "CUMYL-NBMINACA",
+          "CUMYL-PEGACLONE",
+          "CUMYL-PICA",
+          "CUMYL-PICA N-pentanoic acid metabolite",
+          "CUMYL-PINACA",
+          "CUMYL-THPINACA",
+          "CUMYL-TsINACA",
+          "Cyclobutyl fentanyl",
+          "Cyclohexyl fentanyl",
+          "Cyclopentenyl Fentanyl",
+          "Cyclopentyl fentanyl",
+          "Cyclopropane Acetyl Fentanyl",
+          "Cyclopropyl Norfentanyl",
+          "Cyclopropyl Pemoline",
+          "Cyclopropylfentanyl",
+          "Cyproheptadine",
+          "DB-MDBP",
+          "DBZP",
+          "Dehydro-deschloroketamine",
+          "DehydroMethoxetamine",
+          "Dehydronorketamine",
+          "Delorazepam",
+          "Demoxepam",
+          "Desalkylflurazepam",
+          "Desalkylgidazepam",
+          "Desalkylquazepam",
+          "Deschloro W-19",
+          "Deschloroclotizolam",
+          "Deschloroetizolam",
+          "Deschloroketamine",
+          "Deschloro-N-ethyl-Ketamine",
+          "Deschloronorketamine",
+          "Desomorphine",
+          "Despropionyl 2-Fluoro-ortho-Fluorofentanyl",
+          "Despropionyl meta-Fluoro Fentanyl",
+          "Despropionyl meta-Methyl Fentanyl",
+          "Despropionyl N-Benzyl para-Fluoro Norfentanyl",
+          "Despropionyl ortho-Methyl Fentanyl",
+          "Despropionyl p-fluorofentanyl",
+          "Despropionyl-2-fluorofentanyl",
+          "DET",
+          "Dextromethorphan",
+          "Di(beta-phenylisopropyl)amine",
+          "Diacetylmorphine",
+          "Diazepam",
+          "Dibutylone",
+          "Dichloroethcathinone",
+          "Diclazepam",
+          "Diclofensine",
+          "Didesmethylsibutramine",
+          "Diethylone",
+          "Diethylpentylone",
+          "Dihydrocodeine",
+          "Dimethocaine",
+          "Diphenhydramine",
+          "Diphenidine",
+          "DiPT",
+          "Dipyanone",
+          "DL-4662",
+          "DMAR",
+          "DMPEA",
+          "DMT",
+          "DMXE",
+          "DOB",
+          "DOC",
+          "DOET",
+          "DOF",
+          "DOI",
+          "DOIP",
+          "DOM",
+          "DOPR",
+          "DPT",
+          "EADB-FUBINACA",
+          "EAM-2201",
+          "Ecgonine methyl ester",
+          "EDMB-4en-PINACA",
+          "EDMB-CHMICA",
+          "EDMB-PINACA",
+          "EG-018",
+          "EG2201",
+          "EMB-FUBINACA",
+          "Embutramide",
+          "Emetine",
+          "Ephedrine",
+          "Ephenidine",
+          "EPT",
+          "Escaline",
+          "Estazolam",
+          "Etaqualone",
+          "Ethcathinone",
+          "ETH-LAD",
+          "Ethoxyacetyl Fentanyl",
+          "Ethoxyetonitazene",
+          "Ethyl loflazepate",
+          "Ethyl-(1-phenylbutan-2-yl)amine",
+          "Ethylene etonitazene",
+          "Ethylene nitazene",
+          "Ethyleneoxynitazene",
+          "Ethylformate 4-ANPP",
+          "Ethylmorphine",
+          "Ethylone",
+          "Ethylphenidate",
+          "Ethyphenethyl-FUBICA",
+          "Etilamfetamine",
+          "Etizolam",
+          "Etodesnitazene",
+          "Etonitazene",
+          "Etorphine",
+          "Eutylone",
+          "F2201",
+          "FAB-144",
+          "FDU-NNEI",
+          "FDU-PB-22",
+          "Fenethylline",
+          "Fenozolone",
+          "Fenproporex",
+          "Fentanyl",
+          "Fentanyl Methyl Carbamate",
+          "Fentranyl",
+          "Flephedrone",
+          "Flibanserin",
+          "Flualprazolam",
+          "Flubromazepam",
+          "Flubromazepam Isomer",
+          "Flubromazolam",
+          "Flubrotizolam",
+          "Fluclotizolam",
+          "Fludiazepam",
+          "Fluetizolam",
+          "Flunitazene",
+          "Flunitrazepam",
+          "Flunitrazolam",
+          "Fluorexetamine",
+          "Fluoropentyl-norcarfentanil",
+          "Flurazepam",
+          "Flutazolam",
+          "Flutoprazepam",
+          "Formetorex",
+          "FUB-144",
+          "FUBIMINA",
+          "FUBIMINA N-(5-hydroxypentyl) metabolite",
+          "FUBIMINA N-pentanoic acid",
+          "FUB-JWH-018",
+          "FUB-NPB-22",
+          "FUB-PB-22",
+          "FUB-PB-22 3-carboxyindole metabolite",
+          "Furanyl norfentanyl",
+          "Furanyl UF-17",
+          "Furanylethylfentanyl",
+          "Furanylfentanyl",
+          "G-130",
+          "Gabapentin",
+          "Gidazepam",
+          "Glycinexylidide",
+          "GTS-21",
+          "Halazepam",
+          "Harmine",
+          "HDEP-28",
+          "HDMP-28",
+          "Heptanoyl Fentanyl",
+          "Hexahydrocannabiphorol",
+          "Hexanoyl Fentanyl",
+          "Hexedrone",
+          "HMA",
+          "Hordenine",
+          "HU-210",
+          "HU-308",
+          "HU-331",
+          "Hydrocodone",
+          "Hydromorphone",
+          "Hydroxetamine",
+          "Hydroxybupropion",
+          "Hydroxy-THC",
+          "Ibogaine",
+          "iPDMB-FUBINACA",
+          "iso-(metamethyl-propcathinone)",
+          "Iso-3-CMC",
+          "Iso-butonitazene",
+          "Isobutyl-pentyl-1H-indazole-3-carboxylate",
+          "Isobutyryl norfentanyl",
+          "Isobutyrylfentanyl",
+          "Isocarfentanil",
+          "Isohexedrone",
+          "Isopentedrone",
+          "Isophenmetrazine",
+          "Isopropylphenidate",
+          "Isopropyl-U-47700",
+          "Isotodesnitazene",
+          "Isotonitazene",
+          "Isovaleryl Fentanyl",
+          "JWH 019 N-(5-hydroxyhexyl) metabolite",
+          "JWH 073 4-hydroxyindole metabolite",
+          "JWH 073 5-hydroxyindole metabolite",
+          "JWH 122 N-(5-hydroxypentyl) metabolite",
+          "JWH 307 3-isomer",
+          "JWH 412 N-(5-hydroxypentyl) metabolite",
+          "JWH-004",
+          "JWH-007",
+          "JWH-007 (5-OH-Pentyl)",
+          "JWH-007 (N-Pentanoic acid)",
+          "JWH-011",
+          "JWH-015",
+          "JWH-016",
+          "JWH-018",
+          "JWH-018 (2-OH-indole)",
+          "JWH-018 (5-OH-Pentyl-Glucuronide)",
+          "JWH-018 (6-OH-indole)",
+          "JWH-018 4-hydroxyindole metabolite",
+          "JWH-018 5-hydroxyindole metabolite",
+          "JWH-018 6-Methoxyindole Analogue",
+          "JWH-018 8-Quinolinyl Carboxamide",
+          "JWH-018 Benzimidazole Analogue",
+          "JWH-018 N-(1,1-Dimethylpropyl) Isomer",
+          "JWH-018 N-(2-hydroxypentyl) metabolite",
+          "JWH-018 N-(3-hydroxypentyl) metabolite",
+          "JWH-018 N-(4,5-Epoxypentyl) Analogue",
+          "JWH-018 N-(4-hydroxypentyl) metabolite",
+          "JWH-018 N-(4-oxo-pentyl) metabolite",
+          "JWH-018 N-(5-Bromopentyl) Analogue",
+          "JWH-018 N-(5-Chloropentyl) Analogue",
+          "JWH-018 N-(5-hydroxypentyl) metabolite",
+          "JWH-018 N-pentanoic acid",
+          "JWH-018 N-propanoic acid metabolite",
+          "JWH-018 7-hydroxyindole metabolite",
+          "JWH-018-1-Methyl-Hexyl",
+          "JWH-019",
+          "JWH-019 5-hydroxyindole metabolite",
+          "JWH-019 N-(6-hydroxyhexyl) metabolite",
+          "JWH-020",
+          "JWH-022",
+          "JWH-030",
+          "JWH-031",
+          "JWH-047",
+          "JWH-048",
+          "JWH-049",
+          "JWH-050",
+          "JWH-071",
+          "JWH-072",
+          "JWH-073",
+          "JWH-073 (2-methylbutyl) homolog",
+          "JWH-073 2-Methylnaphthyl Analogue",
+          "JWH-073 4-methylnaphthyl analog",
+          "JWH-073 6-hydroxyindole metabolite",
+          "JWH-073 6-Methoxyindole Analogue",
+          "JWH-073 N-(3-hydroxybutyl) metabolite",
+          "JWH-073 N-(4-hydroxybutyl) metabolite",
+          "JWH-073 N-butanoic acid metabolite",
+          "JWH-073-3-Methyl",
+          "JWH-073-M-2-OH-Ind",
+          "JWH-073-M-7-OH-Ind",
+          "JWH-079",
+          "JWH-080",
+          "JWH-081",
+          "JWH-081 2-methoxynaphthyl isomer",
+          "JWH-081 4-hydroxynaphthyl metabolite",
+          "JWH-081 N-(4-hydroxypentyl) metabolite",
+          "JWH-081 N-(5-hydroxypentyl) metabolite",
+          "JWH-081 N-(Cyclohexylmethyl) Analogue",
+          "JWH-081 N-pentanoic acid metabolite",
+          "JWH-082",
+          "JWH-098",
+          "JWH-116",
+          "JWH-122",
+          "JWH-122 (2-OH-Pentyl)",
+          "JWH-122 (3-OH-Pentyl)",
+          "JWH-122 (5-OH-indole)",
+          "JWH-122 (6-OH-indole)",
+          "JWH-122 N-(4-hydroxypentyl) metabolite",
+          "JWH-122 N-(4-pentenyl) Analog",
+          "JWH-122 N-(5-chloropentyl) derivative",
+          "JWH-133",
+          "JWH-145",
+          "JWH-146",
+          "JWH-147",
+          "JWH-149",
+          "JWH-150",
+          "JWH-167",
+          "JWH-175",
+          "JWH-176",
+          "JWH-180",
+          "JWH-181",
+          "JWH-182",
+          "JWH-189",
+          "JWH-193",
+          "JWH-198",
+          "JWH-200",
+          "JWH-200 5-hydroxyindole metabolite",
+          "JWH-200 6-hydroxyindole metabolite",
+          "JWH-200 Analogue",
+          "JWH-200-M-4-OH-Ind",
+          "JWH-201",
+          "JWH-203",
+          "JWH-203 N-(4-hydroxypentyl) metabolite",
+          "JWH-203 N-(5-hydroxypentyl) metabolite",
+          "JWH-203 N-pentanoic acid metabolite",
+          "JWH-204",
+          "JWH-210",
+          "JWH-210 5-hydroxyindole metabolite",
+          "JWH-210 7-ethylnaphthyl isomer",
+          "JWH-210 N-(4-hydroxypentyl) metabolite",
+          "JWH-210 N-(5-hydroxypentyl) metabolite",
+          "JWH-210 N-pentanoic acid metabolite",
+          "JWH-212",
+          "JWH-213",
+          "JWH-240",
+          "JWH-242",
+          "JWH-246",
+          "JWH-249",
+          "JWH-250",
+          "JWH-250 (5-OH-indole)",
+          "JWH-250 N-(4-hydroxypentyl) metabolite",
+          "JWH-250 N-(5-hydroxypentyl) metabolite",
+          "JWH-250 N-pentanoic acid",
+          "JWH-251",
+          "JWH-252",
+          "JWH-253",
+          "JWH-292",
+          "JWH-302",
+          "JWH-305",
+          "JWH-307",
+          "JWH-309",
+          "JWH-311",
+          "JWH-314",
+          "JWH-364",
+          "JWH-368",
+          "JWH-369",
+          "JWH-370",
+          "JWH-371",
+          "JWH-386",
+          "JWH-387",
+          "JWH-394",
+          "JWH-397",
+          "JWH-398",
+          "JWH-398 N-(4-hydroxypentyl) metabolite",
+          "JWH-398 N-(5-hydroxypentyl) metabolite",
+          "JWH-398 N-pentanoic acid metabolite",
+          "JWH-400",
+          "JWH-412",
+          "JWH-413",
+          "JWH-424",
+          "Kavain",
+          "Ketamine",
+          "Ketazolam",
+          "Lacosamide",
+          "Levamisole",
+          "Levorphanol",
+          "Lidocaine",
+          "Lisdexamphetamine",
+          "Lofentanil",
+          "Loprazolam",
+          "Lorazepam",
+          "Lormetazepam",
+          "LSD",
+          "LSZ",
+          "M-144",
+          "MAB-CHMINACA",
+          "MAB-CHMINACA metabolite M1",
+          "MAB-CHMINACA metabolite M11",
+          "MAB-CHMINACA metabolite M2",
+          "MAB-CHMINACA metabolite M7",
+          "MA-CHMINACA",
+          "MAL",
+          "MAM-2201",
+          "MAM2201 N-(4-hydroxypentyl) metabolite",
+          "MAM2201 N-pentanoic acid metabolite",
+          "Mazindol",
+          "MBDB",
+          "MBZP",
+          "MCHB-1",
+          "mCPP",
+          "MDA",
+          "MDA 77",
+          "MDAI",
+          "MDAT",
+          "MDBZP",
+          "MDEA",
+          "MDMA",
+          "MDMB-3en-BUTINACA",
+          "MDMB-4en-PICA",
+          "MDMB-4en-PICA butanoic acid metabolite",
+          "MDMB-4en-PINACA",
+          "MDMB-4en-PINACA butanoic acid metabolite",
+          "MDMB-5Br-BUTINACA",
+          "MDMB-5Br-INACA",
+          "MDMB-5Me-INACA",
+          "MDMB-BUTINACA",
+          "MDMB-BUTINACA butanoic acid metabolite",
+          "MDMB-CHMCZCA",
+          "MDMB-CHMCZCA (Hydrolysat)",
+          "MDMB-CHMCZCA metabolite M3",
+          "MDMB-CHMICA",
+          "MDMB-CHMICA metabolite M2",
+          "MDMB-CHMINACA",
+          "MDMB-FUBICA",
+          "MDMB-FUBICA metabolite 3",
+          "MDMB-FUBINACA",
+          "MDMB-FUBINACA 3",
+          "3-dimethylbutanoic acid",
+          "MDMB-ICA",
+          "MDMB-INACA",
+          "MDMB-INACA 3",
+          "3-dimethylbutanoic acid metabolite",
+          "MDMB-PICA",
+          "MDMB-PICA (Hydrolysat)",
+          "MDMB-PINACA",
+          "MDMB-PINACA (Hydrolysat)",
+          "MDPBP",
+          "MDPEP",
+          "MDPHiP",
+          "MDPHP",
+          "MDPPP",
+          "MDPV",
+          "MDPV-M",
+          "demethylenylmethyl",
+          "MEAI",
+          "Mebroqualone",
+          "Meclonazepam",
+          "Meclonazepam",
+          "Medazepam",
+          "Medetomidine",
+          "Memantine",
+          "Menitazene",
+          "MeO-MDA",
+          "MeOP",
+          "MEP-CHMICA",
+          "Meperidine",
+          "Mephedrene",
+          "Mephedrone",
+          "Mephedrone-M (dihydro-)",
+          "MEPIRAPIM",
+          "MePPP",
+          "Meprobamate",
+          "Mescaline",
+          "Mescaline-NBOMe",
+          "Mesoridazine",
+          "MET",
+          "meta-Chlorofentanyl",
+          "meta-Fluoro Acryl Fentanyl",
+          "meta-Fluoro Butyryl Fentanyl",
+          "meta-Fluoro Methoxyacetyl Fentanyl",
+          "meta-Fluoro Valeryl Fentanyl",
+          "meta-fluorofentanyl",
+          "meta-Fluorofuranylfentanyl",
+          "meta-Hydroxycocaine",
+          "meta-Methoxy Furanyl Fentanyl",
+          "meta-Methyl Acetyl Fentanyl",
+          "meta-Methyl Cyclopropyl Fentanyl",
+          "Meta-methyl Fentanyl",
+          "meta-Methyl Furanyl Fentanyl",
+          "meta-Methyl Methoxyacetyl Fentanyl",
+          "Metamfepramone",
+          "Metaxalone",
+          "Methacrylfentanyl",
+          "Methamnetamine",
+          "Methamphetamine",
+          "Methanandamide",
+          "Methaqualone",
+          "Methcathinone",
+          "Methedrone",
+          "Methionitazene",
+          "Methiopropamine",
+          "Methoxamine",
+          "Methoxetamine",
+          "Methoxmetamine",
+          "Methoxphenidine",
+          "Methoxpropamine",
+          "Methoxy U-47700",
+          "Methoxyacetyl Norfentanyl",
+          "Methoxyacetylfentanyl",
+          "Methoxyphenamine",
+          "Methyl 1-(4-fluorobenzyl)-1H-indazole-3-Carboxylate",
+          "Methyl 2-phenyl-2-(pyrrolidin-1-yl)acetate",
+          "Methyl-1-(5-fluoropentyl)-1H-indole-3-carboxylate",
+          "Methyl-1-pentyl-1H-indole-3-carboxylate",
+          "Methylenedioxynitazene",
+          "Methylephedrine",
+          "Methylergonovine",
+          "Methylhexanamine",
+          "Methylmorphenate",
+          "Methylone",
+          "Methylphenidate",
+          "Metizolam",
+          "Metodesnitazene",
+          "Metonitazene",
+          "Mexedrone",
+          "Mexiletine",
+          "m-Fluorocyclopropylbenzylfentanyl",
+          "m-Fluoro-isobutyrylfentanyl",
+          "Midazolam",
+          "MiPT",
+          "Mirfentanil",
+          "Mitragynine",
+          "MMB-018",
+          "MMB-2201",
+          "MMB-4CN-BUTINACA",
+          "MMB-4CN-BUTINACA N-butanoic acid metabolite",
+          "MMB-4en-PICA",
+          "MMB-4en-PICA ester hydrolysis metabolite",
+          "MMB-4en-PINACA",
+          "MMB-5Br-INACA",
+          "MMB-CHM7AICA",
+          "MMB-CHMICA",
+          "MMB-CHMICA O-Demethyl acid",
+          "MMB-FUBICA metabolite 3",
+          "MMB-PICA N-(5-hydroxypentyl) metabolite",
+          "MMDA-2",
+          "MMMP",
+          "MN-18",
+          "MN-25",
+          "MN-25 2-Methyl Derivative",
+          "MO-CHMINACA",
+          "Modafiendz",
+          "Modafinil",
+          "Modafinil sulphone",
+          "Monoethylglycinexylidide",
+          "MOPPP",
+          "Morphine",
+          "MPBP",
+          "MPBP-M",
+          "4",
+          "MPHP",
+          "MPhP-2201",
+          "MPHP-M",
+          "4",
+          "MPP-PICA",
+          "MPP-PICA ester hydrolysis N-(5-hydroxypentyl) metabolite",
+          "MPP-PICA N-(5-hydroxypentyl) metabolite",
+          "MT-45",
+          "MTTA",
+          "MXiPr",
+          "N-(2-APB) Fentanyl",
+          "N-(2C-B-FLY) Fentanyl",
+          "N-(3C-B-FLY) Fentanyl",
+          "N-(3-ethylindole) Fentanyl",
+          "N-(6-APB) Fentanyl",
+          "N-(6-Dihydrobenzofuranylethyl) alpha-Methyl Fentanyl",
+          "N",
+          "N-Bisdesethylisotonitazene",
+          "N",
+          "N-Didesmethyl U-47700",
+          "N",
+          "N-Diethyl Hexedrone",
+          "N",
+          "N-dimethyl-3",
+          "4-methylenedioxyamphetamine",
+          "N",
+          "N-Dimethylamido Fentanyl",
+          "N",
+          "N-dimethylamphetamine",
+          "N",
+          "N-dimethylpentylone",
+          "N-acetyl 25I-NBOMe",
+          "N-Adamantyl-fentanyl",
+          "Nalbuphine",
+          "Nalmefene",
+          "Nalorphine",
+          "Naloxone",
+          "Naltrexone",
+          "NAMIE",
+          "Naphyrone",
+          "NAPIE",
+          "N-Benzoxazolyl-fentanyl",
+          "N-Benzyl Furanyl Norfentanyl",
+          "N-Benzyl para-Fluoro Cyclopropyl Norfentanyl",
+          "N-Benzyl Phenyl Norfentanyl",
+          "N-benzyl-3",
+          "4-DMA",
+          "N-Benzyl-3-methylfentanyl",
+          "N-Benzyl-butyrylfentanyl",
+          "N-Benzyl-p-fluoro-isobutyrylfentanyl",
+          "N-butyl butylone",
+          "N-Butylhexedrone",
+          "N-Butylpentylone",
+          "N-cyclohexyl Butylone",
+          "N-cyclohexyl-N-methyl Methylone",
+          "N-desethyl Etonitazene",
+          "N-desethyl Isotonitazene",
+          "N-desethyl Metonitazene",
+          "N-desethyl Protonitazene",
+          "N-Desethyl-O-desisopropyl-isotonitazene (M3)",
+          "N-Desmethyl U-47700",
+          "N-Desmethylflunitrazepam",
+          "NEB",
+          "NEB-indene-analog",
+          "NE-CHMIMO",
+          "N-Ethylheptedrone",
+          "N-ethylheptylone",
+          "N-Ethylhexedrone",
+          "N-Ethylhexylone",
+          "N-Ethylnorketamine",
+          "N-Ethylpentedrone",
+          "N-Ethylpentylone",
+          "N-ethylphenmetrazol",
+          "N-Ethyl-U-47700",
+          "NFEPP",
+          "Nifoxipam",
+          "Nimetazepam",
+          "NiPP",
+          "N-Isopropyl Butylone",
+          "N-Isopropyl-N-Propyltryptamine",
+          "Nitazene",
+          "Nitracaine",
+          "Nitrazepam",
+          "Nitrazolam",
+          "NM-2201",
+          "NMDMSB",
+          "N-Me-bk-MMDA-2",
+          "N-Methyl Norcarfentanil",
+          "N-Methyl Norfentanyl",
+          "N-Methyl p-methylphenylnorfentanyl",
+          "N-Methyl Tryptamine",
+          "N-Methyl U-47931E",
+          "N-methyl Cyclopropyl Norfentanyl",
+          "N-Methyl-1-phenylethylamine",
+          "N-methyl-2AI",
+          "N-Methyl-acetyl-norfentanyl",
+          "N-Methyl-butyrylfentanyl",
+          "N-methylcyclazodone",
+          "N-Methyl-hexylone",
+          "N-Methyl-N-Allyl Tryptamine",
+          "NNEI",
+          "NNEI 2-indazole isomer",
+          "Noopept",
+          "Nor-3-methylfentanyl",
+          "Norbuprenorphine",
+          "Norcarfentanil",
+          "Norclobazam",
+          "Norcodeine",
+          "Nordiazepam",
+          "Norephedrine",
+          "Norfentanyl",
+          "Norketamine",
+          "Normethoxetamine",
+          "Noroxycodone",
+          "Norpropoxyphene",
+          "Norsufentanil",
+          "Nortilidine",
+          "NPB-22",
+          "N-Phenethyl Noroxymorphone",
+          "N-Phenethyl-4-piperidone",
+          "N-piperidinyl 4'-hydroxy Nitazene",
+          "N-piperidinyl etonitazene",
+          "N-piperidinyl isotonitazene",
+          "N-piperidinyl Metonitazene",
+          "N-piperidinyl Protonitazene",
+          "N-Propionitrile Chlorphine",
+          "N-propyl Hexylone",
+          "N-propyl Pentedrone",
+          "N-Propylamphetamine",
+          "N-pyrrolidino 4'-hydroxy Nitazene",
+          "N-pyrrolidino etodesnitazene",
+          "N-pyrrolidino etonitazene",
+          "N-Pyrrolidino Isotonitazene",
+          "N-pyrrolidino Metodesnitazene",
+          "N-pyrrolidino Metonitazene",
+          "N-pyrrolidino Protonitazene",
+          "N-pyrrolidinyl-3 4-DMA",
+          "N-Quinolinyl-fentanyl",
+          "NRG-3",
+          "N-sec-butyl-pentedron",
+          "NSI-189",
+          "O-AMKD",
+          "Ocfentanil",
+          "O-Desmethyl Venlafaxine",
+          "O-DT",
+          "Ohmefentanyl",
+          "o-Methyl-methoxyacetylfentanyl",
+          "ORG 27569",
+          "ORG 28611",
+          "Orphenadrine",
+          "Orphenadrine-Nor (Tofenacin. Elamol)",
+          "ortho-Fluoro Acryl Fentanyl",
+          "ortho-Fluoro Butyryl Fentanyl",
+          "ortho-Fluoro Isobutyryl Fentanyl",
+          "ortho-Fluoro Valeryl Fentanyl",
+          "ortho-Fluorofentanyl",
+          "ortho-Fluorofuranylfentanyl",
+          "ortho-Isopropyl Furanyl Fentanyl",
+          "ortho-Methoxy Butyryl Fentanyl",
+          "ortho-Methoxy Furanyl Fentanyl",
+          "ortho-Methyl Acetyl Fentanyl",
+          "ortho-Methyl Acryl Fentanyl",
+          "ortho-Methyl Boc-4-AP",
+          "ortho-Methyl Cyclopropyl Fentanyl",
+          "ortho-Methyl Furanyl Fentanyl",
+          "ortho-Methyl Phenyl Fentanyl",
+          "ortho-MethylFentanyl",
+          "Ostarine",
+          "Oxazepam",
+          "Oxycodone",
+          "Oxymorphone",
+          "Pagoclone",
+          "para-Bromo 4-ANPP",
+          "para-Bromofentanyl",
+          "para-Chloro Acetyl Fentanyl",
+          "para-Chloro Acryl Fentanyl",
+          "para-Chloro Butyryl Fentanyl",
+          "para-Chloro Cyclobutyl Fentanyl",
+          "para-Chloro Cyclopentyl Fentanyl",
+          "para-Chloro Cyclopropyl Fentanyl",
+          "para-Chloro Furanyl Fentanyl",
+          "para-Chloro Furanyl Fentanyl 3-Furancarboxamide",
+          "para-Chloro Valeryl Fentanyl",
+          "para-Fluoro Acetyl Fentanyl",
+          "para-Fluoro Acryl Fentanyl",
+          "para-Fluoro Benzyl Fentanyl",
+          "para-Fluoro Crotonyl Fentanyl",
+          "para-Fluoro Cyclopropyl Fentanyl",
+          "para-Fluoro Cylcopentyl Fentanyl",
+          "para-Fluoro Furanyl Fentanyl 3-Furancarboxamide",
+          "para-Fluoro Furanyl norfentanyl",
+          "para-Fluoro Methoxyacetyl Fentanyl",
+          "para-Fluoro Tetrahydrofuran Fentanyl",
+          "para-Fluoro Valeryl Fentanyl",
+          "para-Fluorobutyrfentanyl",
+          "para-Fluorofentanyl",
+          "para-Fluorofuranylfentanyl",
+          "para-Fluorophenylpiperazine",
+          "para-Hydroxy Butyryl Fentanyl",
+          "para-Hydroxycocaine",
+          "para-Methoxy Acetyl Fentanyl",
+          "para-Methoxy Acryl Fentanyl",
+          "para-Methoxy Fentanyl",
+          "para-Methoxy Furanyl Fentanyl",
+          "para-Methoxy Tetrahydrofuranyl Fentanyl",
+          "para-Methoxy Valeryl Fentanyl",
+          "para-Methyl Acetyl Fentanyl",
+          "para-Methyl Acryl Fentanyl",
+          "para-Methyl AP-237",
+          "para-Methyl Butyryl Fentanyl",
+          "para-Methyl Cyclopropyl Fentanyl",
+          "para-Methyl Fentanyl",
+          "para-Methyl Furanyl Fentanyl",
+          "para-Methyl Isobutyryl Fentanyl",
+          "para-Methyl Methoxyacetyl Fentanyl",
+          "para-Methyl Tetrahydrofuranyl Fentanyl",
+          "para-Toluoyl Fentanyl",
+          "Paynantheine (Mitragyna alkaloid)",
+          "PB-22",
+          "PB-22 (N-4-OH-Pentyl-3-carboxyindole)",
+          "PB-22 (N-5-OH-Pentyl-3-carboxyindole)",
+          "PB-22 (N-Pentanoic acid-3-Carboxyindole)",
+          "PB-22 3-carboxyindole",
+          "PB-22 N-(4-hydroxypentyl) metabolite",
+          "PB-22 N-(5-hydroxypentyl) metabolite",
+          "PB-22 N-pentanoic acid metabolite",
+          "PCE",
+          "p-Chlorofentanyl",
+          "p-Chloro-methoxyacetylfentanyl",
+          "PCP",
+          "pCPP",
+          "PDM-35",
+          "Pentazocine",
+          "Pentedrone",
+          "Pentylone",
+          "PF-03550096",
+          "pF-4-methylaminorex",
+          "pF-BZP",
+          "p-Fluoro-beta-hydroxy-thiobutyrylfentanyl",
+          "p-Fluorococaine",
+          "p-Fluoro-furanylethylfentanyl",
+          "p-Fluoro-furanylremifentanil",
+          "p-Fluoroisobutyrylbenzylfentanyl",
+          "p-Fluoro-remifentanil ethyl ester",
+          "p-Fluoro-thiofentanyl",
+          "Pharaohfentanyl",
+          "Phenaridine",
+          "Phenazepam",
+          "Phenethylamine (2-)",
+          "Phenetrazine",
+          "Phenibut",
+          "Phenmetrazine",
+          "Phenoxyacetyl Fentanyl",
+          "Phenoxyethyl-norfentanyl",
+          "Phentermine",
+          "Phenylacetyl Fentanyl",
+          "Phenylephrine",
+          "Phenylpiracetam",
+          "Phenylpropylmethylamine",
+          "Phenylpropyl-norfentanyl",
+          "p-Iodofentanyl",
+          "Piperidylthiambutene",
+          "Pivaloylfentanyl",
+          "PMA",
+          "p-Methoxy-methoxyacetylfentanyl",
+          "PMMA",
+          "PPAP",
+          "PPH",
+          "Prazepam",
+          "PRE-084",
+          "Pregabalin",
+          "Pregabalin methyl ester",
+          "Primidone",
+          "Procaine",
+          "Prolintane",
+          "Promethazine",
+          "Propoxyphene",
+          "Propoxyphenyl homohydroxysildenafil",
+          "Propyl U-47700",
+          "Propylnitazene",
+          "Propyl-norfentanyl",
+          "Propylone",
+          "Proscaline",
+          "Protodesnitazene",
+          "Protonitazene",
+          "Psicofentanil",
+          "Psilocin",
+          "Psilocybin",
+          "p-TFM-fentanyl",
+          "PTI-1",
+          "PTI-2",
+          "PV8",
+          "PV9",
+          "PX-1",
+          "PX-2",
+          "Pyrazolam",
+          "Pyrilamine",
+          "Pyrovalerone",
+          "Quazepam",
+          "Quetiapine",
+          "R-30490",
+          "RCS-2",
+          "RCS-4",
+          "RCS-4 3-methoxy isomer",
+          "RCS-4 N-(4-hydroxypentyl) metabolite",
+          "RCS-4 N-(4-oxo-pentyl)phenol metabolite (M11)",
+          "RCS-4 N-(5-carboxypentyl) metabolite",
+          "RCS-4 N-(5-hydroxypentyl) metabolite",
+          "RCS-4 N-(5-hydroxypentyl)phenol",
+          "RCS-4 ortho pentanoic acid metabolite",
+          "RCS-4-C4 homolog",
+          "RCS-8",
+          "Remifentanil",
+          "Remifentanil bis ethyl ester",
+          "Remifentanyl Acid",
+          "Remimazolam",
+          "Ricinine",
+          "Rilmazafone",
+          "Rilmazolam",
+          "Rimonabant",
+          "Ritalinic acid",
+          "Ro-07-3953",
+          "Ro5-4864",
+          "Rolicyclidine",
+          "RTI-111",
+          "Salvinorin A",
+          "Salvinorin B",
+          "Scopolamine",
+          "SDB-005",
+          "SDB-006",
+          "SDB-006-N-Phenyl",
+          "Sec-butonitazene",
+          "Senecioyl Fentanyl",
+          "SER-601",
+          "Sertraline",
+          "SGT-13",
+          "Sibutramine",
+          "sibutramine-Nor",
+          "SL-164",
+          "Strychnine",
+          "STS-135",
+          "STS-135 (4-OH-Pentyl)",
+          "Sufentanil",
+          "Sultiame",
+          "Sunifiram",
+          "Tadalafil",
+          "Tapentadol",
+          "tBuONE",
+          "Temazepam",
+          "Tenocyclidine",
+          "Tetrahydrofuran Fentanyl 3-Tetrahydrofurancarboxamide",
+          "Tetrahydrofuranylfentanyl",
+          "Tetrahydrothiophene Fentanyl",
+          "Tetrazepam",
+          "TFMPP",
+          "THC-COOH",
+          "THCP",
+          "Thebaine",
+          "Thiafentanil",
+          "Thienyl Fentanyl",
+          "Thiofentanyl",
+          "Thiophene Fentanyl",
+          "Thiothinone",
+          "THJ",
+          "THJ-018",
+          "THJ-2201",
+          "THJ-2201 (N-Pentanoic acid)",
+          "THJ2201 N-(5-hydroxypentyl) metabolite",
+          "TH-PVP",
+          "Tianeptine",
+          "Tianeptine-M MC5",
+          "Tigloyl Fentanyl",
+          "Tiletamine",
+          "Tilidine",
+          "TMA",
+          "TMA-2",
+          "TMA-6",
+          "Tofisopam",
+          "Tramadol",
+          "trans-3-Methyl 4'",
+          "para-Difluoro Fentanyl",
+          "trans-3-Methyl Thiofentanyl",
+          "trans-Cinnamoylcocaine",
+          "Tranylcypromine",
+          "Triazolam",
+          "Trifluorometonitazene",
+          "Tropicamide",
+          "U-47109",
+          "U-47700",
+          "U-47931E",
+          "U-48520",
+          "U-48753E",
+          "U-48800",
+          "U-49900",
+          "U-50488",
+          "U-51754",
+          "U-62066",
+          "U-69593",
+          "UF-17",
+          "UR-144",
+          "UR-144 Degradant",
+          "UR-144 Degradant N-pentanoic acid metabolite",
+          "UR-144 N-(2-Chloropentyl) analog",
+          "UR-144 N-(3-Chloropentyl) analog",
+          "UR-144 N-(4-Chloropentyl) analog",
+          "UR-144 N-(4-hydroxypentyl) metabolite",
+          "UR-144 N-(5-Bromopentyl) analog",
+          "UR-144 N-(5-Chloropentyl) analog",
+          "UR-144 N-(5-hydroxypentyl) metabolite",
+          "UR-144 N-(5-Methylhexyl) analog",
+          "UR-144 N-Heptyl Analogue",
+          "UR-144 N-pentanoic acid",
+          "URB-447",
+          "URB-754",
+          "UWA-101",
+          "Valerylfentanyl",
+          "Venlafaxine",
+          "Vortioxetine",
+          "W-15",
+          "W-18",
+          "W-19",
+          "WIN 35",
+          "428",
+          "WIN 55",
+          "212-2",
+          "WIN-48098",
+          "WIN-54",
+          "461",
+          "XLR-11",
+          "XLR-11 6-hydroxyindole metabolite",
+          "XLR11 Degradant",
+          "XLR11 N-(4-hydroxypentyl) metabolite",
+          "XLR11 N-(4-pentenyl) analog",
+          "XLR-12",
+          "Xylazine",
+          "Yohimbine",
+          "Zaleplon",
+          "Zolazepam",
+          "Zolpidem",
+          "Zonisamide",
+          "Zopiclone",
+          "a-ET"
+        ]
+      }
+    ],
+    "rawLower": "1-(1,3-diphenylpropan-2-yl)pyrrolidine\n1-(4-methylbenzyl) piperazine\n1-(5-methyl-2-thienyl)-propan-2-amine\n1,3-dimethylbutylamine\n11-nor-9(r)-carboxy-hexahydrocannabinol\n1b-lsd\n1cp-al-lad\n1cp-lsd\n1-ethyl-pyrrolidinylmethyl n-desalkyl etonitazene\n1-naphthoyl indole\n1-napthyl u-47700\n1-phenylbutan-2-amine\n1p-lsd\n1t-lsd\n1v-lsd\n2-(1-(4-fluorobenzyl)-1h-indol-3-yl)acetic acid\n2', ortho-difluoro fentanyl\n2,2,3,3­-tetramethyl­-cyclopropyl fentanyl\n2,3,5-trimethoxyamphetamine\n2,3,6-trimethoxyamphetamine\n2,3-benzodioxole fentanyl\n2',3'-dimethoxy fentanyl\n2,3-dmmc\n2,3-mda\n2,3-seco-fentanyl\n2,4,5-tmmc\n2',4'-dimethoxy fentanyl\n2',5'-dimethoxy 3',4'-dimethyl fentanyl\n2',5'-dimethoxy 4'-bromo alpha-methyl fentanyl\n2',5'-dimethoxy 4'-bromo fentanyl\n2',5'-dimethoxy 4'-butyl alpha-methyl fentanyl\n2',5'-dimethoxy 4'-chloro alpha-methyl fentanyl\n2',5'-dimethoxy 4'-chloro fentanyl\n2',5'-dimethoxy 4'-ethyl alpha-methyl fentanyl\n2',5'-dimethoxy 4'-ethyl fentanyl\n2',5'-dimethoxy 4'-ethylthio fentanyl\n2',5'-dimethoxy 4'-iodo alpha-methyl fentanyl\n2',5'-dimethoxy 4'-iodo fentanyl\n2',5'-dimethoxy 4'-isopropyl fentanyl\n2',5'-dimethoxy 4'-isopropylthio fentanyl\n2',5'-dimethoxy 4'-methyl alpha-methyl fentanyl\n2',5'-dimethoxy 4'-methyl fentanyl\n2',5'-dimethoxy 4'-methylthio fentanyl\n2',5'-dimethoxy 4'-nitro fentanyl\n2',5'-dimethoxy 4'-propyl fentanyl\n2',5'-dimethoxy 4'-propylthio fentanyl\n2',5'-dimethoxy 4'-trifluoro methyl fentanyl\n2',5'-dimethoxy alpha-methyl fentanyl\n2',5'-dimethoxy fentanyl\n2,5-dma\n2',6'-dimethoxy fentanyl\n2-[4-(2-methoxyphenyl)piperazin-1-yl]-1,2-diphenylethanol\n25b-nbf\n25b-nboh\n25b-nbome\n25c-nbf\n25c-nboh\n25c-nbome\n25cn-nboh\n25d-nbome\n25e-nboh\n25e-nbome\n25g-nbome\n25h-nboh\n25h-nbome\n25i-nbf\n25i-nbmd\n25i-nboh\n25i-nbome\n25i-nbome-m (2-desmethyl-)\n25i-nbome-m (5-desmethyl-)\n25i-nbome-m (para-ho)\n25ip-nbome\n25n-nbome\n25p-nbome\n25t2-nbome\n25t4-nbome\n25t7-nbome\n25t-nbome\n2-ai\n2-bromo-4,5-dimethoxyphenethylamin\n2-bromo-deschloroketamine\n2c-b\n2c-b-fly\n2c-c\n2c-d\n2-cdmc\n2c-e\n2-cec\n2c-e-fly\n2c-g\n2c-g-4\n2c-g-n\n2c-h\n2-chloro-mda\n2c-i\n2-cmc\n2c-n\n2c-o-4\n2c-p\n2c-t\n2c-t-2\n2c-t-4\n2c-t-7\n2-diphenylmethylpyrrolidine\n2-dpmp\n2-ethylethcathinone\n2-fa\n2-fec\n2-fluoro adb\n2-fluoro amb\n2'-fluoro fentanyl\n2-fluoro mt-45\n2-fluoro nnei\n2-fluoro-2-oxo pce\n2-fluorodeschloroketamine\n2-fluoroethamphetamine\n2-fluorofentanyl\n2-fluoro-jwh-019\n2-fluoropentylindole\n2-fluoroviminol\n2-fma\n2-fmc\n2-fppp\n2-hydroxyethylflurazepam\n2-mapb\n2-meo-ketamine\n2'-methyl acetyl fentanyl\n2-methyl ap-237\n2-methyl carfentanil\n2-methyl dmt\n2'-methyl fentanyl\n2-methylamphetamine\n2-methylethylbuphedrone\n2-methylfentanyl\n2-mmc\n2-naphthyl u-47700\n2-oxo-3-hydroxy-lsd\n3 4-difluoro u-47700\n3,3-dimethylfentanyl\n3',4',5'-trimethoxy alpha-methyl fentanyl\n3,4-ctmp\n3,4-dichloro-n, n-dimethcathinone\n3',4'-dimethoxy fentanyl\n3,4-dimethoxy-a-php\n3,4-dimethoxy-a-pvp\n3,4-dimethyl alpha-pvp\n3,4-dimethylmethcathinone noreph. metab.\n3,4-dma\n3,4-dmmc\n3,4-edmc\n3,4-ethylenedioxy u-47700\n3,4-ethylenedioxy u-51754\n3,4-mdma methylene homologue\n3',4'-methylenedioxy alpha-methyl fentanyl\n3,4-methylenedioxy u-47700\n3,4-methylenedioxy-alpha-propylaminobutiophenone\n3,4-methylenedioxy-n-cyclohexylcathinone\n3,5-adb-4en-pfuppyca\n3',5'-dimethoxy fentanyl\n3,5-dimethyl-cyclopentylfentanyl\n3,5-dimethylfentanyl\n3,6-dmpm\n3'-4'-dichloro-3''-fluorofentanyl\n3'-4'-methylenedioxyfentanyl\n3-allylfentanyl\n3-caf\n3c-b-fly\n3-cdmc\n3c-e\n3-cec\n3-chlorocathinone\n3-chlorophenmetrazine\n3cl-pcp\n3-cmc\n3c-p\n3-emc\n3-ethylethcathinone\n3-ethylfentanyl\n3f-4-anbp\n3-fa\n3f-alpha-php\n3f-alpha-pihp\n3-fec\n3-fluoro adb\n3-fluoro amb\n3'-fluoro fentanyl\n3-fluoro nnei\n3-fluoroethamphetamine\n3-fluorophenmetrazine\n3-fluropentylindole\n3-fma\n3-fmc\n3f-mt-45\n3f-n-ethylhexedrone\n3f-pcp\n3f-phenetrazine\n3-fpm-m, o,n-bis-dealkyl-\n3-furanyl fentanyl\n3-ho-pce\n3-hydroxybromazepam\n3-hydroxyflubromazepam\n3-hydroxyphenazepam\n3-mapb\n3-me buphedrone\n3'-me-4f-ibf\n3-mec\n3-meomc\n3-meo-pce\n3-meo-pcmmo\n3-meo-pcmo\n3-meo-pcp\n3-me-pcp\n3-me-pcpy\n3-methoxyfentanyl\n3'-methyl acetyl fentanyl\n3'-methyl fentanyl\n3-methyl fentanyl\n3-methyl phenoxy acetylfentanil\n3-methylamphetamine\n3-methyl-furanylfentanyl\n3-methylmethamphetamine\n3-methylphenmetrazine\n3-methylthio-fentanyl\n3-mma\n3-mmc\n3-oh-pcp\n3'-ortho-difluoro fentanyl\n3-phenylpropionylfentanyl\n4' hydroxy nitazene\n4-(m-hydroxyphenyl)fentanyl\n4-(trifluoromethyl)-u-47700\n4,5-mdai (4,5-methylenedioxy-2-aminoindane)\n4-acetoxy mipt\n4-acetoxy-malt\n4-aco-dalt\n4-aco-det\n4-aco-dipt\n4-aco-dmt\n4-aco-dpt\n4-aco-ept\n4-aco-met\n4-anilino-1-benzylpiperidine\n4-anpp\n4-apdb\n4-benzylpiperidine\n4br-mar\n4-bromoamphetamine\n4-bromomethcathinone\n4''-bromo-ohmefentanyl\n4-cab\n4-cbc\n4-cdmc\n4-chloro cumyl-pinaca\n4-chloro pentedrone\n4-chloroamphetamine\n4-chloro-buphedrone\n4'-chloro-deschloroalprazolam\n4-chloroethcathinone\n4-chloromethcathinone\n4-cic\n4-cl-3-mmc\n4cl-ibf\n4cl-mdmb-binaca\n4-cl-ppp\n4cl-pvp\n4-cma\n4-cn-ab-butica\n4-cyano cumyl-but7aica\n4-cyano cumyl-butinaca\n4-cyano cumyl-butinaca isomer 2\n4-cyano cumyl-butinaca n-butanoic acid\n4-cyano mdmb-butinaca\n4-eapb\n4-eec\n4-ethyl pentedrone\n4-ethylmethcathinone\n4-ethyl-n,n-dmc\n4-f mdmb-bica n-(4-hydroxybutyl) m\n4f-abinaca\n4f-alpha-pvp\n4f-buphedrone\n4-fec\n4f-ephedrine\n4f-ibf\n4-fluoro adb\n4-fluoro amb\n4'-fluoro fentanyl\n4-fluoro mdmb-butica butanoic acid metabolite\n4-fluoro mdmb-butinaca 2'-indazole butanoic acid isomer\n4-fluoro mdmb-butinaca 2'-indazole isomer\n4-fluoro mdmb-butinaca 3-carboxy-2'-indazole metabolite\n4-fluoro mdmb-butinaca 3-carboxyindazole metabolite\n4-fluoro mdmb-butinaca n-(4-hydroxybutyl) metabolite\n4-fluoro mdmb-butinaca n-(butanoic acid) 3,3-dimethylbutanoic acid metabolite\n4-fluoro pbp\n4-fluoro-2-oxo pce (4-fdcnek)\n4-fluoro-3-methyl-alpha-pvp\n4-fluoro-abutinaca n-(4-hydroxybutyl) metabolite\n4-fluoro-abutinaca n-butanoic acid metabolite\n4-fluoroamphetamine\n4-fluoro-cumyl-5-fluoro-pica\n4-fluoro-cumyl-5-fluoro-pinaca\n4-fluoro-dmba-binaca\n4-fluoroethamphetamine\n4-fluoroethylphenidate\n4-fluorofentanyl\n4-fluoromethylphenidate\n4-fluoro-n-ethylbuphedron\n4-fluoro-n-ethyl-pentedrone\n4''-fluoro-ohmefentanyl\n4-fluoropentedrone\n4-fluorophenibut\n4-fluorotropacocaine\n4-fma\n4f-mdmb-bica\n4f-mdmb-binaca\n4f-mdmb-butinaca n-butanoic acid metabolite\n4f-npp\n4f-php\n4f-pv8\n4f-pv8 piperidine analogue\n4f-pv9\n4-ho-det\n4-ho-met\n4-ho-mipt\n4-ho-mpt\n4-htmpipo\n4-hydroxy amphetamine\n4-hydroxy dpt\n4-hydroxy ept\n4-hydroxy malt\n4-hydroxy mcpt\n4'-hydroxyclobazam\n4-hydroxymethamphetamine\n4-hydroxy-xylazin\n4-ma-nbome\n4-mapb\n4-meap\n4-mec\n4-meo-bf\n4-meo-pcp\n4-meopp\n4-meo-pv9\n4-meo-pvp\n4-methoxy dipt\n4-methoxy dmt\n4-methoxy mipt\n4-methoxy pce\n4''-methoxyfentanyl\n4-methoxy-n,n-dimethylcathinone\n4'-methyl acetyl fentanyl\n4-methyl aet\n4-methyl fentanyl\n4'-methyl hexedrone\n4-methylaminoantipyrine\n4-methylaminorex\n4-methylamphetamine\n4-methylbuphedrone\n4-methyldiethcathinone\n4'-methylfentanyl\n4-methyl-n,n-dimethylcathinone\n4-methylpentedrone\n4-methylthio-n-benzylcathinone\n4-metmp\n4-mma\n4-mph\n4-mta\n4''-nitrofentanyl\n4-oh dipt\n4-oh-dalt\n4-phenyl fentanyl\n4-phenyl u-51754\n4-pro-dmt\n5,3-ab-chmfuppyca\n5,6-dichloro desmethylchlorphine\n5,7-dichloro tryptamine\n5-aminoisotonitazene\n5-apb\n5-apb nbome\n5-apdb\n5-apdi\n5-bpdi\n5-br-dmt\n5-bromo apinaca\n5-bromo thj 018\n5-bromo-mmb-pica\n5-chloro ab-pinaca\n5-chloro akb48\n5-chloro dmt\n5-chloro thj 018\n5-chloro tryptamine\n5cl-nnei\n5-dbfpv\n5-eapb\n5f edmb-pinaca\n5f-3,5-ab-pfuppyca\n5f-ab-001\n5f-ab-fuppyca\n5f-abica\n5f-ab-pinaca\n5f-adb\n5f-adb metabolite 2\n5f-adbica\n5f-aeb\n5f-akb48\n5f-amb\n5f-a-p7aica\n5f-apinac\n5f-bzo-poxizid\n5f-cumyl-p7aica\n5f-cumyl-pegaclone\n5f-cumyl-pinaca\n5f-edmb-pica\n5f-emb-pica\n5-fluoro 7-qupaic\n5-fluoro ab-7-paica\n5-fluoro ab-pinaca 3-carboxyindazole metabolite\n5-fluoro ab-pinaca n-(4-hydroxypentyl) metabolite\n5-fluoro adb-pinaca\n5-fluoro adb-pinaca isomer 2\n5-fluoro amb metabolite 2\n5-fluoro amb metabolite 3\n5-fluoro amb metabolite 5\n5-fluoro amb metabolite 7\n5-fluoro amt\n5-fluoro bepirapim\n5-fluoro cumyl-p7aica n-pentanoic acid metabolite\n5-fluoro cumyl-pegaclone n-(5-hydroxypentyl) metabolite\n5-fluoro cumyl-pegaclone n-pentanoic acid metabolite\n5-fluoro cumyl-pica\n5-fluoro cyppica\n5-fluoro ethylbenzyl-pica\n5-fluoro mdmb-7-paica butanoic acid metabolite\n5-fluoro mdmb-pica metabolite 2\n5-fluoro mdmb-pica metabolite 4\n5-fluoro mdmb-pica metabolite 7\n5-fluoro mdmb-pica metabolite 8\n5-fluoro mdmb-pica metabolite 9\n5-fluoro mn-18\n5-fluoro nnei\n5-fluoro pb-22 3-carboxyindole metabolite\n5-fluoro phenyl-pica\n5-fluoro py-pica\n5-fluoro sdb-005\n5-fluoro sdb-006\n5-fluoro-2-adb-pinaca isomer 2\n5-fluoro-3,5-adb-pfuppyca\n5-fluoro-akb48 n-(4-hydroxypentyl) metabolite\n5-fluoro-mmb-pica ester hydrolysis metabolite\n5-fluoro-mpp-pica ester hydrolysis metabolite\n5-fluoropentyl-3-pyridinoylindole\n5-fluoropentylindole\n5-fluoro-tert-butylbenzyl-pinaca\n5f-mdmb-p4aica\n5f-mdmb-p7aica\n5f-mdmb-pica\n5f-mdmb-pinaca cooh metabolite\n5f-npb-22\n5f-pb-22\n5f-pcn\n5f-py-pinaca\n5f-thj\n5-htp\n5-hydroxy tryptamine\n5-hydroxy-n-methyl tryptamine\n5-iai\n5-it\n5-mapb\n5-mapdb\n5-mapdi\n5-mbpb\n5-meo-amt\n5-meo-dalt\n5-meo-dibf\n5-meo-dipt\n5-meo-dmt\n5-meo-malt\n5-meo-mipt\n5-meo-tmt\n5-methoxy aet\n5-methoxy det\n5-methoxy dpt\n5-methoxy eipt\n5-methoxy ept\n5-methoxy met\n5-methoxy-n,n-dibutyl tryptamine\n5-methoxy-n,n-diisobutyl tryptamine\n5-methyl etodesnitazene\n5-ppdi\n5-trifluoromethyl isotodesnitazene\n6-(2-aminopropyl)indole\n6-acetylcodeine\n6-apb\n6-apdb\n6-eapb\n6-fluoro det\n6-mapb\n6-methoxy dipt\n7-aminoclonazepam\n7-aminoflunitrazepam\n7-aminonitrazepam\n7-apb\n7-apdb\n7-fluoro tryptamine\n7-hydroxymitragynine\n7-methoxy dipt\n7'-methoxy nabutie\n7-oh-cbd\n8-aminoclonazolam\n8-aminoflunitrazolam\n8-chlorotheophylline\n9(r)-hexahydrocannabinol\na-3665\na-796,260\na-796260 degradant\na-834735\na-834735 degradant\na-836339\nab-001\nab-005\nab-005 azepane isomer\nab-7-fubaica\nab-bica\nab-chfupyca\nab-chmica\nab-chminaca\nab-chminaca 2'-indazole isomer\nab-chminaca metabolite m1a\nab-chminaca metabolite m1b\nab-chminaca metabolite m2\nab-chminaca metabolite m3a\nab-chminaca metabolite m4\nab-chminaca metabolite m5a\nab-chminaca metabolite m6\nab-chminaca metabolite m7\nab-fubica\nab-fubinaca\nab-fubinaca 2b\nab-fubinaca metabolite 4\nab-fubinaca-2-fluorbenzyl\nab-fubinaca-3-fluorbenzyl\nab-pica\nab-pinaca\nab-pinaca (5-oh-pentyl)\nab-pinaca 3-carboxyindazole metabolite\nab-pinaca carboxylic acid\nab-pinaca n-(4-hydroxypentyl) metabolite\nab-pinaca pentanoic acid\nacetildenafil\nacetyl fentanyl\nacetyl norfentanyl\nacetylbenzylfentanyl\nacetyl-carfentanil\nachminaca\naconitine\nacrylfentanyl\nadamantyl-thpinaca\nadb-4en-pinaca\nadb-5br-butinaca\nadb-5'br-butinaca 3,3-dimethylbutanoic acid\nadb-5br-inaca\nadb-5f-butinaca\nadb-bica\nadb-binaca\nadb-butinaca\nadb-butinaca n-(4-hydroxybutyl) metabolite\nadb-butinaca n-butanoic acid metabolite\nadb-chmica\nadb-chminaca (m10(lacton)\nadb-chminaca (m3(valin-4-oh-cyclohexyl))\nadb-fubiata\nadb-fubiata 3,3-dimethylbutanoic acid metabolite\nadb-fubica\nadb-fubinaca\nadb-hexinaca\nadb-iata\nadbica\nadbica n-(4-hydroxypentyl) metabolite\nadbica n-(5-hydroxypentyl) metabolite\nadbica n-pentanoic acid\nadb-inaca\nadb-p-5br-inaca\nadb-p7aica\nadb-phetinaca\nadb-pinaca\nadb-pinaca n-(4-hydroxypentyl) metabolite\nadb-pinaca n-(5-hydroxypentyl) metabolite\nadb-pinaca pentanoic acid metabolite\nadinazolam\nadrafinil\na-fub7aica\nafubiata\nah-7563\nah-7921\nah-7959\nah-8507\nah-8529\nah-8532\nah-8533\nakb48\nakb48 n-(4-fluorobenzyl) analog\nakb48 n-(4-hydroxypentyl) metabolite\nakb48 n-(5-hydroxypentyl) metabolite\nakb48 n-pentanoic acid metabolite\nakb-57\nald-52\naleph-2\naleph-4\nalfa-hydroxy bromazolam\nalfentanil\nal-lad\nallylescaline\nalpha,3-dimethylfentanyl\nalpha-dimethyl fentanyl\nalpha-hydroxy midazolam\nalpha-hydroxyalprazolam\nalpha-hydroxyetizolam\nalpha-hydroxyflualprazolam\nalpha-hydroxytriazolam\nalpha'-methoxy fentanyl\nalpha-methyl acetyl fentanyl\nalpha'-methyl butyryl fentanyl\nalpha-methyl butyryl fentanyl\nalpha-methyl fentanyl\nalpha-methyl thiofentanyl\nalpha-methyl-acrylfentanyl\nalpha-methyl-p-fluorofentanyl\nalpha-naphyrone\nalpha-pbp\nalpha-pcyp\nalpha-php\nalpha-pihp\nalpha-ppp\nalpha-pvp\nalpha-pvt\nalpha-pyrrolidino-2-phenylacetophenone\nalprazolam\nam-1220\nam-1220 azepane isomer\nam-1235\nam-1241\nam-1248\nam-1248 azepane isomer\nam-2201\nam-2201 (2-oh-indole)\nam-2201 (5-oh-indole)\nam-2201 6-hydroxyindole metabolite\nam-2201 7-hydroxyindole metabolite\nam-2201 8-quinolinyl carboxamide\nam-2201 n-(4-hydroxypentyl)\nam-2232\nam-2233\nam-2233 azepane isomer\nam-3102\nam-630\nam-679\nam-694\nam694 n-(5-hydroxypentyl) metabolite\nam694 n-pentanoic acid metabolite\namantadine\namb\namb-fubica\namb-fubinaca\namb-fubinaca acid\namb-pica (valin)\na'-methyl etonitazene\namfepramone\naminorex\namphetamine\namphetamine-n-propyl\namt\nap-237\nap-238\napaa\napica\napica (n-4-oh-pentyl)\napica n-(5-hydroxypentyl) metabolite\napica n-pentanoic acid metabolite\na-pnp\na-ponasa\napp-binaca\napp-butinaca oxidative deamination metabolite\napp-chminaca\napp-fubinaca\napp-pica\napp-pica oxidative deamination metabolite\narecoline\nathpinaca isomer 2\natomoxetine\natropine\nazefubim\nazidoindolene 1\nbaclofen\nbb-22\nbb-22 3-carboxyindole metabolite\nbdb\nbenocyclidine\nbentazepam\nbenzatropine\nbenzedrone\nbenzodioxole fentanyl\nbenzofuranyl-fentanyl\nbenzoylecgonine\nbenzoylfentanyl\nbenzphetamine\nbenzyl acryl fentanyl\nbenzyl carfentanil\nbenzyl fentanyl\nbenzyl-4-cn butinaca\nbenzylone\nbeta-hydroxy acetyl thiofentanyl\nbeta-hydroxy-3-methyl-thienylfentanyl\nbeta-hydroxy-carfentanil\nbetahydroxyfentanyl\nbeta-hydroxy-p-fluorofentanyl\nbeta-hydroxy-php\nbeta-hydroxy-sufentanil\nbeta-hydroxythiofentanyl\nbeta-methoxy-2c-b\nbeta-methyl acetyl fentanyl\nbeta-methyl fentanyl\nbk-2c-b\nbk-ivp\nbk-mddma\nbmpea\nboh-2c-b\nboldenone\nbretazenil\nbrifentanyl\nbromadol\nbromantane\nbromazepam\nbromazepam cleavage product\nbromazolam\nbromo-dragonfly\nbrorphine\nbrotizolam\nbufotenine\nbuphedrone\nbupivacaine\nbuprenorphine\nbupropion\nbutonitazene\nbutorphanol\nbutylone\nbutyryl fentanyl\nbutyryl norfentanyl\nbutyryl-carfentanyl\nbutyrylfentanyl carboxy metabolite\nbutyrylremifentanil\nbzo-4en-poxizid\nbzo-chmoxizid\nbzo-hexoxizid\nbzo-hexoxizid 4-hydroxybenzoyl metabolite\nbzo-poxizid\nbzp\ncamazepam\ncamfetamine\ncannabigerol\ncarfentanil\ncathinone\ncb-13\ncb-25\ncb-52\ncb-86\ncbl-018\ncephaeline\nch-fubiata\nchlordiazepoxide\nchlorphine\nchm-122\ncho-4'me-5'br-fuboxpyra\nch-piata\nch-piata n-pentanoic acid metabolite\ncinolazepam\ncis-3-methyl butyryl fentanyl\ncl-2201\nclobazam\nclobromazolam\nclodesnitazene\nclonazepam\nclonazolam\ncloniprazepam\nclonitazene\nclotiazepam\nclotizolam\nclozapine\ncl-pseudoephedrine\ncocaine\ncodeine\ncoluracetam\ncp-47,497\ncp-47,497-c8-homolog\ncp-55,940\ncpcpp\ncpe\ncrotonylfentanyl\ncumyl-bc-hpmegaclone-221\ncumyl-bica\ncumyl-cb-megaclone\ncumyl-cbmica\ncumyl-cbminaca\ncumyl-ch-megaclone\ncumyl-chsinaca\ncumyl-clchsinaca\ncumyl-inaca\ncumyl-nbminaca\ncumyl-pegaclone\ncumyl-pica\ncumyl-pica n-pentanoic acid metabolite\ncumyl-pinaca\ncumyl-thpinaca\ncumyl-tsinaca\ncyclobutyl fentanyl\ncyclohexyl fentanyl\ncyclopentenyl fentanyl\ncyclopentyl fentanyl\ncyclopropane acetyl fentanyl\ncyclopropyl norfentanyl\ncyclopropyl pemoline\ncyclopropylfentanyl\ncyproheptadine\ndb-mdbp\ndbzp\ndehydro-deschloroketamine\ndehydromethoxetamine\ndehydronorketamine\ndelorazepam\ndemoxepam\ndesalkylflurazepam\ndesalkylgidazepam\ndesalkylquazepam\ndeschloro w-19\ndeschloroclotizolam\ndeschloroetizolam\ndeschloroketamine\ndeschloro-n-ethyl-ketamine\ndeschloronorketamine\ndesomorphine\ndespropionyl 2-fluoro-ortho-fluorofentanyl\ndespropionyl meta-fluoro fentanyl\ndespropionyl meta-methyl fentanyl\ndespropionyl n-benzyl para-fluoro norfentanyl\ndespropionyl ortho-methyl fentanyl\ndespropionyl p-fluorofentanyl\ndespropionyl-2-fluorofentanyl\ndet\ndextromethorphan\ndi(beta-phenylisopropyl)amine\ndiacetylmorphine\ndiazepam\ndibutylone\ndichloroethcathinone\ndiclazepam\ndiclofensine\ndidesmethylsibutramine\ndiethylone\ndiethylpentylone\ndihydrocodeine\ndimethocaine\ndiphenhydramine\ndiphenidine\ndipt\ndipyanone\ndl-4662\ndmar\ndmpea\ndmt\ndmxe\ndob\ndoc\ndoet\ndof\ndoi\ndoip\ndom\ndopr\ndpt\neadb-fubinaca\neam-2201\necgonine methyl ester\nedmb-4en-pinaca\nedmb-chmica\nedmb-pinaca\neg-018\neg2201\nemb-fubinaca\nembutramide\nemetine\nephedrine\nephenidine\nept\nescaline\nestazolam\netaqualone\nethcathinone\neth-lad\nethoxyacetyl fentanyl\nethoxyetonitazene\nethyl loflazepate\nethyl-(1-phenylbutan-2-yl)amine\nethylene etonitazene\nethylene nitazene\nethyleneoxynitazene\nethylformate 4-anpp\nethylmorphine\nethylone\nethylphenidate\nethyphenethyl-fubica\netilamfetamine\netizolam\netodesnitazene\netonitazene\netorphine\neutylone\nf2201\nfab-144\nfdu-nnei\nfdu-pb-22\nfenethylline\nfenozolone\nfenproporex\nfentanyl\nfentanyl methyl carbamate\nfentranyl\nflephedrone\nflibanserin\nflualprazolam\nflubromazepam\nflubromazepam isomer\nflubromazolam\nflubrotizolam\nfluclotizolam\nfludiazepam\nfluetizolam\nflunitazene\nflunitrazepam\nflunitrazolam\nfluorexetamine\nfluoropentyl-norcarfentanil\nflurazepam\nflutazolam\nflutoprazepam\nformetorex\nfub-144\nfubimina\nfubimina n-(5-hydroxypentyl) metabolite\nfubimina n-pentanoic acid\nfub-jwh-018\nfub-npb-22\nfub-pb-22\nfub-pb-22 3-carboxyindole metabolite\nfuranyl norfentanyl\nfuranyl uf-17\nfuranylethylfentanyl\nfuranylfentanyl\ng-130\ngabapentin\ngidazepam\nglycinexylidide\ngts-21\nhalazepam\nharmine\nhdep-28\nhdmp-28\nheptanoyl fentanyl\nhexahydrocannabiphorol\nhexanoyl fentanyl\nhexedrone\nhma\nhordenine\nhu-210\nhu-308\nhu-331\nhydrocodone\nhydromorphone\nhydroxetamine\nhydroxybupropion\nhydroxy-thc\nibogaine\nipdmb-fubinaca\niso-(metamethyl-propcathinone)\niso-3-cmc\niso-butonitazene\nisobutyl-pentyl-1h-indazole-3-carboxylate\nisobutyryl norfentanyl\nisobutyrylfentanyl\nisocarfentanil\nisohexedrone\nisopentedrone\nisophenmetrazine\nisopropylphenidate\nisopropyl-u-47700\nisotodesnitazene\nisotonitazene\nisovaleryl fentanyl\njwh 019 n-(5-hydroxyhexyl) metabolite\njwh 073 4-hydroxyindole metabolite\njwh 073 5-hydroxyindole metabolite\njwh 122 n-(5-hydroxypentyl) metabolite\njwh 307 3-isomer\njwh 412 n-(5-hydroxypentyl) metabolite\njwh-004\njwh-007\njwh-007 (5-oh-pentyl)\njwh-007 (n-pentanoic acid)\njwh-011\njwh-015\njwh-016\njwh-018\njwh-018 (2-oh-indole)\njwh-018 (5-oh-pentyl-glucuronide)\njwh-018 (6-oh-indole)\njwh-018 4-hydroxyindole metabolite\njwh-018 5-hydroxyindole metabolite\njwh-018 6-methoxyindole analogue\njwh-018 8-quinolinyl carboxamide\njwh-018 benzimidazole analogue\njwh-018 n-(1,1-dimethylpropyl) isomer\njwh-018 n-(2-hydroxypentyl) metabolite\njwh-018 n-(3-hydroxypentyl) metabolite\njwh-018 n-(4,5-epoxypentyl) analogue\njwh-018 n-(4-hydroxypentyl) metabolite\njwh-018 n-(4-oxo-pentyl) metabolite\njwh-018 n-(5-bromopentyl) analogue\njwh-018 n-(5-chloropentyl) analogue\njwh-018 n-(5-hydroxypentyl) metabolite\njwh-018 n-pentanoic acid\njwh-018 n-propanoic acid metabolite\njwh-018 7-hydroxyindole metabolite\njwh-018-1-methyl-hexyl\njwh-019\njwh-019 5-hydroxyindole metabolite\njwh-019 n-(6-hydroxyhexyl) metabolite\njwh-020\njwh-022\njwh-030\njwh-031\njwh-047\njwh-048\njwh-049\njwh-050\njwh-071\njwh-072\njwh-073\njwh-073 (2-methylbutyl) homolog\njwh-073 2-methylnaphthyl analogue\njwh-073 4-methylnaphthyl analog\njwh-073 6-hydroxyindole metabolite\njwh-073 6-methoxyindole analogue\njwh-073 n-(3-hydroxybutyl) metabolite\njwh-073 n-(4-hydroxybutyl) metabolite\njwh-073 n-butanoic acid metabolite\njwh-073-3-methyl\njwh-073-m-2-oh-ind\njwh-073-m-7-oh-ind\njwh-079\njwh-080\njwh-081\njwh-081 2-methoxynaphthyl isomer\njwh-081 4-hydroxynaphthyl metabolite\njwh-081 n-(4-hydroxypentyl) metabolite\njwh-081 n-(5-hydroxypentyl) metabolite\njwh-081 n-(cyclohexylmethyl) analogue\njwh-081 n-pentanoic acid metabolite\njwh-082\njwh-098\njwh-116\njwh-122\njwh-122 (2-oh-pentyl)\njwh-122 (3-oh-pentyl)\njwh-122 (5-oh-indole)\njwh-122 (6-oh-indole)\njwh-122 n-(4-hydroxypentyl) metabolite\njwh-122 n-(4-pentenyl) analog\njwh-122 n-(5-chloropentyl) derivative\njwh-133\njwh-145\njwh-146\njwh-147\njwh-149\njwh-150\njwh-167\njwh-175\njwh-176\njwh-180\njwh-181\njwh-182\njwh-189\njwh-193\njwh-198\njwh-200\njwh-200 5-hydroxyindole metabolite\njwh-200 6-hydroxyindole metabolite\njwh-200 analogue\njwh-200-m-4-oh-ind\njwh-201\njwh-203\njwh-203 n-(4-hydroxypentyl) metabolite\njwh-203 n-(5-hydroxypentyl) metabolite\njwh-203 n-pentanoic acid metabolite\njwh-204\njwh-210\njwh-210 5-hydroxyindole metabolite\njwh-210 7-ethylnaphthyl isomer\njwh-210 n-(4-hydroxypentyl) metabolite\njwh-210 n-(5-hydroxypentyl) metabolite\njwh-210 n-pentanoic acid metabolite\njwh-212\njwh-213\njwh-240\njwh-242\njwh-246\njwh-249\njwh-250\njwh-250 (5-oh-indole)\njwh-250 n-(4-hydroxypentyl) metabolite\njwh-250 n-(5-hydroxypentyl) metabolite\njwh-250 n-pentanoic acid\njwh-251\njwh-252\njwh-253\njwh-292\njwh-302\njwh-305\njwh-307\njwh-309\njwh-311\njwh-314\njwh-364\njwh-368\njwh-369\njwh-370\njwh-371\njwh-386\njwh-387\njwh-394\njwh-397\njwh-398\njwh-398 n-(4-hydroxypentyl) metabolite\njwh-398 n-(5-hydroxypentyl) metabolite\njwh-398 n-pentanoic acid metabolite\njwh-400\njwh-412\njwh-413\njwh-424\nkavain\nketamine\nketazolam\nlacosamide\nlevamisole\nlevorphanol\nlidocaine\nlisdexamphetamine\nlofentanil\nloprazolam\nlorazepam\nlormetazepam\nlsd\nlsz\nm-144\nmab-chminaca\nmab-chminaca metabolite m1\nmab-chminaca metabolite m11\nmab-chminaca metabolite m2\nmab-chminaca metabolite m7\nma-chminaca\nmal\nmam-2201\nmam2201 n-(4-hydroxypentyl) metabolite\nmam2201 n-pentanoic acid metabolite\nmazindol\nmbdb\nmbzp\nmchb-1\nmcpp\nmda\nmda 77\nmdai\nmdat\nmdbzp\nmdea\nmdma\nmdmb-3en-butinaca\nmdmb-4en-pica\nmdmb-4en-pica butanoic acid metabolite\nmdmb-4en-pinaca\nmdmb-4en-pinaca butanoic acid metabolite\nmdmb-5br-butinaca\nmdmb-5br-inaca\nmdmb-5me-inaca\nmdmb-butinaca\nmdmb-butinaca butanoic acid metabolite\nmdmb-chmczca\nmdmb-chmczca (hydrolysat)\nmdmb-chmczca metabolite m3\nmdmb-chmica\nmdmb-chmica metabolite m2\nmdmb-chminaca\nmdmb-fubica\nmdmb-fubica metabolite 3\nmdmb-fubinaca\nmdmb-fubinaca 3,3-dimethylbutanoic acid\nmdmb-ica\nmdmb-inaca\nmdmb-inaca 3,3-dimethylbutanoic acid metabolite\nmdmb-pica\nmdmb-pica (hydrolysat)\nmdmb-pinaca\nmdmb-pinaca (hydrolysat)\nmdpbp\nmdpep\nmdphip\nmdphp\nmdppp\nmdpv\nmdpv-m, demethylenylmethyl\nmeai\nmebroqualone\nmeclonazepam\nmeclonazepam\nmedazepam\nmedetomidine\nmemantine\nmenitazene\nmeo-mda\nmeop\nmep-chmica\nmeperidine\nmephedrene\nmephedrone\nmephedrone-m (dihydro-)\nmepirapim\nmeppp\nmeprobamate\nmescaline\nmescaline-nbome\nmesoridazine\nmet\nmeta-chlorofentanyl\nmeta-fluoro acryl fentanyl\nmeta-fluoro butyryl fentanyl\nmeta-fluoro methoxyacetyl fentanyl\nmeta-fluoro valeryl fentanyl\nmeta-fluorofentanyl\nmeta-fluorofuranylfentanyl\nmeta-hydroxycocaine\nmeta-methoxy furanyl fentanyl\nmeta-methyl acetyl fentanyl\nmeta-methyl cyclopropyl fentanyl\nmeta-methyl fentanyl\nmeta-methyl furanyl fentanyl\nmeta-methyl methoxyacetyl fentanyl\nmetamfepramone\nmetaxalone\nmethacrylfentanyl\nmethamnetamine\nmethamphetamine\nmethanandamide\nmethaqualone\nmethcathinone\nmethedrone\nmethionitazene\nmethiopropamine\nmethoxamine\nmethoxetamine\nmethoxmetamine\nmethoxphenidine\nmethoxpropamine\nmethoxy u-47700\nmethoxyacetyl norfentanyl\nmethoxyacetylfentanyl\nmethoxyphenamine\nmethyl 1-(4-fluorobenzyl)-1h-indazole-3-carboxylate\nmethyl 2-phenyl-2-(pyrrolidin-1-yl)acetate\nmethyl-1-(5-fluoropentyl)-1h-indole-3-carboxylate\nmethyl-1-pentyl-1h-indole-3-carboxylate\nmethylenedioxynitazene\nmethylephedrine\nmethylergonovine\nmethylhexanamine\nmethylmorphenate\nmethylone\nmethylphenidate\nmetizolam\nmetodesnitazene\nmetonitazene\nmexedrone\nmexiletine\nm-fluorocyclopropylbenzylfentanyl\nm-fluoro-isobutyrylfentanyl\nmidazolam\nmipt\nmirfentanil\nmitragynine\nmmb-018\nmmb-2201\nmmb-4cn-butinaca\nmmb-4cn-butinaca n-butanoic acid metabolite\nmmb-4en-pica\nmmb-4en-pica ester hydrolysis metabolite\nmmb-4en-pinaca\nmmb-5br-inaca\nmmb-chm7aica\nmmb-chmica\nmmb-chmica o-demethyl acid\nmmb-fubica metabolite 3\nmmb-pica n-(5-hydroxypentyl) metabolite\nmmda-2\nmmmp\nmn-18\nmn-25\nmn-25 2-methyl derivative\nmo-chminaca\nmodafiendz\nmodafinil\nmodafinil sulphone\nmonoethylglycinexylidide\nmoppp\nmorphine\nmpbp\nmpbp-m, 4\nmphp\nmphp-2201\nmphp-m, 4\nmpp-pica\nmpp-pica ester hydrolysis n-(5-hydroxypentyl) metabolite\nmpp-pica n-(5-hydroxypentyl) metabolite\nmt-45\nmtta\nmxipr\nn-(2-apb) fentanyl\nn-(2c-b-fly) fentanyl\nn-(3c-b-fly) fentanyl\nn-(3-ethylindole) fentanyl\nn-(6-apb) fentanyl\nn-(6-dihydrobenzofuranylethyl) alpha-methyl fentanyl\nn,n-bisdesethylisotonitazene\nn,n-didesmethyl u-47700\nn,n-diethyl hexedrone\nn,n-dimethyl-3,4-methylenedioxyamphetamine\nn,n-dimethylamido fentanyl\nn,n-dimethylamphetamine\nn,n-dimethylpentylone\nn-acetyl 25i-nbome\nn-adamantyl-fentanyl\nnalbuphine\nnalmefene\nnalorphine\nnaloxone\nnaltrexone\nnamie\nnaphyrone\nnapie\nn-benzoxazolyl-fentanyl\nn-benzyl furanyl norfentanyl\nn-benzyl para-fluoro cyclopropyl norfentanyl\nn-benzyl phenyl norfentanyl\nn-benzyl-3,4-dma\nn-benzyl-3-methylfentanyl\nn-benzyl-butyrylfentanyl\nn-benzyl-p-fluoro-isobutyrylfentanyl\nn-butyl butylone\nn-butylhexedrone\nn-butylpentylone\nn-cyclohexyl butylone\nn-cyclohexyl-n-methyl methylone\nn-desethyl etonitazene\nn-desethyl isotonitazene\nn-desethyl metonitazene\nn-desethyl protonitazene\nn-desethyl-o-desisopropyl-isotonitazene (m3)\nn-desmethyl u-47700\nn-desmethylflunitrazepam\nneb\nneb-indene-analog\nne-chmimo\nn-ethylheptedrone\nn-ethylheptylone\nn-ethylhexedrone\nn-ethylhexylone\nn-ethylnorketamine\nn-ethylpentedrone\nn-ethylpentylone\nn-ethylphenmetrazol\nn-ethyl-u-47700\nnfepp\nnifoxipam\nnimetazepam\nnipp\nn-isopropyl butylone\nn-isopropyl-n-propyltryptamine\nnitazene\nnitracaine\nnitrazepam\nnitrazolam\nnm-2201\nnmdmsb\nn-me-bk-mmda-2\nn-methyl norcarfentanil\nn-methyl norfentanyl\nn-methyl p-methylphenylnorfentanyl\nn-methyl tryptamine\nn-methyl u-47931e\nn-methyl cyclopropyl norfentanyl\nn-methyl-1-phenylethylamine\nn-methyl-2ai\nn-methyl-acetyl-norfentanyl\nn-methyl-butyrylfentanyl\nn-methylcyclazodone\nn-methyl-hexylone\nn-methyl-n-allyl tryptamine\nnnei\nnnei 2-indazole isomer\nnoopept\nnor-3-methylfentanyl\nnorbuprenorphine\nnorcarfentanil\nnorclobazam\nnorcodeine\nnordiazepam\nnorephedrine\nnorfentanyl\nnorketamine\nnormethoxetamine\nnoroxycodone\nnorpropoxyphene\nnorsufentanil\nnortilidine\nnpb-22\nn-phenethyl noroxymorphone\nn-phenethyl-4-piperidone\nn-piperidinyl 4'-hydroxy nitazene\nn-piperidinyl etonitazene\nn-piperidinyl isotonitazene\nn-piperidinyl metonitazene\nn-piperidinyl protonitazene\nn-propionitrile chlorphine\nn-propyl hexylone\nn-propyl pentedrone\nn-propylamphetamine\nn-pyrrolidino 4'-hydroxy nitazene\nn-pyrrolidino etodesnitazene\nn-pyrrolidino etonitazene\nn-pyrrolidino isotonitazene\nn-pyrrolidino metodesnitazene\nn-pyrrolidino metonitazene\nn-pyrrolidino protonitazene\nn-pyrrolidinyl-3 4-dma\nn-quinolinyl-fentanyl\nnrg-3\nn-sec-butyl-pentedron\nnsi-189\no-amkd\nocfentanil\no-desmethyl venlafaxine\no-dt\nohmefentanyl\no-methyl-methoxyacetylfentanyl\norg 27569\norg 28611\norphenadrine\norphenadrine-nor (tofenacin. elamol)\northo-fluoro acryl fentanyl\northo-fluoro butyryl fentanyl\northo-fluoro isobutyryl fentanyl\northo-fluoro valeryl fentanyl\northo-fluorofentanyl\northo-fluorofuranylfentanyl\northo-isopropyl furanyl fentanyl\northo-methoxy butyryl fentanyl\northo-methoxy furanyl fentanyl\northo-methyl acetyl fentanyl\northo-methyl acryl fentanyl\northo-methyl boc-4-ap\northo-methyl cyclopropyl fentanyl\northo-methyl furanyl fentanyl\northo-methyl phenyl fentanyl\northo-methylfentanyl\nostarine\noxazepam\noxycodone\noxymorphone\npagoclone\npara-bromo 4-anpp\npara-bromofentanyl\npara-chloro acetyl fentanyl\npara-chloro acryl fentanyl\npara-chloro butyryl fentanyl\npara-chloro cyclobutyl fentanyl\npara-chloro cyclopentyl fentanyl\npara-chloro cyclopropyl fentanyl\npara-chloro furanyl fentanyl\npara-chloro furanyl fentanyl 3-furancarboxamide\npara-chloro valeryl fentanyl\npara-fluoro acetyl fentanyl\npara-fluoro acryl fentanyl\npara-fluoro benzyl fentanyl\npara-fluoro crotonyl fentanyl\npara-fluoro cyclopropyl fentanyl\npara-fluoro cylcopentyl fentanyl\npara-fluoro furanyl fentanyl 3-furancarboxamide\npara-fluoro furanyl norfentanyl\npara-fluoro methoxyacetyl fentanyl\npara-fluoro tetrahydrofuran fentanyl\npara-fluoro valeryl fentanyl\npara-fluorobutyrfentanyl\npara-fluorofentanyl\npara-fluorofuranylfentanyl\npara-fluorophenylpiperazine\npara-hydroxy butyryl fentanyl\npara-hydroxycocaine\npara-methoxy acetyl fentanyl\npara-methoxy acryl fentanyl\npara-methoxy fentanyl\npara-methoxy furanyl fentanyl\npara-methoxy tetrahydrofuranyl fentanyl\npara-methoxy valeryl fentanyl\npara-methyl acetyl fentanyl\npara-methyl acryl fentanyl\npara-methyl ap-237\npara-methyl butyryl fentanyl\npara-methyl cyclopropyl fentanyl\npara-methyl fentanyl\npara-methyl furanyl fentanyl\npara-methyl isobutyryl fentanyl\npara-methyl methoxyacetyl fentanyl\npara-methyl tetrahydrofuranyl fentanyl\npara-toluoyl fentanyl\npaynantheine (mitragyna alkaloid)\npb-22\npb-22 (n-4-oh-pentyl-3-carboxyindole)\npb-22 (n-5-oh-pentyl-3-carboxyindole)\npb-22 (n-pentanoic acid-3-carboxyindole)\npb-22 3-carboxyindole\npb-22 n-(4-hydroxypentyl) metabolite\npb-22 n-(5-hydroxypentyl) metabolite\npb-22 n-pentanoic acid metabolite\npce\np-chlorofentanyl\np-chloro-methoxyacetylfentanyl\npcp\npcpp\npdm-35\npentazocine\npentedrone\npentylone\npf-03550096\npf-4-methylaminorex\npf-bzp\np-fluoro-beta-hydroxy-thiobutyrylfentanyl\np-fluorococaine\np-fluoro-furanylethylfentanyl\np-fluoro-furanylremifentanil\np-fluoroisobutyrylbenzylfentanyl\np-fluoro-remifentanil ethyl ester\np-fluoro-thiofentanyl\npharaohfentanyl\nphenaridine\nphenazepam\nphenethylamine (2-)\nphenetrazine\nphenibut\nphenmetrazine\nphenoxyacetyl fentanyl\nphenoxyethyl-norfentanyl\nphentermine\nphenylacetyl fentanyl\nphenylephrine\nphenylpiracetam\nphenylpropylmethylamine\nphenylpropyl-norfentanyl\np-iodofentanyl\npiperidylthiambutene\npivaloylfentanyl\npma\np-methoxy-methoxyacetylfentanyl\npmma\nppap\npph\nprazepam\npre-084\npregabalin\npregabalin methyl ester\nprimidone\nprocaine\nprolintane\npromethazine\npropoxyphene\npropoxyphenyl homohydroxysildenafil\npropyl u-47700\npropylnitazene\npropyl-norfentanyl\npropylone\nproscaline\nprotodesnitazene\nprotonitazene\npsicofentanil\npsilocin\npsilocybin\np-tfm-fentanyl\npti-1\npti-2\npv8\npv9\npx-1\npx-2\npyrazolam\npyrilamine\npyrovalerone\nquazepam\nquetiapine\nr-30490\nrcs-2\nrcs-4\nrcs-4 3-methoxy isomer\nrcs-4 n-(4-hydroxypentyl) metabolite\nrcs-4 n-(4-oxo-pentyl)phenol metabolite (m11)\nrcs-4 n-(5-carboxypentyl) metabolite\nrcs-4 n-(5-hydroxypentyl) metabolite\nrcs-4 n-(5-hydroxypentyl)phenol\nrcs-4 ortho pentanoic acid metabolite\nrcs-4-c4 homolog\nrcs-8\nremifentanil\nremifentanil bis ethyl ester\nremifentanyl acid\nremimazolam\nricinine\nrilmazafone\nrilmazolam\nrimonabant\nritalinic acid\nro-07-3953\nro5-4864\nrolicyclidine\nrti-111\nsalvinorin a\nsalvinorin b\nscopolamine\nsdb-005\nsdb-006\nsdb-006-n-phenyl\nsec-butonitazene\nsenecioyl fentanyl\nser-601\nsertraline\nsgt-13\nsibutramine\nsibutramine-nor\nsl-164\nstrychnine\nsts-135\nsts-135 (4-oh-pentyl)\nsufentanil\nsultiame\nsunifiram\ntadalafil\ntapentadol\ntbuone\ntemazepam\ntenocyclidine\ntetrahydrofuran fentanyl 3-tetrahydrofurancarboxamide\ntetrahydrofuranylfentanyl\ntetrahydrothiophene fentanyl\ntetrazepam\ntfmpp\nthc-cooh\nthcp\nthebaine\nthiafentanil\nthienyl fentanyl\nthiofentanyl\nthiophene fentanyl\nthiothinone\nthj\nthj-018\nthj-2201\nthj-2201 (n-pentanoic acid)\nthj2201 n-(5-hydroxypentyl) metabolite\nth-pvp\ntianeptine\ntianeptine-m mc5\ntigloyl fentanyl\ntiletamine\ntilidine\ntma\ntma-2\ntma-6\ntofisopam\ntramadol\ntrans-3-methyl 4',para-difluoro fentanyl\ntrans-3-methyl thiofentanyl\ntrans-cinnamoylcocaine\ntranylcypromine\ntriazolam\ntrifluorometonitazene\ntropicamide\nu-47109\nu-47700\nu-47931e\nu-48520\nu-48753e\nu-48800\nu-49900\nu-50488\nu-51754\nu-62066\nu-69593\nuf-17\nur-144\nur-144 degradant\nur-144 degradant n-pentanoic acid metabolite\nur-144 n-(2-chloropentyl) analog\nur-144 n-(3-chloropentyl) analog\nur-144 n-(4-chloropentyl) analog\nur-144 n-(4-hydroxypentyl) metabolite\nur-144 n-(5-bromopentyl) analog\nur-144 n-(5-chloropentyl) analog\nur-144 n-(5-hydroxypentyl) metabolite\nur-144 n-(5-methylhexyl) analog\nur-144 n-heptyl analogue\nur-144 n-pentanoic acid\nurb-447\nurb-754\nuwa-101\nvalerylfentanyl\nvenlafaxine\nvortioxetine\nw-15\nw-18\nw-19\nwin 35,428\nwin 55,212-2\nwin-48098\nwin-54,461\nxlr-11\nxlr-11 6-hydroxyindole metabolite\nxlr11 degradant\nxlr11 n-(4-hydroxypentyl) metabolite\nxlr11 n-(4-pentenyl) analog\nxlr-12\nxylazine\nyohimbine\nzaleplon\nzolazepam\nzolpidem\nzonisamide\nzopiclone\na-et"
+  },
+  {
+    "name": "(WP) Urine 6 Panel",
+    "price": 80,
+    "isPerDrug": false,
+    "header": "Amphetamine, Methamphetamines, Benzodiazepines, Cannabis, Cocaine, Methadone, Propoxyphene, Opiates",
+    "groups": [
+      {
+        "label": "Amphetamine",
+        "drugs": [
+          "Methamphetamines",
+          "Benzodiazepines",
+          "Cannabis",
+          "Cocaine",
+          "Methadone",
+          "Propoxyphene",
+          "Opiates"
+        ]
+      }
+    ],
+    "rawLower": "amphetamine, methamphetamines, benzodiazepines, cannabis, cocaine, methadone, propoxyphene, opiates"
   }
 ];
-
 export const DRUG_LIST: string[] = [
   "1M-3PP",
   "2-AI",
@@ -5565,164 +4733,29 @@ export const URINE_PANELS: SimplePanel[] = [
 
 export const MEDICATIONS: Medication[] = [
   {
-    "group": "Pharmaceuticals",
-    "ingredient": "Aripiprazole",
-    "brand": "Abilify"
+    "group": "Amphetamine",
+    "ingredient": "Amphetamine",
+    "brand": "Lisdexamphetmaine"
+  },
+  {
+    "group": "Amphetamine",
+    "ingredient": "Amphetamine",
+    "brand": "Lisdexamfetamine"
+  },
+  {
+    "group": "Amphetamine",
+    "ingredient": "Amphetamine",
+    "brand": "Elvanse"
+  },
+  {
+    "group": "Amphetamine",
+    "ingredient": "Amphetamine",
+    "brand": "Vyvanse"
   },
   {
     "group": "Amphetamine",
     "ingredient": "Amphetamine",
     "brand": "Adderall"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Nortriptyline",
-    "brand": "Allegron"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pregabalin",
-    "brand": "Alzain"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Zolpidem",
-    "brand": "Ambien"
-  },
-  {
-    "group": "Amphetamine",
-    "ingredient": "Amphetamine",
-    "brand": "Amfexa"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clomipramine",
-    "brand": "Anafranil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Benperidol",
-    "brand": "Anquil"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Lorazepam",
-    "brand": "Ativan"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pregabalin",
-    "brand": "Axalid"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Dextromethorphan",
-    "brand": "Benylin"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Mianserin",
-    "brand": "Bolvidon"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Midazolam",
-    "brand": "Buccolam"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Melperone",
-    "brand": "Buronil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clonidine",
-    "brand": "Catapres"
-  },
-  {
-    "group": "Cannabinoids",
-    "ingredient": "Cannabinoids",
-    "brand": "CBD/Hemp Products"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Citalopram",
-    "brand": "Celexa"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Citalopram",
-    "brand": "Cipramil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Zuclopenthixol",
-    "brand": "Clopixol"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clozapine",
-    "brand": "Clozaril"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Co-codamol"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Dihydrocodeine",
-    "brand": "Co-dydramol"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Codeine"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Codeine phosphate"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Codipar"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Dextromethorphan",
-    "brand": "Covonia"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Carbamazepine",
-    "brand": "Curatil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flurazepam",
-    "brand": "Dalmane"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clozapine",
-    "brand": "Denzapine"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flupentixol",
-    "brand": "Depixol"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Levetiracetam",
-    "brand": "Desitrend"
-  },
-  {
-    "group": "Amphetamine",
-    "ingredient": "Amphetamine",
-    "brand": "Dexamphetamine"
   },
   {
     "group": "Amphetamine",
@@ -5735,384 +4768,24 @@ export const MEDICATIONS: Medication[] = [
     "brand": "Dextroamphetamine"
   },
   {
-    "group": "Opiates",
-    "ingredient": "Dihydrocodeine",
-    "brand": "Dihydrocodeine"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pipamperone",
-    "brand": "Dipiperon"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clonidine",
-    "brand": "Dixarit"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Sulpiride",
-    "brand": "Dolmatil"
-  },
-  {
-    "group": "Methadone",
-    "ingredient": "Methadone",
-    "brand": "Dolophine"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Amitriptyline",
-    "brand": "Domical"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Reboxetine",
-    "brand": "Edronax"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Venlafaxine",
-    "brand": "Efexor XL"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Amitriptyline",
-    "brand": "Elavil"
+    "group": "Amphetamine",
+    "ingredient": "Amphetamine",
+    "brand": "Amfexa"
   },
   {
     "group": "Amphetamine",
     "ingredient": "Amphetamine",
-    "brand": "Elvanse"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clotiapine",
-    "brand": "Entumine"
+    "brand": "Dexamphetamine"
   },
   {
     "group": "Benzodiazepines and sedatives",
-    "ingredient": "Midazolam",
-    "brand": "Epistatus"
-  },
-  {
-    "group": "Narcotics by LC-MS/MS",
-    "ingredient": "Buprenorphine",
-    "brand": "Espranor"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Etomidate",
-    "brand": "Etomidate-Lipuro"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Melperone",
-    "brand": "Eunerpan"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluvoxamine",
-    "brand": "Faverin"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flupentixol",
-    "brand": "Fluanxol"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pentazocine",
-    "brand": "Fortral"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clobazam / Norclobazam",
-    "brand": "Frisium"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Etomidate",
-    "brand": "Hypnomidate"
+    "ingredient": "Diazepam",
+    "brand": "Valium"
   },
   {
     "group": "Benzodiazepines and sedatives",
-    "ingredient": "Midazolam",
-    "brand": "Hypnovel"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Imipramine",
-    "brand": "Imipramine Hydrochloride"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Opipramol",
-    "brand": "Insidon"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Kapake"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flupirtine",
-    "brand": "Katadolon"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Levetiracetam",
-    "brand": "Keppra"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Clonazepam",
-    "brand": "Klonopin"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Chlorpromazine",
-    "brand": "Largactil"
-  },
-  {
-    "group": "Cannabinoids",
-    "ingredient": "Cannabinoids",
-    "brand": "Legally prescribed cannabis"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Amitriptyline",
-    "brand": "Lentizol"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Chlordiazepoxide",
-    "brand": "Libruim"
-  },
-  {
-    "group": "Amphetamine",
-    "ingredient": "Amphetamine",
-    "brand": "Lisdexamfetamine"
-  },
-  {
-    "group": "Amphetamine",
-    "ingredient": "Amphetamine",
-    "brand": "Lisdexamphetmaine"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Maprotiline",
-    "brand": "Ludiomil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flupirtine",
-    "brand": "Lupirtin"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Sertraline",
-    "brand": "Lustral"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pregabalin",
-    "brand": "Lyrica"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Moclobemide",
-    "brand": "Manerix"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Thioridazine",
-    "brand": "Melleril"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Mersyndol"
-  },
-  {
-    "group": "Methadone",
-    "ingredient": "Methadone",
-    "brand": "Methadose"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Pregabalin",
-    "brand": "Misabri"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Modafinil",
-    "brand": "Modasomil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluphenazine",
-    "brand": "Modecate"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Modafinil",
-    "brand": "Modiodal"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Nitrazepam",
-    "brand": "Mogadon"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Trazodone",
-    "brand": "Molipaxin"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Morphine",
-    "brand": "Morphine"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Morphine",
-    "brand": "MST"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Gabapentin",
-    "brand": "Neurontin"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Dextromethorphan",
-    "brand": "Night nurse"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Medazepam",
-    "brand": "Nobrium"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Nurofen Plus"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Risperidone",
-    "brand": "Okedi"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluoxetine",
-    "brand": "Olena"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Morphine",
-    "brand": "Oramorph"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluoxetine",
-    "brand": "Oxactin"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Oxycodone",
-    "brand": "Oxycodone"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Midazolam",
-    "brand": "Ozalin"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Panadeine"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Dihydrocodeine",
-    "brand": "Paramol"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Clobazam / Norclobazam",
-    "brand": "Perizam"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Desipramine",
-    "brand": "Pertofran"
-  },
-  {
-    "group": "Methadone",
-    "ingredient": "Methadone",
-    "brand": "Physeptone"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Opipramol",
-    "brand": "Pramolan"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Dosulepin",
-    "brand": "Prothiaden"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Modafinil",
-    "brand": "Provigil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluoxetine",
-    "brand": "Prozac"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Fluoxetine",
-    "brand": "Prozep"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Viloxazine",
-    "brand": "Qelbree"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Alfentanil",
-    "brand": "Rapifen"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Dihydrocodeine",
-    "brand": "Remedeine"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Temazepam",
-    "brand": "Restoril"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Flupirtine",
-    "brand": "Retense"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Risperidone",
-    "brand": "Risperdal"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Risperidone",
-    "brand": "Risperdal Consta"
+    "ingredient": "Alprazolam",
+    "brand": "Xanax"
   },
   {
     "group": "Benzodiazepines and sedatives",
@@ -6120,9 +4793,49 @@ export const MEDICATIONS: Medication[] = [
     "brand": "Rivotril"
   },
   {
-    "group": "Pharmaceuticals",
-    "ingredient": "Dextromethorphan",
-    "brand": "Robitussin"
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Clonazepam",
+    "brand": "Klonopin"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Citalopram",
+    "brand": "Cipramil"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Citalopram",
+    "brand": "Celexa"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Lorazepam",
+    "brand": "Ativan"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Temazepam",
+    "brand": "Tenox"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Temazepam",
+    "brand": "Restoril"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Nitrazepam",
+    "brand": "Mogadon"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Midazolam",
+    "brand": "Versed"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Chlordiazepoxide",
+    "brand": "Libruim"
   },
   {
     "group": "Benzodiazepines and sedatives",
@@ -6135,14 +4848,149 @@ export const MEDICATIONS: Medication[] = [
     "brand": "Roofies"
   },
   {
-    "group": "Pharmaceuticals",
-    "ingredient": "Medazepam",
-    "brand": "Rudotel"
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Midazolam",
+    "brand": "Buccolam"
   },
   {
-    "group": "Pharmaceuticals",
-    "ingredient": "Paroxetine",
-    "brand": "Seroxat"
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Midazolam",
+    "brand": "Epistatus"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Midazolam",
+    "brand": "Ozalin"
+  },
+  {
+    "group": "Benzodiazepines and sedatives",
+    "ingredient": "Midazolam",
+    "brand": "Hypnovel"
+  },
+  {
+    "group": "Cannabinoids",
+    "ingredient": "Cannabinoids",
+    "brand": "CBD/Hemp Products"
+  },
+  {
+    "group": "Cannabinoids",
+    "ingredient": "Cannabinoids",
+    "brand": "Legally prescribed cannabis"
+  },
+  {
+    "group": "Methadone",
+    "ingredient": "Methadone",
+    "brand": "Physeptone"
+  },
+  {
+    "group": "Methadone",
+    "ingredient": "Methadone",
+    "brand": "Methadose"
+  },
+  {
+    "group": "Methadone",
+    "ingredient": "Methadone",
+    "brand": "Dolophine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Codeine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Panadeine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Nurofen Plus"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Mersyndol"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Co-codamol"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Zapain"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Codeine phosphate"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Codipar"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Kapake"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Solpadol"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Codeine",
+    "brand": "Tyrex"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Dihydrocodeine",
+    "brand": "Dihydrocodeine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Dihydrocodeine",
+    "brand": "Paramol"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Dihydrocodeine",
+    "brand": "Co-dydramol"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Dihydrocodeine",
+    "brand": "Remedeine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Morphine",
+    "brand": "Morphine"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Morphine",
+    "brand": "Oramorph"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Morphine",
+    "brand": "Zomorph"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Morphine",
+    "brand": "MST"
+  },
+  {
+    "group": "Opiates",
+    "ingredient": "Oxycodone",
+    "brand": "Oxycodone"
   },
   {
     "group": "Opiates",
@@ -6151,8 +4999,198 @@ export const MEDICATIONS: Medication[] = [
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Doxepin",
-    "brand": "Silenor"
+    "ingredient": "Trazodone",
+    "brand": "Molipaxin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Fluoxetine",
+    "brand": "Prozac"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Fluoxetine",
+    "brand": "Olena"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Fluoxetine",
+    "brand": "Prozep"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Fluoxetine",
+    "brand": "Oxactin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clozapine",
+    "brand": "Clozaril"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clozapine",
+    "brand": "Denzapine"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clozapine",
+    "brand": "Zaponex"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Amitriptyline",
+    "brand": "Tryptizol"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Amitriptyline",
+    "brand": "Lentizol"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Amitriptyline",
+    "brand": "Domical"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Amitriptyline",
+    "brand": "Elavil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Nortriptyline",
+    "brand": "Allegron"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Venlafaxine",
+    "brand": "Efexor XL"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Paroxetine",
+    "brand": "Seroxat"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clotiapine",
+    "brand": "Entumine"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Mirtazapine",
+    "brand": "Zispin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Carbamazepine",
+    "brand": "Tegretol"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Carbamazepine",
+    "brand": "Curatil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Zuclopenthixol",
+    "brand": "Clopixol"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Risperidone",
+    "brand": "Risperdal"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Risperidone",
+    "brand": "Risperdal Consta"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Risperidone",
+    "brand": "Okedi"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Alfentanil",
+    "brand": "Rapifen"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pregabalin",
+    "brand": "Lyrica"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pregabalin",
+    "brand": "Alzain"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pregabalin",
+    "brand": "Axalid"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pregabalin",
+    "brand": "Misabri"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Amisulpride",
+    "brand": "Solian"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Aripiprazole",
+    "brand": "Abilify"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Chlorpromazine",
+    "brand": "Largactil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clomipramine",
+    "brand": "Anafranil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clonazepam",
+    "brand": "Rivotril"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Desipramine",
+    "brand": "Pertofran"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Dextromethorphan",
+    "brand": "Benylin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Dextromethorphan",
+    "brand": "Robitussin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Dextromethorphan",
+    "brand": "Covonia"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Dextromethorphan",
+    "brand": "Night nurse"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Dosulepin",
+    "brand": "Prothiaden"
   },
   {
     "group": "Pharmaceuticals",
@@ -6161,58 +5199,23 @@ export const MEDICATIONS: Medication[] = [
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Amisulpride",
-    "brand": "Solian"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Solpadol"
+    "ingredient": "Doxepin",
+    "brand": "Silenor"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Zaleplon",
-    "brand": "Sonata"
+    "ingredient": "Flupentixol",
+    "brand": "Depixol"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Zolpidem",
-    "brand": "Stilnox"
-  },
-  {
-    "group": "Narcotics by LC-MS/MS",
-    "ingredient": "Buprenorphine",
-    "brand": "Suboxone"
-  },
-  {
-    "group": "Narcotics by LC-MS/MS",
-    "ingredient": "Buprenorphine",
-    "brand": "Subutex"
+    "ingredient": "Flupentixol",
+    "brand": "Fluanxol"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Sulpiride",
-    "brand": "Sulpor"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Trimipramine",
-    "brand": "Surmontil"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Opipramol",
-    "brand": "Sympramol"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Carbamazepine",
-    "brand": "Tegretol"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Temazepam",
-    "brand": "Tenox"
+    "ingredient": "Fluvoxamine",
+    "brand": "Faverin"
   },
   {
     "group": "Pharmaceuticals",
@@ -6221,28 +5224,98 @@ export const MEDICATIONS: Medication[] = [
   },
   {
     "group": "Pharmaceuticals",
+    "ingredient": "Imipramine",
+    "brand": "Imipramine Hydrochloride"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Maprotiline",
+    "brand": "Ludiomil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Medazepam",
+    "brand": "Nobrium"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Medazepam",
+    "brand": "Rudotel"
+  },
+  {
+    "group": "Pharmaceuticals",
     "ingredient": "Mianserin",
     "brand": "Tolvon"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Chlorprothixene",
-    "brand": "Truxal"
+    "ingredient": "Mianserin",
+    "brand": "Bolvidon"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Amitriptyline",
-    "brand": "Tryptizol"
+    "ingredient": "Moclobemide",
+    "brand": "Manerix"
   },
   {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Tyrex"
+    "group": "Pharmaceuticals",
+    "ingredient": "Opipramol",
+    "brand": "Insidon"
   },
   {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Diazepam",
-    "brand": "Valium"
+    "group": "Pharmaceuticals",
+    "ingredient": "Opipramol",
+    "brand": "Pramolan"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Opipramol",
+    "brand": "Sympramol"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pentazocine",
+    "brand": "Fortral"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Pipamperone",
+    "brand": "Dipiperon"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Sertraline",
+    "brand": "Lustral"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Sulpiride",
+    "brand": "Dolmatil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Sulpiride",
+    "brand": "Sulpor"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Viloxazine",
+    "brand": "Qelbree"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Levetiracetam",
+    "brand": "Keppra"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Levetiracetam",
+    "brand": "Desitrend"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Zaleplon",
+    "brand": "Sonata"
   },
   {
     "group": "Pharmaceuticals",
@@ -6255,29 +5328,114 @@ export const MEDICATIONS: Medication[] = [
     "brand": "Valtran"
   },
   {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Midazolam",
-    "brand": "Versed"
-  },
-  {
-    "group": "Amphetamine",
-    "ingredient": "Amphetamine",
-    "brand": "Vyvanse"
-  },
-  {
-    "group": "Benzodiazepines and sedatives",
-    "ingredient": "Alprazolam",
-    "brand": "Xanax"
-  },
-  {
-    "group": "Opiates",
-    "ingredient": "Codeine",
-    "brand": "Zapain"
+    "group": "Pharmaceuticals",
+    "ingredient": "Clobazam / Norclobazam",
+    "brand": "Frisium"
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Clozapine",
-    "brand": "Zaponex"
+    "ingredient": "Clobazam / Norclobazam",
+    "brand": "Perizam"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Flurazepam",
+    "brand": "Dalmane"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Benperidol",
+    "brand": "Anquil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Chlorprothixene",
+    "brand": "Truxal"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clonidine",
+    "brand": "Catapres"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Clonidine",
+    "brand": "Dixarit"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Etomidate",
+    "brand": "Hypnomidate"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Etomidate",
+    "brand": "Etomidate-Lipuro"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Fluphenazine",
+    "brand": "Modecate"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Flupirtine",
+    "brand": "Katadolon"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Flupirtine",
+    "brand": "Lupirtin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Flupirtine",
+    "brand": "Retense"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Gabapentin",
+    "brand": "Neurontin"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Melperone",
+    "brand": "Buronil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Melperone",
+    "brand": "Eunerpan"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Modafinil",
+    "brand": "Provigil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Modafinil",
+    "brand": "Modasomil"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Modafinil",
+    "brand": "Modiodal"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Reboxetine",
+    "brand": "Edronax"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Thioridazine",
+    "brand": "Melleril"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Trimipramine",
+    "brand": "Surmontil"
   },
   {
     "group": "Pharmaceuticals",
@@ -6286,18 +5444,8 @@ export const MEDICATIONS: Medication[] = [
   },
   {
     "group": "Pharmaceuticals",
-    "ingredient": "Zopiclone",
-    "brand": "Zimovane"
-  },
-  {
-    "group": "Pharmaceuticals",
     "ingredient": "Ziprasidone",
     "brand": "Ziprasidone"
-  },
-  {
-    "group": "Pharmaceuticals",
-    "ingredient": "Mirtazapine",
-    "brand": "Zispin"
   },
   {
     "group": "Pharmaceuticals",
@@ -6305,16 +5453,40 @@ export const MEDICATIONS: Medication[] = [
     "brand": "Zoleptil"
   },
   {
-    "group": "Opiates",
-    "ingredient": "Morphine",
-    "brand": "Zomorph"
+    "group": "Pharmaceuticals",
+    "ingredient": "Zopiclone",
+    "brand": "Zimovane"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Zolpidem",
+    "brand": "Stilnox"
+  },
+  {
+    "group": "Pharmaceuticals",
+    "ingredient": "Zolpidem",
+    "brand": "Ambien"
+  },
+  {
+    "group": "Narcotics by LC-MS/MS",
+    "ingredient": "Buprenorphine",
+    "brand": "Subutex"
+  },
+  {
+    "group": "Narcotics by LC-MS/MS",
+    "ingredient": "Buprenorphine",
+    "brand": "Espranor"
+  },
+  {
+    "group": "Narcotics by LC-MS/MS",
+    "ingredient": "Buprenorphine",
+    "brand": "Suboxone"
   }
 ];
-
 export const QUESTION_SETS: QuestionSet[] = [
   {
     "question": "Child Questions",
-    "answer": "Thank you for your request to perform testing on a child. Please be aware, drug and alcohol testing in children are always treated as complex cases due to the physical differences in children compared to adults, which affect how the results are interpreted. \n\nAs per our protocols, please see below the information we will require to perform this testing, along with our recommendations for the best possible testing outcome:\nDoes the mother use drugs, and if so which drugs?\nDoes the mother declare she currently breastfeeds the child, or has done in the past? If so when?\nDoes the father/partner use drugs? And do they live in the same household as the child?\nHas the mother and/or father/partner already been tested for drug use, if so please provide a copy of the report. \nPlease confirm the specific concern, be it accidental ingestion, environmental exposure, passive exposure or being actively drugged etc. \nIf they have been removed from the parents care, please provide a date for this.\n\nIt is our strong recommendation, depending on the case circumstances, that the parents/carers be tested alongside the child to provide further evidence for our experts to use in the interpretation of the child\u2019s results."
+    "answer": "Thank you for your request to perform testing on a child. Please be aware, drug and alcohol testing in children are always treated as complex cases due to the physical differences in children compared to adults, which affect how the results are interpreted.\n\nAs per our protocols, please see below the information we will require to perform this testing, along with our recommendations for the best possible testing outcome:\nDoes the mother use drugs, and if so which drugs?\nDoes the mother declare she currently breastfeeds the child, or has done in the past? If so when?\nDoes the father/partner use drugs? And do they live in the same household as the child?\nHas the mother and/or father/partner already been tested for drug use, if so please provide a copy of the report.\nPlease confirm the specific concern, be it accidental ingestion, environmental exposure, passive exposure or being actively drugged etc.\nIf they have been removed from the parents care, please provide a date for this.\n\nIt is our strong recommendation, depending on the case circumstances, that the parents/carers be tested alongside the child to provide further evidence for our experts to use in the interpretation of the child’s results."
   },
   {
     "question": "Braid Questions",
@@ -6327,5 +5499,33 @@ export const QUESTION_SETS: QuestionSet[] = [
   {
     "question": "Why do we need to test EtG & FAEE alongside?",
     "answer": "As standard practise, DNA Legal test head hair for EtG and EtPa alcohol markers (EtPa being the most specific of the four compounds covered under the name FAEE).\n\nChemical hair treatments, such as hair dye, can decrease the concentration of hair alcohol markers present within the hair. Chemical hair treatments have a greater impact on the concentration of EtG than on EtPa, due to the way EtG is incorporated into the hair shaft and the chemical properties of each compound. Because of this, when chemical hair treatment is declared/suspected, it is recommended that EtG and EtPa be analysed together, as EtPa is more resistant to the effects of hair treatment and therefore can be used when a false negative result is suspected.\n\nDue to the way EtPa is incorporated into the hair, EtPa concentrations can be affected (increased) by the use of alcohol-containing hair products. On the other hand, unlike EtPa, EtG is not impacted by alcohol-containing products."
+  },
+  {
+    "question": "Testing <3cm for Alcohol",
+    "answer": "It is recommended by the Society of Hair Testing to test 3cm and up to 6cm hair lengths to monitor excessive alcohol consumption. EtG is known to accumulate more towards the scalp due to its route of incorporation into hair. Due to this accumulation of EtG, it is not possible to directly correlate the concentration of EtG in a 1cm segment to a definitive pattern of alcohol consumption i.e. excessive vs non-excessive.\n\nEssentially, this may potentiate an overestimation of EtG concentration when compared to alcohol consumption."
+  },
+  {
+    "question": "Testing >6cm for Alcohol",
+    "answer": "EtG is known to accumulate more towards the scalp due to a combination of its route of incorporation into hair, and its susceptibility to removal by natural hair washing, UV (sunlight) exposure, in addition to any application of hair chemical treatments. Therefore, for hair strands greater than 6cm, it is possible that an increased likelihood of the hair being exposed to these conditions has occurred from the longer time attached to the scalp. This may potentiate an underestimation of EtG concentration when compared to alcohol consumption."
+  },
+  {
+    "question": "Segmenting Hair for Excessive Alcohol Consumption",
+    "answer": "Whilst scientifically it is straight forward to test multiple segments for EtG or EtPa, there is not a consensus on the interpretation of such results and a significant risk for using hair analysis for a purpose for which it is not designed (Forensic Science International. Volume 217, Issues 1-3, 10 April 2012, Pages e4-e7. Interpretation problems in a forensic case of abstinence determination using alcohol markers in hair. Fritz Pragst).\n\nThe matter of interpretation of alcohol marker results was examined in court (https://www.familylawweek.co.uk/articles/children-public-law-update-december-2010/) and one of the findings made was:\n\nThe current peer agreed cut off levels for both EtG and FAEEs are for the proximal 3 cm segment of hair. Whilst the testing of 1cm segments (of the proximal 3cm segment of hair) might have some value for the purpose of looking at trends (and also at very high levels referred to in (i) above), no cut off levels have been established or generally agreed for 1 cm segments nor, as referred to earlier in this judgment, is there sufficient published data on testing such segments to enable the validity of such tests to be established. Accordingly, any evidence based on the testing of 1 cm segments is unlikely to be sufficient to support conclusions as to the level of alcohol consumption.\n\nThe Society of Hair Testing provides guidelines for such testing which are currently detailed in the 2019 Consensus for the use of alcohol markers in hair for supporting the assessment of abstinence and chronic alcohol consumption(https://www.soht.org/images/pdf/Revision_2019_Alcoholmarkers.pdf) - the guidance states that 'If sample lengths less than 3 cm or greater than 6 cm are used, the results should be interpreted with caution'. Although it does concede that 'segmentation may provide additional information' it is not clear for what purpose this would be suitable and currently no peer reviewed/published literature has been agreed upon by the scientific community."
+  },
+  {
+    "question": "why PEth tests only cover the last 28 days and not longer",
+    "answer": "It takes 28 days (approximately) for PEth to be eliminated from the body. So when a blood sample is collected and analysed for PEth the window of detection is approximately 28 days prior to the date of collection. Any alcohol consumed before this 28 day period is unlikely to still be present in the blood."
+  },
+  {
+    "question": "Effect of Pregnancy",
+    "answer": "It is important to note that pregnancy hormones will not have a direct effect on the results of the hair strand test. However, hormones can have an effect on the hair growth cycle.\n\nThe hair goes through growth cycles. Anagen phase, the growth stage, is where the hair is active and is growing, Catagen phase, the intermediate stage, is where the hair begins to stop being active and Telogen phase, the inactive stage, is where the hair is inactive and has disconnected from the blood supply. 10-15% of hair is in the telogen phase. When interpreting the results, the stages of hair growth, especially the anagen and telogen phase, needs to be considered.\n\nRegarding pregnancy, there is a marginal change in the physiology of human hair during pregnancy. During the third trimester of pregnancy, more hair is in the anagen phase rather than the telogen phase. This means there are fewer older hairs present on the head and therefore, the detected drug concentrations are less likely from the previous consumption of the drug."
+  },
+  {
+    "question": "Longer hair test",
+    "answer": "If it is necessary to monitor any potential future drug use/exposure, a further segmental hair strand test (at least 3 x 1cm, free from the use of hair chemical treatments such as dye and bleach) following the current test profile could be undertaken no earlier than XXX XXX 2026. Please contact your Client Manager to discuss any further testing."
+  },
+  {
+    "question": "Hair severely chemically treated",
+    "answer": "Due to the application of hair chemical treatment, further testing of an uninfluenced/uncompromised sample is recommended in determining potential historic drug use and/or alcohol consumption. Body hair, fingernails, and/or toenails could be collected immediately, if available. Please contact your Client Manager to discuss any further testing."
   }
 ];

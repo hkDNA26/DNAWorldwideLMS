@@ -14,7 +14,7 @@ const COOKIE_NAME = "forge_session";
 
 export type SessionPayload = {
   userId: string;
-  role: "ADMIN" | "STAFF";
+  role: "ADMIN" | "STAFF" | "TENDER";
   name: string;
   email: string;
 };
@@ -59,13 +59,18 @@ export async function clearSessionCookie() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export async function requireAuth(requiredRole?: "ADMIN" | "STAFF"): Promise<SessionPayload> {
+type AuthRole = "ADMIN" | "STAFF" | "TENDER";
+
+export async function requireAuth(requiredRole?: AuthRole | AuthRole[]): Promise<SessionPayload> {
   const session = await getSession();
   if (!session) {
     throw new Error("UNAUTHORIZED");
   }
-  if (requiredRole && session.role !== requiredRole) {
-    throw new Error("FORBIDDEN");
+  if (requiredRole) {
+    const allowed = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    if (!allowed.includes(session.role)) {
+      throw new Error("FORBIDDEN");
+    }
   }
   return session;
 }

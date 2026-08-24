@@ -18,7 +18,7 @@ import { VideoThumbnailPicker } from "./video-thumbnail-picker";
 import { useToast } from "@/components/ui/toast";
 import {
   GripVertical, Plus, Trash2, ChevronDown, ChevronRight, Edit3,
-  FileText, Video, HelpCircle, Check, X, Upload,
+  FileText, Video, HelpCircle, Globe, Check, X, Upload,
 } from "lucide-react";
 import type { Course, Module, Lesson, Quiz } from "@/types";
 
@@ -30,6 +30,7 @@ const CONTENT_TYPE_ICONS: Record<string, React.ReactNode> = {
   TEXT: <FileText className="h-3.5 w-3.5" />,
   VIDEO: <Video className="h-3.5 w-3.5" />,
   QUIZ: <HelpCircle className="h-3.5 w-3.5" />,
+  EXTERNAL: <Globe className="h-3.5 w-3.5" />,
 };
 
 interface CourseBuilderProps {
@@ -106,7 +107,7 @@ export function CourseBuilder({ course: initialCourse }: CourseBuilderProps) {
     }
   }, []);
 
-  const addLesson = useCallback(async (moduleId: string, contentType: "TEXT" | "VIDEO" | "QUIZ") => {
+  const addLesson = useCallback(async (moduleId: string, contentType: "TEXT" | "VIDEO" | "QUIZ" | "EXTERNAL") => {
     const res = await fetch(`/api/modules/${moduleId}/lessons`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -387,7 +388,7 @@ function SortableModule({
   onToggle: () => void;
   onDeleteModule: () => void;
   onUpdateTitle: (t: string) => void;
-  onAddLesson: (type: "TEXT" | "VIDEO" | "QUIZ") => void;
+  onAddLesson: (type: "TEXT" | "VIDEO" | "QUIZ" | "EXTERNAL") => void;
   onDeleteLesson: (id: string) => void;
   onSelectLesson: (l: FullLesson) => void;
   activeLesson: FullLesson | null;
@@ -469,6 +470,7 @@ function SortableModule({
                   { type: "TEXT" as const, label: "Text lesson", icon: <FileText className="h-3.5 w-3.5" /> },
                   { type: "VIDEO" as const, label: "Video lesson", icon: <Video className="h-3.5 w-3.5" /> },
                   { type: "QUIZ" as const, label: "Quiz", icon: <HelpCircle className="h-3.5 w-3.5" /> },
+                  { type: "EXTERNAL" as const, label: "Embedded app", icon: <Globe className="h-3.5 w-3.5" /> },
                 ].map((item) => (
                   <button
                     key={item.type}
@@ -555,7 +557,7 @@ function LessonEditor({
         <div className="flex items-center gap-2">
           <span className="text-slate-400">{CONTENT_TYPE_ICONS[lesson.contentType]}</span>
           <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-            {lesson.contentType === "TEXT" ? "Text Lesson" : lesson.contentType === "VIDEO" ? "Video Lesson" : "Quiz"}
+            {lesson.contentType === "TEXT" ? "Text Lesson" : lesson.contentType === "VIDEO" ? "Video Lesson" : lesson.contentType === "EXTERNAL" ? "Embedded App" : "Quiz"}
           </span>
         </div>
         {lesson.contentType !== "QUIZ" && (
@@ -616,6 +618,24 @@ function LessonEditor({
               onSelect={(url) => onUpdate({ videoThumbnail: url })}
             />
           )}
+        </div>
+      )}
+
+      {lesson.contentType === "EXTERNAL" && (
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Launch URL</label>
+          <Input
+            placeholder="https://your-app.example.com/"
+            value={lesson.content || ""}
+            onChange={(e) => onUpdate({ content: e.target.value })}
+          />
+          <p className="text-xs text-slate-400">
+            Embedded in an iframe for the student. The app must call
+            <code className="mx-1 px-1 py-0.5 rounded bg-slate-100 text-slate-600">
+              window.parent.postMessage({"{"}type: &quot;lesson-complete&quot;{"}"}, &quot;*&quot;)
+            </code>
+            when the learner finishes, so forge-lms can mark the lesson (and course, if it&apos;s the last one) complete.
+          </p>
         </div>
       )}
 

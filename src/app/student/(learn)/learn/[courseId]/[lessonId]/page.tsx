@@ -86,6 +86,7 @@ export default async function LearnPage({ params }: { params: Promise<Params> })
       enrollmentCompleted={!!enrollment.completedAt}
       certificate={certificate}
       latestAttempt={latestAttempt}
+      externalCheckpoint={enrollment.externalCheckpoint}
     />
   );
 }

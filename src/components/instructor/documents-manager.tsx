@@ -6,7 +6,8 @@ import { Upload, Trash2, FileText, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
-import { PDF_CATEGORIES } from "@/lib/pdf-library";
+import { LIBRARY_CATEGORIES } from "@/lib/library";
+import { formatFileSize } from "@/lib/format";
 import type { PdfCategory } from "@/generated/prisma/enums";
 
 export interface AdminPdfDoc {
@@ -19,20 +20,16 @@ export interface AdminPdfDoc {
   createdAt: string;
 }
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
 export function DocumentsManager({ documents }: { documents: AdminPdfDoc[] }) {
   return (
     <div className="space-y-8">
-      {PDF_CATEGORIES.map((cat) => (
+      {LIBRARY_CATEGORIES.map((cat) => (
         <CategoryPanel
           key={cat.category}
           category={cat.category}
           label={cat.label}
+          inputAccept={cat.inputAccept}
+          acceptHint={cat.acceptHint}
           documents={documents.filter((d) => d.category === cat.category)}
         />
       ))}
@@ -43,10 +40,14 @@ export function DocumentsManager({ documents }: { documents: AdminPdfDoc[] }) {
 function CategoryPanel({
   category,
   label,
+  inputAccept,
+  acceptHint,
   documents,
 }: {
   category: PdfCategory;
   label: string;
+  inputAccept: string;
+  acceptHint: string;
   documents: AdminPdfDoc[];
 }) {
   const router = useRouter();
@@ -60,7 +61,7 @@ function CategoryPanel({
   async function handleUpload(e: React.FormEvent) {
     e.preventDefault();
     if (!file || !title.trim()) {
-      addToast("Add a title and choose a PDF first", "error");
+      addToast("Add a title and choose a file first", "error");
       return;
     }
     setUploading(true);
@@ -75,7 +76,7 @@ function CategoryPanel({
         addToast(data.error || "Upload failed", "error");
         return;
       }
-      addToast("PDF added", "success");
+      addToast("File added", "success");
       setTitle("");
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -97,7 +98,7 @@ function CategoryPanel({
         addToast(data.error || "Delete failed", "error");
         return;
       }
-      addToast("PDF deleted", "success");
+      addToast("File deleted", "success");
       router.refresh();
     } catch {
       addToast("Network error — please try again", "error");
@@ -110,7 +111,9 @@ function CategoryPanel({
     <section className="bg-white border border-line rounded-2xl shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-line">
         <h2 className="text-[15px] font-bold text-ink">{label}</h2>
-        <p className="text-[13px] text-ink-faint mt-0.5">{documents.length} PDF{documents.length === 1 ? "" : "s"}</p>
+        <p className="text-[13px] text-ink-faint mt-0.5">
+          {documents.length} file{documents.length === 1 ? "" : "s"} &middot; {acceptHint}
+        </p>
       </div>
 
       <form onSubmit={handleUpload} className="px-5 py-4 border-b border-line bg-paper/50 flex flex-col sm:flex-row sm:items-end gap-3">
@@ -123,23 +126,23 @@ function CategoryPanel({
           />
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">PDF file</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">File</label>
           <input
             ref={fileInputRef}
             type="file"
-            accept="application/pdf"
+            accept={inputAccept}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             className="block w-full text-sm text-ink-soft file:mr-3 file:rounded-lg file:border-0 file:bg-brand-light file:px-3 file:py-2 file:text-sm file:font-semibold file:text-brand hover:file:bg-brand hover:file:text-white file:transition-colors"
           />
         </div>
         <Button type="submit" loading={uploading}>
           <Upload className="h-4 w-4 mr-2" />
-          Add PDF
+          Add file
         </Button>
       </form>
 
       {documents.length === 0 ? (
-        <div className="px-5 py-8 text-center text-ink-faint text-sm">No PDFs yet — add one above.</div>
+        <div className="px-5 py-8 text-center text-ink-faint text-sm">Nothing here yet — add one above.</div>
       ) : (
         <ul className="divide-y divide-line">
           {documents.map((doc) => (
@@ -150,7 +153,7 @@ function CategoryPanel({
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-ink truncate">{doc.title}</p>
                 <p className="text-xs text-ink-faint mt-0.5 truncate">
-                  {doc.fileName} &middot; {formatSize(doc.fileSize)}
+                  {doc.fileName} &middot; {formatFileSize(doc.fileSize)}
                 </p>
               </div>
               <a

@@ -11,7 +11,7 @@ const SCORM_STATUS_VALUES = new Set(["NOT_ATTEMPTED", "INCOMPLETE", "COMPLETED",
  * from where the learner left off (suspend_data/location) on relaunch. */
 export async function GET(_req: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("STAFF");
+    const session = await requireAuth(["STAFF", "TENDER"]);
     const { courseId } = await params;
 
     const enrollment = await db.enrollment.findFirst({
@@ -42,7 +42,7 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
 /** Called by the SCORM runtime shim on Commit/LMSCommit and Terminate/LMSFinish. */
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    const session = await requireAuth("STAFF");
+    const session = await requireAuth(["STAFF", "TENDER"]);
     const { courseId } = await params;
     const body = await request.json();
 

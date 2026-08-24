@@ -1,7 +1,7 @@
-export type Role = "ADMIN" | "STAFF";
+export type Role = "ADMIN" | "STAFF" | "TENDER";
 export type CourseStatus = "DRAFT" | "PUBLISHED";
 export type CourseType = "STANDARD" | "SCORM";
-export type ContentType = "TEXT" | "VIDEO" | "QUIZ";
+export type ContentType = "TEXT" | "VIDEO" | "QUIZ" | "EXTERNAL";
 export type QuestionType = "MULTIPLE_CHOICE" | "TRUE_FALSE" | "SHORT_ANSWER";
 export type ScormVersion = "SCORM_12" | "SCORM_2004";
 

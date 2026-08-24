@@ -31,7 +31,7 @@ export async function GET(_req: Request, { params }: { params: Promise<Params> }
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    if (session.role === "STAFF" && course.status === "DRAFT") {
+    if (session.role !== "ADMIN" && course.status === "DRAFT") {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
