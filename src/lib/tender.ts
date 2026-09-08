@@ -2,7 +2,7 @@
 // by exact course title, so a course only needs to exist with one of these titles for
 // Tender accounts to start picking it up automatically — no further code changes needed.
 //
-export const TENDER_COURSE_TITLES = ["Information Security & 27001", "CPD Case Study: Andy & Kate"];
+export const TENDER_COURSE_TITLES = ["CPD Case Study: Andy & Kate"];
 
 // The app resources (as opposed to courses) every Tender account gets, regardless of role.
 export const TENDER_RESOURCE_LABELS = ["Videos", "Drug Street Name Search", "Alcohol Unit Calculator"];
