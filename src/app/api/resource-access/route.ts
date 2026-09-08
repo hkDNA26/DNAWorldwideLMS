@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getResource } from "@/lib/resources";
+import { getResource, RESOURCES } from "@/lib/resources";
 import { grantResourceAccess } from "@/lib/access-grants";
 import type { ResourceKey } from "@/generated/prisma/enums";
 
-const VALID_KEYS: ResourceKey[] = ["DRUG_SEARCH", "ALCOHOL_CALCULATOR"];
+const VALID_KEYS: ResourceKey[] = RESOURCES.map((r) => r.key);
 
 export async function POST(request: Request) {
   try {
