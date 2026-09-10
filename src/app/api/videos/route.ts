@@ -54,3 +54,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    await requireAuth("ADMIN");
+    const body = await request.json(); // [{ id, sortOrder }]
+
+    await Promise.all(
+      body.map((v: { id: string; sortOrder: number }) =>
+        db.videoResource.update({ where: { id: v.id }, data: { sortOrder: v.sortOrder } })
+      )
+    );
+
+    return NextResponse.json({ data: { success: true } });
+  } catch (err) {
+    if (err instanceof Error && (err.message === "UNAUTHORIZED" || err.message === "FORBIDDEN")) {
+      return NextResponse.json({ error: err.message }, { status: 401 });
+    }
+    console.error("Reorder videos error:", err);
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+  }
+}
