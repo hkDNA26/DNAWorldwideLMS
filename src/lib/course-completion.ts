@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { recordCourseCompletion } from "@/lib/sheets";
+import { syncCourseProgressToSheet } from "@/lib/sheets";
 
 /** Marks an enrollment complete and issues a certificate, idempotently.
  * Shared by lesson-based completion (/api/progress) and SCORM completion
@@ -21,13 +21,5 @@ export async function markCourseComplete(enrollmentId: string, studentId: string
 
   await db.certificate.create({ data: { studentId, courseId } });
 
-  const [student, course] = await Promise.all([
-    db.user.findUnique({ where: { id: studentId }, select: { name: true } }),
-    db.course.findUnique({ where: { id: courseId }, select: { title: true } }),
-  ]);
-  if (student && course) {
-    recordCourseCompletion(student.name, course.title).catch((err) =>
-      console.error("Google Sheets update failed:", err)
-    );
-  }
+  syncCourseProgressToSheet().catch((err) => console.error("Google Sheets update failed:", err));
 }

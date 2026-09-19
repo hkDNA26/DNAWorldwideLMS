@@ -1,7 +1,12 @@
 import { google } from "googleapis";
+import { db } from "@/lib/db";
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID!;
-const SHEET_NAME = "Sheet1";
+
+// Written to its own tab so the original Sheet1 grid keeps its history untouched.
+const PROGRESS_SHEET_NAME = "Course Progress";
+
+const HEADER = ["Name", "Email", "Role", "Course", "Status", "Started", "Completed"];
 
 function getAuthClient() {
   return new google.auth.GoogleAuth({
@@ -13,87 +18,60 @@ function getAuthClient() {
   });
 }
 
-// Convert zero-based column index to spreadsheet letter (0→A, 1→B, 26→AA, etc.)
-function colLetter(index: number): string {
-  let col = "";
-  let i = index + 1;
-  while (i > 0) {
-    const rem = (i - 1) % 26;
-    col = String.fromCharCode(65 + rem) + col;
-    i = Math.floor((i - 1) / 26);
-  }
-  return col;
+function formatDate(value: Date | null): string {
+  if (!value) return "";
+  return value.toISOString().slice(0, 10);
 }
 
-export async function recordCourseCompletion(studentName: string, courseTitle: string) {
+/**
+ * Mirrors every enrollment into the progress tab, one row each, so the sheet answers
+ * both "who has completed" and "who hasn't". Rewrites the whole tab rather than
+ * patching cells: the sheet can't drift out of sync if an individual write is missed.
+ */
+export async function syncCourseProgressToSheet() {
+  const enrollments = await db.enrollment.findMany({
+    select: {
+      firstAccessedAt: true,
+      completedAt: true,
+      student: { select: { name: true, email: true, role: true } },
+      course: { select: { title: true } },
+    },
+  });
+
+  const rows = enrollments
+    .map((e) => ({
+      name: e.student.name,
+      email: e.student.email,
+      role: e.student.role,
+      course: e.course.title,
+      status: e.completedAt ? "Completed" : e.firstAccessedAt ? "In progress" : "Not started",
+      started: formatDate(e.firstAccessedAt),
+      completed: formatDate(e.completedAt),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name) || a.course.localeCompare(b.course))
+    .map((r) => [r.name, r.email, r.role, r.course, r.status, r.started, r.completed]);
+
   const auth = getAuthClient();
   const sheets = google.sheets({ version: "v4", auth });
 
-  // Read the entire sheet
-  const res = await sheets.spreadsheets.values.get({
+  const meta = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
+  const tabExists = meta.data.sheets?.some((s) => s.properties?.title === PROGRESS_SHEET_NAME);
+  if (!tabExists) {
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: SPREADSHEET_ID,
+      requestBody: { requests: [{ addSheet: { properties: { title: PROGRESS_SHEET_NAME } } }] },
+    });
+  }
+
+  await sheets.spreadsheets.values.clear({
     spreadsheetId: SPREADSHEET_ID,
-    range: SHEET_NAME,
+    range: PROGRESS_SHEET_NAME,
   });
 
-  const rows: string[][] = (res.data.values as string[][] | null) ?? [];
-
-  // If the sheet is empty, bootstrap it
-  if (rows.length === 0) {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A1`,
-      valueInputOption: "RAW",
-      requestBody: { values: [["Name", courseTitle], [studentName, "✓"]] },
-    });
-    return;
-  }
-
-  const headerRow = rows[0];
-
-  // Find or create the course column
-  let courseColIdx = headerRow.findIndex(
-    (h) => h.trim().toLowerCase() === courseTitle.trim().toLowerCase()
-  );
-  if (courseColIdx === -1) {
-    courseColIdx = headerRow.length;
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!${colLetter(courseColIdx)}1`,
-      valueInputOption: "RAW",
-      requestBody: { values: [[courseTitle]] },
-    });
-  }
-
-  // Find the student row (rows[0] is the header, so students start at rows[1])
-  let studentRowIdx = -1;
-  for (let i = 1; i < rows.length; i++) {
-    if (rows[i][0]?.trim().toLowerCase() === studentName.trim().toLowerCase()) {
-      studentRowIdx = i;
-      break;
-    }
-  }
-
-  const courseCol = colLetter(courseColIdx);
-
-  if (studentRowIdx === -1) {
-    // Student not found — append a new row with a tick in the correct column
-    const newRow = Array(courseColIdx + 1).fill("");
-    newRow[0] = studentName;
-    newRow[courseColIdx] = "✓";
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A:A`,
-      valueInputOption: "RAW",
-      requestBody: { values: [newRow] },
-    });
-  } else {
-    // Student found — update their cell for this course
-    const sheetRow = studentRowIdx + 1; // Sheets API is 1-based
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!${courseCol}${sheetRow}`,
-      valueInputOption: "RAW",
-      requestBody: { values: [["✓"]] },
-    });
-  }
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${PROGRESS_SHEET_NAME}!A1`,
+    valueInputOption: "RAW",
+    requestBody: { values: [HEADER, ...rows] },
+  });
 }
