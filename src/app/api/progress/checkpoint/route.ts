@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 // checkpoint from the embedded app is a no-op.
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth(["STAFF", "TENDER"]);
+    const session = await requireAuth(["STAFF", "TENDER", "ADMIN"]);
     const body = await request.json();
     const { lessonId, checkpoint } = body;
 
