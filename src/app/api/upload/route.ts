@@ -9,12 +9,15 @@ export async function POST(request: Request) {
     const url = new URL(request.url);
     const type = url.searchParams.get("type") || "image";
 
-    const allowedTypes: Record<string, { mimes: string[]; folder: string }> = {
-      cover: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "covers" },
+    // optimize: downscale/re-encode oversized images. Left off for certificate
+    // templates (printed, so they need their full resolution) and for logos,
+    // which are small already and may be SVG.
+    const allowedTypes: Record<string, { mimes: string[]; folder: string; optimize?: boolean }> = {
+      cover: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "covers", optimize: true },
       video: { mimes: ["video/mp4", "video/webm", "video/ogg", "video/quicktime"], folder: "videos" },
-      image: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "images" },
+      image: { mimes: ["image/jpeg", "image/png", "image/webp", "image/gif"], folder: "images", optimize: true },
       template: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "certificate-templates" },
-      thumbnail: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "thumbnails" },
+      thumbnail: { mimes: ["image/jpeg", "image/png", "image/webp"], folder: "thumbnails", optimize: true },
       logo: { mimes: ["image/jpeg", "image/png", "image/webp", "image/svg+xml"], folder: "organizations" },
     };
 
@@ -23,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid upload type" }, { status: 400 });
     }
 
-    const result = await parseFileUpload(request, "file", config.folder, config.mimes);
+    const result = await parseFileUpload(request, "file", config.folder, config.mimes, config.optimize);
 
     if (result.error) {
       return NextResponse.json({ error: result.error }, { status: 400 });

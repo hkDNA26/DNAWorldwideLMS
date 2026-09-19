@@ -104,22 +104,32 @@ export function ScormPlayer({
         location: state.location,
       });
       const url = `/api/courses/${courseId}/scorm-progress`;
-      if (finalCall && navigator.sendBeacon) {
+      const isComplete = state.status === "COMPLETED" || state.status === "PASSED";
+      const willRedirect = isComplete && !initialCompleted && !hasRedirected;
+
+      // This POST is what writes the Certificate row, and the completion page
+      // 404s without it. So when we're about to navigate there, we need a
+      // handle on the request to wait for — sendBeacon gives us none.
+      if (finalCall && navigator.sendBeacon && !willRedirect) {
         navigator.sendBeacon(url, new Blob([payload], { type: "application/json" }));
       } else {
-        fetch(url, {
+        const request = fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: payload,
           keepalive: finalCall,
         }).catch(() => {});
-      }
-      if (state.status === "COMPLETED" || state.status === "PASSED") {
-        setCompleted(true);
-        if (!initialCompleted && !hasRedirected) {
+
+        if (willRedirect) {
           hasRedirected = true;
-          router.push(`/student/learn/${courseId}/complete`);
+          // Navigate only once the write has landed, otherwise the completion
+          // page can load before the certificate exists and 404 on first view.
+          request.then(() => router.push(`/student/learn/${courseId}/complete`));
         }
+      }
+
+      if (isComplete) {
+        setCompleted(true);
       }
     };
 

@@ -138,11 +138,55 @@ export async function downloadRemoteFile(
   return { url: savedUrl };
 }
 
+// Photos straight off a phone or stock site run to 10MB+, which is slow to load as a
+// course cover. Anything above this gets downscaled and re-encoded as WebP.
+const OPTIMIZE_THRESHOLD_BYTES = 400 * 1024;
+const MAX_IMAGE_WIDTH = 1600;
+
+// GIFs may be animated and SVGs aren't raster, so both are passed through untouched.
+const OPTIMIZABLE_MIMES = ["image/jpeg", "image/png", "image/webp"];
+
+/**
+ * Downscales and re-encodes an oversized image. Returns the original buffer unchanged
+ * if it's already small enough, isn't a format we can safely re-encode, or if encoding
+ * fails — an upload should never be lost just because it couldn't be compressed.
+ */
+async function optimizeImage(
+  buffer: Buffer,
+  mime: string,
+  originalName: string
+): Promise<{ buffer: Buffer; name: string }> {
+  if (!OPTIMIZABLE_MIMES.includes(mime) || buffer.byteLength <= OPTIMIZE_THRESHOLD_BYTES) {
+    return { buffer, name: originalName };
+  }
+
+  try {
+    const { default: sharp } = await import("sharp");
+    const optimized = await sharp(buffer)
+      .rotate() // honour EXIF orientation, which is lost once metadata is stripped
+      .resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true })
+      .webp({ quality: 82 })
+      .toBuffer();
+
+    // Keep the original if re-encoding somehow made it bigger.
+    if (optimized.byteLength >= buffer.byteLength) {
+      return { buffer, name: originalName };
+    }
+
+    const base = path.basename(originalName, path.extname(originalName));
+    return { buffer: optimized, name: `${base}.webp` };
+  } catch (err) {
+    console.error("Image optimisation failed, storing original:", err);
+    return { buffer, name: originalName };
+  }
+}
+
 export async function parseFileUpload(
   request: Request,
   field: string,
   folder: string,
-  allowedTypes: string[]
+  allowedTypes: string[],
+  optimize = false
 ): Promise<{ url: string; error?: never } | { url?: never; error: string }> {
   try {
     const formData = await request.formData();
@@ -161,8 +205,12 @@ export async function parseFileUpload(
       return { error: "File too large (max 100MB)" };
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const url = await storage.save(buffer, file.name, folder);
+    const raw = Buffer.from(await file.arrayBuffer());
+    const { buffer, name } = optimize
+      ? await optimizeImage(raw, file.type, file.name)
+      : { buffer: raw, name: file.name };
+
+    const url = await storage.save(buffer, name, folder);
 
     return { url };
   } catch (err) {
