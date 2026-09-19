@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { enrollAdminTester } from "@/lib/admin-tester";
 
 export async function GET(request: Request) {
   try {
@@ -64,6 +65,7 @@ export async function POST(request: Request) {
         instructorId: session.userId,
       },
     });
+    await enrollAdminTester(course.id);
 
     return NextResponse.json({ data: course }, { status: 201 });
   } catch (err) {

@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { storage, downloadRemoteFile } from "@/lib/storage";
 import { parseCourseWorkbook } from "@/lib/course-import/parse";
+import { enrollAdminTester } from "@/lib/admin-tester";
 
 const IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const VIDEO_MIMES = ["video/mp4", "video/webm", "video/ogg", "video/quicktime"];
@@ -109,6 +110,8 @@ export async function POST(request: Request) {
 
         return newCourse;
       });
+
+      await enrollAdminTester(createdCourse.id);
 
       return NextResponse.json({ data: { courseId: createdCourse.id } }, { status: 201 });
     } catch (err) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { extractScormPackage, deleteScormFiles } from "@/lib/scorm/extract";
+import { enrollAdminTester } from "@/lib/admin-tester";
 
 // SCORM exports are frequently video/image-heavy (Articulate/Captivate output),
 // so this allows a much larger upload than the shared 100MB cap in storage.ts.
@@ -56,6 +57,8 @@ export async function POST(request: Request) {
         manifestTitle: extracted.data.title,
       },
     });
+
+    await enrollAdminTester(course.id);
 
     return NextResponse.json({ data: { id: course.id } }, { status: 201 });
   } catch (err) {
