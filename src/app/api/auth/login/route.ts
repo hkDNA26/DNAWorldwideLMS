@@ -22,6 +22,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
+    await db.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+
     const token = await createSession({
       userId: user.id,
       role: user.role,

@@ -162,6 +162,7 @@ model User {
   role           Role     @default(STAFF)
   organizationId String?
   createdAt      DateTime @default(now())
+  lastLoginAt    DateTime?
 
   organization         Organization?         @relation(fields: [organizationId], references: [id])
   courses             Course[]
