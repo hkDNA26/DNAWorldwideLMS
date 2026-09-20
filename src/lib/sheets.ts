@@ -3,11 +3,14 @@ import { db } from "@/lib/db";
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID!;
 
-// Staff and tender clients are reported separately, each on its own tab, so the
-// original Sheet1 grid keeps its history untouched. Admins are internal and excluded.
+// Each audience gets its own tab, so the original Sheet1 grid keeps its history
+// untouched. Admins are on a separate "Testing" tab rather than mixed into Staff:
+// the admin account is auto-enrolled on every new course to trial it, so its
+// completions are test runs and would otherwise distort the staff report.
 const ROLE_TABS = [
   { role: "STAFF", tab: "Staff", label: "Staff" },
   { role: "TENDER", tab: "Tender", label: "Tender Clients" },
+  { role: "ADMIN", tab: "Testing", label: "Admin / Testing" },
 ] as const;
 
 const FIXED_COLUMNS = ["Name", "Email", "Last login"];
@@ -93,7 +96,7 @@ function buildGrid(
 
 export async function syncCourseProgressToSheet() {
   const enrollments = await db.enrollment.findMany({
-    where: { student: { role: { in: ["STAFF", "TENDER"] } } },
+    where: { student: { role: { in: ROLE_TABS.map((t) => t.role) } } },
     select: {
       completedAt: true,
       student: { select: { id: true, name: true, email: true, role: true, lastLoginAt: true } },
