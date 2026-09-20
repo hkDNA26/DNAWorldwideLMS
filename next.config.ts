@@ -17,6 +17,9 @@ const securityHeaders = [
   // HTTPS only, once the domain has settled.
   { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
   { key: "Permissions-Policy", value: "geolocation=(), microphone=(), payment=()" },
+  // Internal staff system: keep it out of search results entirely. robots.txt only
+  // asks crawlers not to fetch; this tells them not to index what they already have.
+  { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
 ];
 
 const nextConfig: NextConfig = {
