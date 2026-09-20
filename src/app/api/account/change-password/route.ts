@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, createSession, setSessionCookie, sessionRevocationCutoff } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
@@ -22,7 +22,14 @@ export async function POST(request: Request) {
     if (!valid) return NextResponse.json({ error: "Current password is incorrect." }, { status: 401 });
 
     const passwordHash = await bcrypt.hash(newPassword, 12);
-    await db.user.update({ where: { id: session.userId }, data: { passwordHash } });
+    await db.user.update({
+      where: { id: session.userId },
+      // Signs out every other session; the caller keeps access via the fresh
+      // token issued below.
+      data: { passwordHash, sessionsValidFrom: sessionRevocationCutoff() },
+    });
+
+    await setSessionCookie(await createSession(session));
 
     return NextResponse.json({ ok: true });
   } catch (err) {

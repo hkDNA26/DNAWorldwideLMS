@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { secureToken } from "@/lib/tokens";
 import { syncCourseProgressToSheet } from "@/lib/sheets";
 
 type Params = { quizId: string };
@@ -131,7 +132,7 @@ async function checkCourseCompletion(enrollmentId: string, courseId: string, stu
       where: { studentId_courseId: { studentId, courseId } },
     });
     if (!existing) {
-      await db.certificate.create({ data: { studentId, courseId } });
+      await db.certificate.create({ data: { studentId, courseId, verificationCode: secureToken(16) } });
 
       syncCourseProgressToSheet().catch((err) => console.error("Google Sheets update failed:", err));
     }

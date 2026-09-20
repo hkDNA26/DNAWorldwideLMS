@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sessionRevocationCutoff } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 
 export async function GET(request: Request) {
@@ -42,7 +43,12 @@ export async function POST(request: Request) {
     await db.$transaction([
       db.user.update({
         where: { id: record.userId },
-        data: { passwordHash: await bcrypt.hash(password, 12) },
+        data: {
+          passwordHash: await bcrypt.hash(password, 12),
+          // Kill any session issued before this reset — the whole point of a
+          // reset is that whoever had the old password loses access.
+          sessionsValidFrom: sessionRevocationCutoff(),
+        },
       }),
       db.inviteToken.update({
         where: { id: record.id },

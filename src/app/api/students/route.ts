@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { sendStudentInviteEmail } from "@/lib/email";
 import { RESOURCES } from "@/lib/resources";
+import { secureToken } from "@/lib/tokens";
 import { TENDER_COURSE_TITLES } from "@/lib/tender";
 import type { ResourceKey } from "@/generated/prisma/enums";
 import crypto from "crypto";
@@ -132,6 +133,7 @@ export async function POST(request: Request) {
         ...(sendInvite && {
           inviteTokens: {
             create: {
+              token: secureToken(),
               expiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
             },
           },

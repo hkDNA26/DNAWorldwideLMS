@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { secureToken } from "@/lib/tokens";
 import { syncCourseProgressToSheet } from "@/lib/sheets";
 
 /** Marks an enrollment complete and issues a certificate, idempotently.
@@ -19,7 +20,7 @@ export async function markCourseComplete(enrollmentId: string, studentId: string
   });
   if (existing) return;
 
-  await db.certificate.create({ data: { studentId, courseId } });
+  await db.certificate.create({ data: { studentId, courseId, verificationCode: secureToken(16) } });
 
   syncCourseProgressToSheet().catch((err) => console.error("Google Sheets update failed:", err));
 }

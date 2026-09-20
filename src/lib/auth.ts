@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { db } from "./db";
@@ -19,6 +20,19 @@ export type SessionPayload = {
   email: string;
 };
 
+/**
+ * Cutoff to store in sessionsValidFrom when revoking sessions.
+ *
+ * A JWT's `iat` is whole seconds, so using the raw millisecond clock would reject
+ * a token minted in the same second as the revocation — including the fresh one
+ * we hand back to the user who just changed their own password. Flooring to the
+ * start of the second keeps that token valid while still rejecting every token
+ * from any earlier second.
+ */
+export function sessionRevocationCutoff(): Date {
+  return new Date(Math.floor(Date.now() / 1000) * 1000);
+}
+
 export async function createSession(payload: SessionPayload): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
@@ -36,12 +50,45 @@ export async function verifySession(token: string): Promise<SessionPayload | nul
   }
 }
 
-export async function getSession(): Promise<SessionPayload | null> {
+/**
+ * Resolves the current session against the database rather than trusting the JWT
+ * alone. The token is only a claim: it's valid for 7 days and says nothing about
+ * whether the account still exists, still holds that role, or has since had its
+ * password changed. Without this, deleting or demoting someone left them with
+ * their old access until the token happened to expire.
+ *
+ * Memoised with React's cache() so a render pass that calls this repeatedly costs
+ * a single query (see the Next.js authentication guide's Data Access Layer).
+ */
+export const getSession = cache(async (): Promise<SessionPayload | null> => {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
-  return verifySession(token);
-}
+
+  let payload;
+  try {
+    ({ payload } = await jwtVerify(token, JWT_SECRET));
+  } catch {
+    return null;
+  }
+
+  const claim = payload as unknown as SessionPayload;
+  if (!claim?.userId) return null;
+
+  const user = await db.user.findUnique({
+    where: { id: claim.userId },
+    select: { id: true, name: true, email: true, role: true, sessionsValidFrom: true },
+  });
+  if (!user) return null; // deleted account — the token is worthless immediately
+
+  // Tokens minted before a password change or an explicit revocation are rejected.
+  if (user.sessionsValidFrom && typeof payload.iat === "number") {
+    if (payload.iat * 1000 < user.sessionsValidFrom.getTime()) return null;
+  }
+
+  // Role comes from the database, never the token, so a demotion is instant.
+  return { userId: user.id, role: user.role, name: user.name, email: user.email };
+});
 
 export async function setSessionCookie(token: string) {
   const cookieStore = await cookies();

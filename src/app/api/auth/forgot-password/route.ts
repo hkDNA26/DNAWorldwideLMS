@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { secureToken } from "@/lib/tokens";
 
 // Always the same shape/message regardless of whether the email is
 // registered — branching the response on that would let this endpoint be
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
       const inviteToken = await db.inviteToken.create({
         data: {
           userId: user.id,
+          token: secureToken(),
           expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour — shorter-lived than a new-account invite
         },
       });

@@ -163,6 +163,9 @@ model User {
   organizationId String?
   createdAt      DateTime @default(now())
   lastLoginAt    DateTime?
+  // Sessions issued before this instant are rejected, so a password change or a
+  // revoked account takes effect immediately instead of waiting out the JWT.
+  sessionsValidFrom DateTime?
 
   organization         Organization?         @relation(fields: [organizationId], references: [id])
   courses             Course[]

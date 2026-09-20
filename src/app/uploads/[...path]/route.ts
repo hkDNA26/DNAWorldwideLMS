@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import mime from "mime-types";
+import { canAccessUpload } from "@/lib/upload-access";
 
 /**
  * Serves uploaded files (course videos/images, certificate backgrounds, etc.)
@@ -22,6 +23,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
     return NextResponse.json({ error: "Invalid path" }, { status: 400 });
   }
 
+  // 404 rather than 403 on refusal, so this can't be used to probe which files exist.
+  if (!(await canAccessUpload(segments))) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const uploadDir = process.env.UPLOAD_DIR || "./public/uploads";
   const filePath = path.join(process.cwd(), uploadDir.replace("./", ""), ...segments);
 
@@ -36,7 +42,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
   // Video/image uploads get a fresh UUID filename per upload (see storage.ts),
   // so caching them forever is safe. SCORM files live at a stable, courseId-based
   // path that "replace package" overwrites in place, so they must revalidate.
-  const cacheControl = segments[0] === "scorm" ? "public, max-age=0, must-revalidate" : "public, max-age=31536000, immutable";
+  // Access-controlled files must be cached per-user ("private"), or a shared cache
+  // could hand a gated document to someone who isn't entitled to it.
+  const isPublicFolder = segments[0] === "organizations" || segments[0] === "certificate-templates";
+  const scope = isPublicFolder ? "public" : "private";
+  const cacheControl =
+    segments[0] === "scorm"
+      ? `${scope}, max-age=0, must-revalidate`
+      : `${scope}, max-age=31536000, immutable`;
 
   const range = request.headers.get("range");
   if (range) {
