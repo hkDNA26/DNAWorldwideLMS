@@ -8,6 +8,7 @@ import Link from "next/link";
 import { UserPlus, Trash2, Users, BookOpen, X, Mail, Lock, ChevronDown, ChevronRight, Building2, Upload } from "lucide-react";
 import { formatDateShort } from "@/lib/utils";
 import { RESOURCES } from "@/lib/resources";
+import { StaffBulkUpload } from "./staff-bulk-upload";
 import { TENDER_FIXED_ACCESS_SUMMARY } from "@/lib/tender";
 import type { ResourceKey } from "@/generated/prisma/enums";
 
@@ -213,10 +214,20 @@ export function StudentsManager({ initialStudents, courses, initialOrganizations
         <p className="text-sm text-slate-500">
           {students.length} {students.length === 1 ? "account" : "accounts"} registered
         </p>
-        <Button onClick={() => { setShowForm((v) => !v); if (showForm) resetForm(); }}>
-          {showForm ? <X className="h-4 w-4 mr-2" /> : <UserPlus className="h-4 w-4 mr-2" />}
-          {showForm ? "Cancel" : "Add Account"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <StaffBulkUpload
+            courses={courses}
+            organizations={organizations}
+            // The list is held in local state seeded from server props, so a soft
+            // refresh wouldn't repopulate it after a bulk create. A reload is the
+            // predictable option for an action that can add fifty rows at once.
+            onDone={() => window.location.reload()}
+          />
+          <Button onClick={() => { setShowForm((v) => !v); if (showForm) resetForm(); }}>
+            {showForm ? <X className="h-4 w-4 mr-2" /> : <UserPlus className="h-4 w-4 mr-2" />}
+            {showForm ? "Cancel" : "Add Account"}
+          </Button>
+        </div>
       </div>
 
       {/* Create form */}

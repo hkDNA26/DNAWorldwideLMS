@@ -86,10 +86,15 @@ export async function sendStudentInviteEmail(
             </p>
             ${courseList ? `<div style="margin:0 0 20px;">${courseList}</div>` : ""}
             ${resourceList ? `<div style="margin:0 0 20px;">${resourceList}</div>` : ""}
-            <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.6;">
+            <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.6;">
               Click the button below to set your password and access your account.
-              This link expires in <strong>72 hours</strong>.
             </p>
+            <div style="margin:0 0 24px;background:#fef9c3;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:6px;padding:14px 16px;">
+              <p style="margin:0;color:#854d0e;font-size:14px;line-height:1.6;">
+                <strong>Please set your password within 72 hours.</strong><br>
+                This link expires after that, and you&rsquo;ll need to ask your administrator for a new one.
+              </p>
+            </div>
             <div style="text-align:center;margin:0 0 28px;">
               <a href="${setupUrl}"
                  style="display:inline-block;background:#1d4f8c;color:#ffffff;text-decoration:none;
@@ -118,9 +123,9 @@ export async function sendStudentInviteEmail(
 
   await sendEmail({
     to,
-    subject: "You've been invited to DNA Worldwide",
+    subject: "You've been invited to DNA Worldwide — please set your password within 72 hours",
     html,
-    text: `Hello ${studentName},\n\nYou've been invited to join DNA Worldwide.\n\nSet your password here: ${setupUrl}\n\nThis link expires in 72 hours.`,
+    text: `Hello ${studentName},\n\nYou've been invited to join DNA Worldwide.\n\nSet your password here: ${setupUrl}\n\nIMPORTANT: please set your password within 72 hours. This link expires after that, and you'll need to ask your administrator for a new one.`,
   });
 }
 
