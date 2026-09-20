@@ -29,7 +29,10 @@ class LocalStorageProvider implements StorageProvider {
   }
 
   async delete(filePath: string): Promise<void> {
-    const fullPath = path.join(process.cwd(), "public", filePath);
+    // filePath is the public URL ("/uploads/covers/x.webp"); strip that prefix and
+    // resolve against the configured upload dir, which is no longer under public/.
+    const relative = filePath.replace(/^\/uploads\//, "");
+    const fullPath = path.join(process.cwd(), this.uploadDir.replace("./", ""), relative);
     try {
       await fs.unlink(fullPath);
     } catch {
@@ -45,6 +48,8 @@ class LocalStorageProvider implements StorageProvider {
 export const storage: StorageProvider = new LocalStorageProvider();
 
 const EXT_BY_MIME: Record<string, string> = {
+  "image/svg+xml": ".svg",
+  "video/ogg": ".ogv",
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
@@ -205,10 +210,19 @@ export async function parseFileUpload(
       return { error: "File too large (max 100MB)" };
     }
 
+    // The stored extension decides the Content-Type this is later served with, so
+    // take it from the validated mime type rather than the client-supplied
+    // filename — otherwise "evil.html" declared as image/png would be stored as
+    // .html and served as executable HTML from our own origin.
+    const safeExt = EXT_BY_MIME[file.type];
+    if (!safeExt) {
+      return { error: `File type ${file.type} not allowed` };
+    }
+
     const raw = Buffer.from(await file.arrayBuffer());
     const { buffer, name } = optimize
-      ? await optimizeImage(raw, file.type, file.name)
-      : { buffer: raw, name: file.name };
+      ? await optimizeImage(raw, file.type, `upload${safeExt}`)
+      : { buffer: raw, name: `upload${safeExt}` };
 
     const url = await storage.save(buffer, name, folder);
 

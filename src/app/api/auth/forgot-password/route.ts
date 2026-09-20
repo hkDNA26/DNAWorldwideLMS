@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/email";
 import { secureToken } from "@/lib/tokens";
+import { rateLimit, clientIp, tooManyRequests } from "@/lib/rate-limit";
 
 // Always the same shape/message regardless of whether the email is
 // registered — branching the response on that would let this endpoint be
@@ -16,6 +17,12 @@ export async function POST(request: Request) {
     if (!email?.trim()) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
+
+    const ip = rateLimit(`forgot:ip:${clientIp(request)}`, 10, 60 * 60 * 1000);
+    if (!ip.allowed) return tooManyRequests(ip.retryAfterSeconds);
+
+    const account = rateLimit(`forgot:email:${email.trim().toLowerCase()}`, 5, 60 * 60 * 1000);
+    if (!account.allowed) return tooManyRequests(account.retryAfterSeconds);
 
     const user = await db.user.findUnique({
       where: { email: email.trim().toLowerCase() },

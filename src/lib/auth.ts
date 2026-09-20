@@ -121,7 +121,3 @@ export async function requireAuth(requiredRole?: AuthRole | AuthRole[]): Promise
   }
   return session;
 }
-
-export async function getUserFromDb(userId: string) {
-  return db.user.findUnique({ where: { id: userId } });
-}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { createSession, setSessionCookie } from "@/lib/auth";
+import { rateLimit, clientIp, tooManyRequests } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
@@ -11,6 +12,12 @@ export async function POST(request: Request) {
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
+
+    const ip = rateLimit(`login:ip:${clientIp(request)}`, 20, 15 * 60 * 1000);
+    if (!ip.allowed) return tooManyRequests(ip.retryAfterSeconds);
+
+    const account = rateLimit(`login:email:${String(email).toLowerCase()}`, 10, 15 * 60 * 1000);
+    if (!account.allowed) return tooManyRequests(account.retryAfterSeconds);
 
     const user = await db.user.findUnique({ where: { email: email.toLowerCase() } });
     if (!user) {

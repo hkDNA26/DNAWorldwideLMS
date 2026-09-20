@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sessionRevocationCutoff } from "@/lib/auth";
+import { rateLimit, clientIp, tooManyRequests } from "@/lib/rate-limit";
 import bcrypt from "bcryptjs";
 
 export async function GET(request: Request) {
@@ -8,6 +9,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
     if (!token) return NextResponse.json({ error: "Token required" }, { status: 400 });
+
+    // Without this, an attacker can grind guesses against the token space.
+    const probe = rateLimit(`setup:ip:${clientIp(request)}`, 30, 15 * 60 * 1000);
+    if (!probe.allowed) return tooManyRequests(probe.retryAfterSeconds);
 
     const record = await db.inviteToken.findUnique({
       where: { token },
@@ -29,6 +34,9 @@ export async function POST(request: Request) {
     const { token, password } = await request.json();
 
     if (!token || !password) return NextResponse.json({ error: "Token and password required" }, { status: 400 });
+
+    const redeem = rateLimit(`setup-post:ip:${clientIp(request)}`, 20, 15 * 60 * 1000);
+    if (!redeem.allowed) return tooManyRequests(redeem.retryAfterSeconds);
     if (password.length < 8) return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
     const record = await db.inviteToken.findUnique({

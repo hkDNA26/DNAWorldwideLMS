@@ -39,6 +39,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
   }
 
   const contentType = mime.lookup(filePath) || "application/octet-stream";
+
+  // An SVG is a document, not just a picture: opened directly it can run script on
+  // our own origin. Org logos are the one SVG we accept and they're served without
+  // a session, so sandbox them.
+  const extraHeaders: Record<string, string> =
+    contentType === "image/svg+xml" ? { "Content-Security-Policy": "sandbox" } : {};
   // Video/image uploads get a fresh UUID filename per upload (see storage.ts),
   // so caching them forever is safe. SCORM files live at a stable, courseId-based
   // path that "replace package" overwrites in place, so they must revalidate.
@@ -70,6 +76,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
           "Accept-Ranges": "bytes",
           "Content-Length": String(chunkSize),
           "Cache-Control": cacheControl,
+          ...extraHeaders,
         },
       });
     } finally {
@@ -84,6 +91,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
       "Content-Length": String(stat.size),
       "Accept-Ranges": "bytes",
       "Cache-Control": cacheControl,
+      ...extraHeaders,
     },
   });
 }

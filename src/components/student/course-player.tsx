@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { sanitizeLessonHtml } from "@/lib/sanitize";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Circle, ChevronDown, ChevronRight, FileText, Video, HelpCircle, Globe, Award, ArrowLeft, Eye, RotateCcw, ArrowRight } from "lucide-react";
@@ -122,6 +123,13 @@ export function CoursePlayer({
   const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
   const currentIndex = allLessons.findIndex((l) => l.id === currentLesson.id);
+
+  // Lesson bodies are admin-authored HTML, so a compromised or careless admin
+  // account shouldn't be able to run script in every learner's browser.
+  const safeLessonHtml = useMemo(
+    () => sanitizeLessonHtml(currentLesson.content || "<p>No content yet.</p>"),
+    [currentLesson.content]
+  );
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
@@ -515,7 +523,7 @@ export function CoursePlayer({
                 <>
                   <div
                     className="prose text-slate-800 max-w-none"
-                    dangerouslySetInnerHTML={{ __html: currentLesson.content || "<p>No content yet.</p>" }}
+                    dangerouslySetInnerHTML={{ __html: safeLessonHtml }}
                   />
 
                   {/* End-of-text actions */}
