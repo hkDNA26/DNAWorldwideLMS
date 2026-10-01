@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     let validCourseIds: string[] = [];
     if (courseIds.length > 0) {
       const ownedCourses = await db.course.findMany({
-        where: { id: { in: courseIds }, instructorId: session.userId },
+        where: { id: { in: courseIds } },
         select: { id: true },
       });
       validCourseIds = ownedCourses.map((c) => c.id);

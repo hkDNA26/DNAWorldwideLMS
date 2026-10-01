@@ -10,7 +10,6 @@ export default async function AnalyticsPage() {
   if (!session || session.role !== "ADMIN") redirect("/login");
 
   const courses = await db.course.findMany({
-    where: { instructorId: session.userId },
     select: {
       id: true,
       title: true,

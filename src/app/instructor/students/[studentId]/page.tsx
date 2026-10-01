@@ -55,7 +55,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
       select: { courseId: true, verificationCode: true, issuedAt: true },
     }),
     db.course.findMany({
-      where: { instructorId: session.userId, status: "PUBLISHED" },
+      where: { status: "PUBLISHED" },
       select: { id: true, title: true },
       orderBy: { title: "asc" },
     }),

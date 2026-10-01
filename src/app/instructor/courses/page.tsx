@@ -12,7 +12,6 @@ export default async function InstructorCoursesPage() {
   if (!session) return null;
 
   const courses = await db.course.findMany({
-    where: { instructorId: session.userId },
     include: {
       _count: { select: { enrollments: true, modules: true } },
       enrollments: { select: { completedAt: true } },

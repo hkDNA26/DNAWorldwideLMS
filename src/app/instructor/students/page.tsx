@@ -23,7 +23,6 @@ export default async function StudentsPage() {
       orderBy: { createdAt: "desc" },
     }),
     db.course.findMany({
-      where: { instructorId: session.userId },
       select: { id: true, title: true, status: true },
       orderBy: { title: "asc" },
     }),

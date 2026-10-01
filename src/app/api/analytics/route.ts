@@ -7,7 +7,6 @@ export async function GET() {
     const session = await requireAuth("ADMIN");
 
     const courses = await db.course.findMany({
-      where: { instructorId: session.userId },
       select: {
         id: true,
         title: true,

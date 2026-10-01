@@ -8,7 +8,6 @@ export default async function InstructorDashboard() {
   if (!session || session.role !== "ADMIN") redirect("/login");
 
   const courses = await db.course.findMany({
-    where: { instructorId: session.userId },
     include: {
       _count: { select: { enrollments: true, modules: true } },
       enrollments: {

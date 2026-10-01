@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     if (session.role === "ADMIN") {
       const courses = await db.course.findMany({
         where: {
-          instructorId: session.userId,
+          // Every admin sees every course; instructorId only records who made it.
           ...(status ? { status: status as "DRAFT" | "PUBLISHED" } : {}),
           ...(search ? { title: { contains: search, mode: "insensitive" } } : {}),
         },
