@@ -76,12 +76,16 @@ export async function requireResourceAccess(resource: ResourceKey) {
 
   if (!access) redirect("/resources");
 
-  if (!access.firstAccessedAt) {
-    await db.resourceAccess.update({
-      where: { id: access.id },
-      data: { firstAccessedAt: new Date() },
-    });
-  }
+  // Record every open, not just the first, so the admin can tell a resource
+  // somebody uses regularly from one they looked at once and abandoned.
+  await db.resourceAccess.update({
+    where: { id: access.id },
+    data: {
+      firstAccessedAt: access.firstAccessedAt ?? new Date(),
+      lastAccessedAt: new Date(),
+      accessCount: { increment: 1 },
+    },
+  });
 
   return session;
 }

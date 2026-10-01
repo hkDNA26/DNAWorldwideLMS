@@ -58,6 +58,22 @@ export function CollectorMap({ collectors, token }: { collectors: CollectorItem[
     }
   }, [collectors]);
 
+  // A missing token previously rendered an empty bordered box with no error, which
+  // reads as "the map is broken" rather than "the map isn't configured".
+  if (!token) {
+    return (
+      <div className="w-full h-[600px] rounded-2xl border border-line flex items-center justify-center bg-paper/40">
+        <div className="text-center px-6">
+          <p className="text-sm font-semibold text-ink">Map unavailable</p>
+          <p className="text-[13px] text-ink-soft mt-1 max-w-sm">
+            The map isn&rsquo;t configured on this environment. The list below still works —
+            ask an administrator to set the Mapbox token.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return <div ref={containerRef} className="w-full h-[600px] rounded-2xl overflow-hidden border border-line" />;
 }
 

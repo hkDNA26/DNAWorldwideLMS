@@ -61,7 +61,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
     }),
     db.resourceAccess.findMany({
       where: { userId: studentId },
-      select: { id: true, resource: true, grantedAt: true },
+      select: { id: true, resource: true, grantedAt: true, firstAccessedAt: true, lastAccessedAt: true, accessCount: true },
     }),
     db.organization.findMany({
       select: { id: true, name: true, logoUrl: true },
@@ -105,7 +105,15 @@ export default async function StudentDetailPage({ params }: { params: Promise<Pa
   const grantedResourceKeys = new Set(resourceAccess.map((r) => r.resource));
   const grantedResources = resourceAccess.map((r) => {
     const def = RESOURCES.find((res) => res.key === r.resource)!;
-    return { id: r.id, key: r.resource, label: def.label, grantedAt: r.grantedAt.toISOString() };
+    return {
+      id: r.id,
+      key: r.resource,
+      label: def.label,
+      grantedAt: r.grantedAt.toISOString(),
+      firstAccessedAt: r.firstAccessedAt?.toISOString() ?? null,
+      lastAccessedAt: r.lastAccessedAt?.toISOString() ?? null,
+      accessCount: r.accessCount,
+    };
   });
   const availableResources = RESOURCES.filter((r) => !grantedResourceKeys.has(r.key)).map((r) => ({
     key: r.key,

@@ -54,6 +54,9 @@ interface GrantedResource {
   key: ResourceKey;
   label: string;
   grantedAt: string;
+  firstAccessedAt: string | null;
+  lastAccessedAt: string | null;
+  accessCount: number;
 }
 
 interface Props {
@@ -708,7 +711,23 @@ export function StudentDetailClient({
                   <Wrench className="h-4 w-4 text-slate-400 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-900">{r.label}</p>
-                    <p className="text-xs text-slate-400">Granted {formatDateShort(r.grantedAt)}</p>
+                    <p className="text-xs text-slate-400">
+                      Granted {formatDateShort(r.grantedAt)}
+                      {r.lastAccessedAt ? (
+                        <>
+                          {" · "}
+                          <span className="text-slate-500">
+                            opened {r.accessCount} {r.accessCount === 1 ? "time" : "times"}, last{" "}
+                            {formatDateShort(r.lastAccessedAt)}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          {" · "}
+                          <span className="text-amber-600 font-medium">never opened</span>
+                        </>
+                      )}
+                    </p>
                   </div>
                   <button
                     onClick={() => handleRevokeResource(r.id, r.key, r.label)}

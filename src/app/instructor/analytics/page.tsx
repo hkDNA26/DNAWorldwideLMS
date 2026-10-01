@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { AnalyticsPanel } from "@/components/instructor/analytics-panel";
+import { ResourceUsagePanel } from "@/components/instructor/resource-usage-panel";
+import { RESOURCES } from "@/lib/resources";
 
 export default async function AnalyticsPage() {
   const session = await getSession();
@@ -84,6 +86,39 @@ export default async function AnalyticsPage() {
     };
   });
 
+  // Resource usage is tracked per grant, so this reflects STAFF accounts. Admins
+  // and tender users reach resources through their role rather than a grant row,
+  // so they don't appear here.
+  const grants = await db.resourceAccess.findMany({
+    select: {
+      resource: true,
+      accessCount: true,
+      lastAccessedAt: true,
+      user: { select: { id: true, name: true, email: true } },
+    },
+  });
+
+  const resourceUsage = RESOURCES.map((def) => {
+    const forResource = grants.filter((g) => g.resource === def.key);
+    const opened = forResource.filter((g) => g.accessCount > 0);
+    return {
+      key: def.key as string,
+      label: def.label,
+      granted: forResource.length,
+      opened: opened.length,
+      totalOpens: forResource.reduce((sum, g) => sum + g.accessCount, 0),
+      lastAccessedAt:
+        opened
+          .map((g) => g.lastAccessedAt)
+          .filter((d): d is Date => Boolean(d))
+          .sort((a, b) => b.getTime() - a.getTime())[0]
+          ?.toISOString() ?? null,
+      neverOpened: forResource
+        .filter((g) => g.accessCount === 0)
+        .map((g) => ({ name: g.user.name, email: g.user.email })),
+    };
+  }).filter((r) => r.granted > 0);
+
   const summary = {
     totalCourses: data.length,
     totalEnrollments: data.reduce((s, c) => s + c.enrollmentCount, 0),
@@ -98,6 +133,7 @@ export default async function AnalyticsPage() {
         <p className="text-slate-500 mt-1">Course progression and certificate data across all students.</p>
       </div>
       <AnalyticsPanel summary={summary} courses={data} />
+      <ResourceUsagePanel resources={resourceUsage} />
     </div>
   );
 }

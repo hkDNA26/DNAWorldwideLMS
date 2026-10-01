@@ -149,6 +149,10 @@ model ResourceAccess {
   grantedAt       DateTime    @default(now())
   notifiedAt      DateTime?
   firstAccessedAt DateTime?
+  lastAccessedAt  DateTime?
+  // Opens, not unique visits — enough to tell a resource somebody uses weekly from
+  // one they opened once and never returned to.
+  accessCount     Int         @default(0)
   lastReminderAt  DateTime?
 
   @@unique([userId, resource])
