@@ -196,7 +196,16 @@ export async function sendPasswordResetEmail(to: string, name: string, resetUrl:
   });
 }
 
-function assignmentEmailHtml(studentName: string, itemLabel: string, itemUrl: string, itemWord: string) {
+const appUrl = () => process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+/**
+ * Shared branded shell for the notification emails.
+ *
+ * These used to be a bare white card with "Hi <name>" and a link — no logo, no
+ * sender, no reason for receiving it, which reads as phishing. Anything landing
+ * in a staff inbox needs to identify itself and say why it arrived.
+ */
+function emailLayout({ body, footerNote }: { body: string; footerNote?: string }) {
   return `
 <!DOCTYPE html>
 <html>
@@ -204,20 +213,35 @@ function assignmentEmailHtml(studentName: string, itemLabel: string, itemUrl: st
 <body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:40px 0;">
     <tr><td align="center">
-      <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
         <tr>
-          <td style="padding:32px 36px 28px;">
-            <p style="margin:0 0 16px;color:#1e293b;font-size:16px;font-weight:600;">Hi ${studentName},</p>
-            <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.6;">
-              You've been given access to a new ${itemWord}: <strong>${itemLabel}</strong>.
+          <td style="background:#1d4f8c;padding:28px 40px;text-align:center;">
+            <img
+              src="${appUrl()}/logo.png"
+              alt="DNA Worldwide"
+              width="120"
+              style="display:block;margin:0 auto 10px;max-width:120px;height:auto;"
+            />
+            <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:-0.3px;">
+              DNA Worldwide
+            </h1>
+            <p style="margin:4px 0 0;color:#93c5fd;font-size:13px;">Staff Learning Portal</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:36px 40px 28px;">
+            ${body}
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f8fafc;padding:18px 40px;border-top:1px solid #e2e8f0;">
+            <p style="margin:0 0 6px;color:#64748b;font-size:12px;line-height:1.6;text-align:center;">
+              ${footerNote ?? "You're receiving this because you have an account on the DNA Worldwide staff learning portal."}
             </p>
-            <div style="text-align:center;margin:0 0 8px;">
-              <a href="${itemUrl}"
-                 style="display:inline-block;background:#1d4f8c;color:#ffffff;text-decoration:none;
-                        font-size:15px;font-weight:600;padding:12px 28px;border-radius:8px;">
-                Get started →
-              </a>
-            </div>
+            <p style="margin:0;color:#94a3b8;font-size:12px;text-align:center;">
+              <a href="${appUrl()}" style="color:#1d4f8c;text-decoration:none;">${appUrl().replace(/^https?:\/\//, "")}</a>
+              &nbsp;·&nbsp; If you weren't expecting this, please contact your administrator.
+            </p>
           </td>
         </tr>
       </table>
@@ -225,6 +249,28 @@ function assignmentEmailHtml(studentName: string, itemLabel: string, itemUrl: st
   </table>
 </body>
 </html>`;
+}
+
+function assignmentEmailHtml(studentName: string, itemLabel: string, itemUrl: string, itemWord: string) {
+  return emailLayout({
+    body: `
+      <p style="margin:0 0 16px;color:#1e293b;font-size:16px;font-weight:600;">Hi ${studentName},</p>
+      <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">
+        Your administrator at DNA Worldwide has given you access to a new ${itemWord} on the
+        staff learning portal:
+      </p>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #1d4f8c;border-radius:8px;padding:14px 16px;margin:0 0 24px;">
+        <p style="margin:0;color:#1e293b;font-size:15px;font-weight:600;">${itemLabel}</p>
+      </div>
+      <div style="text-align:center;margin:0 0 8px;">
+        <a href="${itemUrl}"
+           style="display:inline-block;background:#1d4f8c;color:#ffffff;text-decoration:none;
+                  font-size:15px;font-weight:600;padding:12px 28px;border-radius:8px;">
+          Open it now →
+        </a>
+      </div>`,
+    footerNote: `You're receiving this because a DNA Worldwide administrator granted you access to this ${itemWord}.`,
+  });
 }
 
 export async function sendCourseAssignedEmail(
@@ -264,46 +310,46 @@ export async function sendAccessReminderEmail(to: string, studentName: string, i
   const rows = items
     .map(
       (item) => `
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;margin-bottom:10px;">
         <span style="font-size:14px;font-weight:600;color:#1e293b;">${item.label}</span>
-        <a href="${item.url}" style="font-size:13px;font-weight:600;color:#1d4f8c;text-decoration:none;">Open →</a>
+        <a href="${item.url}" style="font-size:13px;font-weight:600;color:#1d4f8c;text-decoration:none;margin-left:10px;">Open &rarr;</a>
       </div>`
     )
     .join("");
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:40px 0;">
-    <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
-        <tr>
-          <td style="padding:32px 36px 28px;">
-            <p style="margin:0 0 8px;color:#1e293b;font-size:16px;font-weight:600;">Hi ${studentName},</p>
-            <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">
-              Just a reminder — you still have ${items.length === 1 ? "this" : "these"} waiting for you:
-            </p>
-            ${rows}
-          </td>
-        </tr>
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
+  const html = emailLayout({
+    body: `
+      <p style="margin:0 0 8px;color:#1e293b;font-size:16px;font-weight:600;">Hi ${studentName},</p>
+      <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">
+        This is a reminder from <strong>DNA Worldwide</strong>. Your administrator gave you access to
+        ${items.length === 1 ? "the following, which you haven&rsquo;t opened yet" : "the following, which you haven&rsquo;t opened yet"}:
+      </p>
+      ${rows}
+      <p style="margin:20px 0 0;color:#64748b;font-size:13px;line-height:1.6;">
+        No action is needed if you&rsquo;ve already finished with ${items.length === 1 ? "it" : "them"}.
+      </p>`,
+    footerNote:
+      "You're receiving this because you have access to these on the DNA Worldwide staff learning portal and haven't opened them yet.",
+  });
 
   const text = [
     `Hi ${studentName},`,
     ``,
-    `Just a reminder — you still have these waiting for you:`,
+    `This is a reminder from DNA Worldwide, your staff learning portal.`,
+    `Your administrator gave you access to the following, which you haven't opened yet:`,
+    ``,
     ...items.map((item) => `- ${item.label}: ${item.url}`),
+    ``,
+    `No action is needed if you've already finished with them.`,
+    `If you weren't expecting this, please contact your administrator.`,
   ].join("\n");
 
   await sendEmail({
     to,
-    subject: items.length === 1 ? `Reminder: ${items[0].label}` : `Reminder: you have ${items.length} things waiting`,
+    subject:
+      items.length === 1
+        ? `DNA Worldwide reminder: ${items[0].label}`
+        : `DNA Worldwide reminder: ${items.length} things waiting for you`,
     html,
     text,
   });
@@ -372,7 +418,13 @@ export async function sendReminderEmail(
     <tr><td align="center">
       <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
         <tr>
-          <td style="background:#1d4f8c;padding:28px 40px;">
+          <td style="background:#1d4f8c;padding:28px 40px;text-align:center;">
+            <img
+              src="${appUrl()}/logo.png"
+              alt="DNA Worldwide"
+              width="120"
+              style="display:block;margin:0 auto 10px;max-width:120px;height:auto;"
+            />
             <h1 style="margin:0;color:#ffffff;font-size:20px;font-weight:700;">DNA Worldwide</h1>
             <p style="margin:4px 0 0;color:#93c5fd;font-size:13px;">Learning Progress Reminder</p>
           </td>
@@ -417,7 +469,13 @@ export async function sendReminderEmail(
         </tr>
         <tr>
           <td style="background:#f8fafc;padding:16px 40px;border-top:1px solid #e2e8f0;">
-            <p style="margin:0;color:#94a3b8;font-size:12px;text-align:center;">DNA Worldwide Learning Platform</p>
+            <p style="margin:0 0 6px;color:#64748b;font-size:12px;text-align:center;line-height:1.6;">
+              You&rsquo;re receiving this because you have an account on the DNA Worldwide staff learning portal.
+            </p>
+            <p style="margin:0;color:#94a3b8;font-size:12px;text-align:center;">
+              <a href="${appUrl()}" style="color:#1d4f8c;text-decoration:none;">${appUrl().replace(/^https?:\/\//, "")}</a>
+              &nbsp;·&nbsp; If you weren&rsquo;t expecting this, please contact your administrator.
+            </p>
           </td>
         </tr>
       </table>
