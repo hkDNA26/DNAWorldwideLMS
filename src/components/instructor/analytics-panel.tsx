@@ -92,7 +92,8 @@ function RingChart({ value, max, color, size = 80 }: { value: number; max: numbe
         strokeWidth="8"
         strokeLinecap="round"
         strokeDasharray={`${dash} ${circ}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform="rotate(-90 40 40)"
         style={{ transition: "stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1)" }}
       />
       <text x="40" y="44" textAnchor="middle" fontSize="14" fontWeight="700" fill="#1e293b">

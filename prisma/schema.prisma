@@ -75,6 +75,9 @@ model PdfDocument {
   category     PdfCategory
   title        String
   fileUrl      String
+  // First page / first frame, generated at upload. Null for formats we can't
+  // preview (or older uploads), which fall back to the file-type icon.
+  thumbnailUrl String?
   fileName     String
   fileSize     Int
   mimeType     String?

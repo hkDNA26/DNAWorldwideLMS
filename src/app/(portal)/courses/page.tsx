@@ -33,7 +33,8 @@ function Ring({ pct, color, size = 56 }: { pct: number; color: string; size?: nu
         strokeWidth="5"
         strokeLinecap="round"
         strokeDasharray={`${dash} ${circ}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform="rotate(-90 30 30)"
       />
       <text x="30" y="34" textAnchor="middle" fontSize="11" fontWeight="700" fill="#16202c">
         {pct}%

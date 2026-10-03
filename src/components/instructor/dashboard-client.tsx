@@ -73,7 +73,8 @@ function Ring({ pct, color, size = 72 }: { pct: number; color: string; size?: nu
         cx="36" cy="36" r={r}
         fill="none" stroke={color} strokeWidth="6" strokeLinecap="round"
         strokeDasharray={`${dash} ${circ}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform="rotate(-90 36 36)"
         style={{ transition: "stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1)" }}
       />
       <text x="36" y="40" textAnchor="middle" fontSize="13" fontWeight="700" fill="#1e293b">

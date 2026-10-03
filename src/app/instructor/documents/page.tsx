@@ -16,6 +16,7 @@ export default async function InstructorDocumentsPage() {
       fileUrl: true,
       fileName: true,
       fileSize: true,
+      thumbnailUrl: true,
       createdAt: true,
     },
   });

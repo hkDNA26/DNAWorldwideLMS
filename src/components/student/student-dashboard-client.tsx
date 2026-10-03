@@ -57,7 +57,8 @@ function Ring({ pct, color, size = 64 }: { pct: number; color: string; size?: nu
       <circle
         cx="32" cy="32" r={r} fill="none" stroke={color} strokeWidth="5" strokeLinecap="round"
         strokeDasharray={`${go ? (pct / 100) * circ : 0} ${circ}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform="rotate(-90 32 32)"
         style={{ transition: "stroke-dasharray 1.1s cubic-bezier(0.4,0,0.2,1)" }}
       />
       <text x="32" y="36" textAnchor="middle" fontSize="11" fontWeight="700" fill="#1e293b">
@@ -258,7 +259,8 @@ function HeroProgress({ summary }: { summary: Props["summary"] }) {
             <circle
               cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" strokeWidth="8" strokeLinecap="round"
               strokeDasharray={`${show ? (summary.avgProgress / 100) * 2 * Math.PI * 42 : 0} ${2 * Math.PI * 42}`}
-              strokeDashoffset={2 * Math.PI * 42 / 4}
+              strokeDashoffset={0}
+              transform="rotate(-90 50 50)"
               style={{ transition: "stroke-dasharray 1.4s cubic-bezier(0.4,0,0.2,1) 300ms" }}
             />
             <text x="50" y="46" textAnchor="middle" fontSize="20" fontWeight="800" fill="white">{summary.avgProgress}%</text>

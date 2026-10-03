@@ -9,6 +9,7 @@ export interface PdfListItem {
   fileSize: number;
   createdAt: Date;
   mimeType?: string | null;
+  thumbnailUrl?: string | null;
 }
 
 function iconFor(mime: string | null | undefined, fileName: string): LucideIcon {
@@ -45,9 +46,21 @@ export function PdfList({ documents, emptyLabel }: { documents: PdfListItem[]; e
           className="bg-white border border-line rounded-2xl p-4 sm:p-5 shadow-sm flex items-center gap-4 animate-brand-card-in"
           style={{ animationDelay: `${i * 50}ms` }}
         >
-          <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center text-brand shrink-0">
-            <Icon className="w-5 h-5" />
-          </div>
+          {doc.thumbnailUrl ? (
+            // A preview of the file itself. Falls back to the type icon below
+            // for formats we can't render, and for anything uploaded earlier.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={doc.thumbnailUrl}
+              alt=""
+              loading="lazy"
+              className="w-11 h-14 sm:w-14 sm:h-[4.5rem] rounded-lg object-cover object-top border border-line bg-white shrink-0"
+            />
+          ) : (
+            <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center text-brand shrink-0">
+              <Icon className="w-5 h-5" />
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <p className="text-[15px] font-semibold text-ink truncate">{doc.title}</p>
             <p className="text-[12.5px] text-ink-faint mt-0.5">

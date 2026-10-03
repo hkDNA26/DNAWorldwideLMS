@@ -20,6 +20,7 @@ export async function LibraryPage({ category }: { category: PdfCategory }) {
       fileUrl: true,
       fileName: true,
       fileSize: true,
+      thumbnailUrl: true,
       mimeType: true,
       createdAt: true,
     },

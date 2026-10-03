@@ -47,6 +47,18 @@ export async function canAccessUpload(segments: string[]): Promise<boolean> {
     return Boolean(enrollment);
   }
 
+  if (folder === "thumbnails") {
+    // A preview reveals the document's cover, so gate it exactly as the document
+    // itself — otherwise a tender user could see staff-only booklet covers.
+    const doc = await db.pdfDocument.findFirst({
+      where: { thumbnailUrl: `/uploads/${segments.join("/")}` },
+      select: { category: true },
+    });
+    if (!doc) return true; // course/lesson thumbnails, not a gated library file
+    const access = await getResourceAccessMap(session.userId, session.role);
+    return access[doc.category as unknown as ResourceKey] === "GRANTED";
+  }
+
   if (LIBRARY_FOLDERS.has(folder)) {
     // PdfCategory and ResourceKey share names for these, so the document's own
     // category is the permission to check.

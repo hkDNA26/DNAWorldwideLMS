@@ -85,7 +85,8 @@ function ProgressRing({ pct, color }: { pct: number; color: string }) {
       <circle
         cx="24" cy="24" r={r} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round"
         strokeDasharray={`${(pct / 100) * circ} ${circ}`}
-        strokeDashoffset={circ / 4}
+        strokeDashoffset={0}
+        transform="rotate(-90 24 24)"
         style={{ transition: "stroke-dasharray 0.8s ease" }}
       />
       <text x="24" y="28" textAnchor="middle" fontSize="10" fontWeight="700" fill="#1e293b">{pct}%</text>
