@@ -251,6 +251,7 @@ function SortableVideoRow({
           <div className="flex items-center gap-2">
             <input
               autoFocus
+              onFocus={(e) => e.currentTarget.select()}
               value={editValue}
               onChange={(e) => onEditValueChange(e.target.value)}
               onKeyDown={(e) => {

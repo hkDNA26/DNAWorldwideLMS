@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, Trash2, FileText, Download, Eye } from "lucide-react";
+import { Upload, Trash2, FileText, Download, Eye, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
@@ -56,6 +56,9 @@ function CategoryPanel({
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [savingRename, setSavingRename] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(e: React.FormEvent) {
@@ -85,6 +88,44 @@ function CategoryPanel({
       addToast("Network error — please try again", "error");
     } finally {
       setUploading(false);
+    }
+  }
+
+  function startRename(doc: AdminPdfDoc) {
+    setEditingId(doc.id);
+    setEditValue(doc.title);
+  }
+
+  function cancelRename() {
+    setEditingId(null);
+    setEditValue("");
+  }
+
+  async function saveRename(doc: AdminPdfDoc) {
+    const nextTitle = editValue.trim();
+    if (!nextTitle || nextTitle === doc.title) {
+      cancelRename();
+      return;
+    }
+    setSavingRename(true);
+    try {
+      const res = await fetch(`/api/pdf-documents/${doc.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: nextTitle }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        addToast(data.error || "Rename failed", "error");
+        return;
+      }
+      addToast("Renamed", "success");
+      cancelRename();
+      router.refresh();
+    } catch {
+      addToast("Network error — please try again", "error");
+    } finally {
+      setSavingRename(false);
     }
   }
 
@@ -151,11 +192,57 @@ function CategoryPanel({
                 <FileText className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-ink truncate">{doc.title}</p>
-                <p className="text-xs text-ink-faint mt-0.5 truncate">
-                  {doc.fileName} &middot; {formatFileSize(doc.fileSize)}
-                </p>
+                {editingId === doc.id ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      autoFocus
+                      onFocus={(e) => e.currentTarget.select()}
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveRename(doc);
+                        if (e.key === "Escape") cancelRename();
+                      }}
+                      className="w-full text-sm font-semibold text-ink border border-line rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand/30"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => saveRename(doc)}
+                      disabled={savingRename}
+                      className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 transition-colors disabled:opacity-50"
+                      title="Save"
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelRename}
+                      disabled={savingRename}
+                      className="p-1.5 rounded-lg text-ink-soft hover:bg-paper transition-colors disabled:opacity-50"
+                      title="Cancel"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-sm font-semibold text-ink truncate">{doc.title}</p>
+                    <p className="text-xs text-ink-faint mt-0.5 truncate">
+                      {doc.fileName} &middot; {formatFileSize(doc.fileSize)}
+                    </p>
+                  </>
+                )}
               </div>
+              {editingId !== doc.id && (
+                <button
+                  type="button"
+                  onClick={() => startRename(doc)}
+                  className="p-2 rounded-lg text-ink-soft hover:bg-paper hover:text-ink transition-colors"
+                  title="Rename"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+              )}
               <a
                 href={doc.fileUrl}
                 target="_blank"
